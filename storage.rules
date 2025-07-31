@@ -1,0 +1,38 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // =============================================
+    // Imagens de Eventos (formato: userId_timestamp.jpg)
+    // =============================================
+    match /events/{imageId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && 
+                   imageId.matches('^(.+)_(\\d+)\\.jpg$') &&
+                   request.auth.uid == imageId.split('_')[0];
+    }
+
+    // =============================================
+    // Avatares de Usuário
+    // =============================================
+    match /avatars/{userId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && 
+                   request.auth.uid == userId;
+    }
+
+    // =============================================
+    // Imagens de Vinhos
+    // =============================================
+    match /wines/{fileName} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+
+    // =============================================
+    // Regra de negação padrão
+    // =============================================
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}

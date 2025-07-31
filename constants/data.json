@@ -1,0 +1,134 @@
+{
+    "wines": [
+        {
+            "id": "wine-1",
+            "name": "Cabernet Sauvignon Reserva",
+            "country": "Chile",
+            "ratings": {
+                "color": 4.5,
+                "aroma": 4.7,
+                "taste": 4.8
+            },
+            "average": 4.67,
+            "reviewsCount": 128,
+            "image": "../assets/images/wine-1.png"
+        },
+        {
+            "id": "wine-2",
+            "name": "Malbec Premium",
+            "country": "Argentina",
+            "ratings": {
+                "color": 4.2,
+                "aroma": 4.4,
+                "taste": 4.6
+            },
+            "average": 4.4,
+            "reviewsCount": 97,
+            "image": "../assets/images/wine-2.png"
+        },
+        {
+            "id": "wine-3",
+            "name": "Chardonnay Reserva",
+            "country": "Brasil",
+            "ratings": {
+                "color": 4.0,
+                "aroma": 4.3,
+                "taste": 4.1
+            },
+            "average": 4.13,
+            "reviewsCount": 56,
+            "image": "../assets/images/wine-3.png"
+        },
+        {
+            "id": "wine-4",
+            "name": "Syrah Grand Cuvée",
+            "country": "França",
+            "ratings": {
+                "color": 4.8,
+                "aroma": 4.9,
+                "taste": 5.0
+            },
+            "average": 4.9,
+            "reviewsCount": 243,
+            "image": "../assets/images/wine-4.png"
+        },
+        {
+            "id": "wine-5",
+            "name": "Merlot Delicado",
+            "country": "Portugal",
+            "ratings": {
+                "color": 4.1,
+                "aroma": 4.0,
+                "taste": 4.3
+            },
+            "average": 4.13,
+            "reviewsCount": 32,
+            "image": "../assets/images/wine-5.png"
+        },
+        {
+            "id": "wine-6",
+            "name": "Tempranillo Clássico",
+            "country": "Espanha",
+            "ratings": {
+                "color": 4.6,
+                "aroma": 4.4,
+                "taste": 4.5
+            },
+            "average": 4.5,
+            "reviewsCount": 88,
+            "image": "../assets/images/wine-6.png"
+        },
+        {
+            "id": "wine-7",
+            "name": "Pinot Noir Elegance",
+            "country": "França",
+            "ratings": {
+                "color": 4.3,
+                "aroma": 4.6,
+                "taste": 4.7
+            },
+            "average": 4.53,
+            "reviewsCount": 119,
+            "image": "../assets/images/wine-7.png"
+        },
+        {
+            "id": "wine-8",
+            "name": "Branco Suave",
+            "country": "Brasil",
+            "ratings": {
+                "color": 3.9,
+                "aroma": 4.1,
+                "taste": 4.0
+            },
+            "average": 4.0,
+            "reviewsCount": 45,
+            "image": "../assets/images/wine-8.png"
+        },
+        {
+            "id": "wine-9",
+            "name": "Zinfandel Rosé",
+            "country": "EUA",
+            "ratings": {
+                "color": 4.2,
+                "aroma": 4.0,
+                "taste": 4.3
+            },
+            "average": 4.17,
+            "reviewsCount": 67,
+            "image": "../assets/images/wine-9.png"
+        },
+        {
+            "id": "wine-10",
+            "name": "Espumante Brut Nature",
+            "country": "Itália",
+            "ratings": {
+                "color": 4.7,
+                "aroma": 4.6,
+                "taste": 4.8
+            },
+            "average": 4.7,
+            "reviewsCount": 101,
+            "image": "../assets/images/wine-10.png"
+        }
+    ]
+}

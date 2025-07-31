@@ -1,0 +1,94 @@
+{
+    "expo": {
+        "name": "EnoLink",
+        "slug": "ivino-app",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/images/icon.jpeg",
+        "scheme": "com.wine.app",
+        "userInterfaceStyle": "automatic",
+        "assetBundlePatterns": ["**/*"],
+        "newArchEnabled": true,
+        "ios": {
+            "icon": "./assets/images/icon.jpeg",
+            "associatedDomains": ["applinks:enolinkapp.com"],
+            "supportsTablet": true,
+            "bundleIdentifier": "com.vivavinho.enolink",
+            "buildNumber": "1.0.0",
+            "usesAppleSignIn": true,
+            "infoPlist": {
+                "NSCameraUsageDescription": "Este app precisa acessar a câmera para adicionar imagens aos vinhos.",
+                "NSContactsUsageDescription": "Acessamos seus contatos para convidar amigos. Exemplo: enviar um link de indicação por WhatsApp.",
+                "NSPhotoLibraryUsageDescription": "Este app precisa acessar a galeria para selecionar imagens de vinhos.",
+                "NSAppleMusicUsageDescription": "Usamos login com Apple para autenticação segura.",
+                "NSLocationWhenInUseUsageDescription": "Usamos sua localização para mostrar serviços próximos a você. Exemplo: encontrar restaurantes em um raio de 5 km.",
+                "NSLocationAlwaysAndWhenInUseUsageDescription": "Localização em segundo plano é necessária para notificá-lo sobre ofertas próximas mesmo com o app fechado."
+            },
+            "appleTeamId": "8J82XT42C9"
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/images/adaptive-icon.jpeg",
+                "backgroundColor": "#FFF8EC"
+            },
+            "intentFilters": [
+                {
+                    "action": "VIEW",
+                    "data": [
+                        {
+                            "scheme": "wineapp"
+                        },
+                        {
+                            "scheme": "https",
+                            "host": "enolinkapp.com",
+                            "pathPrefix": "/join/"
+                        }
+                    ],
+                    "category": ["BROWSABLE", "DEFAULT"]
+                }
+            ],
+            "package": "com.wine.app",
+            "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE", "CAMERA", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"]
+        },
+        "web": {
+            "bundler": "metro",
+            "output": "static",
+            "favicon": "./assets/images/favicon.jpeg"
+        },
+        "plugins": [
+            "expo-router",
+            [
+                "expo-splash-screen",
+                {
+                    "image": "./assets/images/splash-icon.jpeg",
+                    "imageWidth": 200,
+                    "resizeMode": "contain",
+                    "backgroundColor": "#FFF8EC"
+                }
+            ],
+            [
+                "expo-location",
+                {
+                    "locationAlwaysAndWhenInUsePermission": "Permissão para acessar sua localização é necessária para criar eventos próximos a você."
+                }
+            ],
+            [
+                "expo-apple-authentication",
+                {
+                    "appleTeamId": "8J82XT42C9"
+                }
+            ]
+        ],
+        "experiments": {
+            "typedRoutes": true
+        },
+        "extra": {
+            "router": {
+                "origin": false
+            },
+            "eas": {
+                "projectId": "bb0f226a-63b2-40a7-90e1-6aa1511c4aba"
+            }
+        }
+    }
+}

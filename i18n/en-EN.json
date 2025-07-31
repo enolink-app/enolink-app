@@ -1,0 +1,247 @@
+{
+    "login": {
+        "wellcome": "Wellcome!",
+        "phrase": "Live the experience.",
+        "phrase2": "Discover de wine club!",
+        "join": "Join",
+        "forgot": "Forgot my password",
+        "or": "or",
+        "signIn": "Signin with",
+        "new": "New here?",
+        "create": "Create an account"
+    },
+    "register": {
+        "create": "Create Account",
+        "name": "name",
+        "email": "email",
+        "dateBirth": "Date Birth",
+        "lang": "Language",
+        "password": "Password",
+        "confirmPassword": "Confirm Password"
+    },
+    "forgot": {
+        "recover": "Recover Password",
+        "text": "Type your registered email to receive the redefinition link",
+        "email": "Email",
+        "submit": "Send Link"
+    },
+    "home": {
+        "today": "What do you want to do today?",
+        "diary": "Personal Diary",
+        "calculator": "Wine Calculator",
+        "event": "Create Event",
+        "wine": "Add Wine",
+        "highToday": "What's hot today?",
+        "checkout": "Check out the best-rated wines of the moment",
+        "details": "See details"
+    },
+    "events": {
+        "title": "Events",
+        "now": "Happening now",
+        "closed": "Closed",
+        "emptyList": "Events will appear here"
+    },
+    "wines": {
+        "title": "My Wines",
+        "emptyList": "Your wines will appear here",
+        "add": "Add Wine"
+    },
+    "me": {
+        "title": "My Profile",
+        "edit": "Edit profile",
+        "invite": "Invite Friends",
+        "created": "Created by me",
+        "joined": "Joined",
+        "emptyList": "Your wines will appear here"
+    },
+    "forms": {
+        "rating": {
+            "title": "Evaluate Wine",
+            "color": "Color",
+            "aroma": "Aroma",
+            "flavor": "Flavor",
+            "notes": "Quick notes",
+            "submit": "Send Evaluation",
+            "loadingSbmit": "Sending...",
+            "validation": {
+                "title": "Incomplete Evaluation",
+                "message": "Please rate all criteria with scores between 1 and 5 stars.",
+                "button": "OK"
+            },
+            "authRequired": {
+                "title": "Authentication Required",
+                "message": "You need to be logged in to evaluate. Please log in and try again.",
+                "button": "OK"
+            },
+            "dataError": {
+                "title": "Incomplete Data",
+                "message": "Event or wine information was not loaded correctly. Please try again.",
+                "button": "OK"
+            },
+            "success": {
+                "title": "✅ Evaluation Registered!",
+                "message": "Your evaluation was saved successfully.",
+                "rateAnother": "Rate Another Wine",
+                "goBack": "Go Back"
+            },
+            "errors": {
+                "title": "Oops!",
+                "generic": "An error occurred while sending your evaluation.",
+                "alreadyRated": "You've already rated this wine. Only one evaluation per wine is allowed.",
+                "networkTitle": "Connection Problem",
+                "networkMessage": "Could not connect to the server. Check your internet and try again.",
+                "unexpectedTitle": "Unexpected Error",
+                "unexpectedMessage": "An unexpected error occurred while processing your evaluation. Please try again later."
+            },
+            "notesPlaceholder": "What did you think of the wine?"
+        },
+        "addWineDiary": {
+            "title": "Add Wine",
+            "name": "Name",
+            "harvest": "Harvest",
+            "country": "Country",
+            "grape": "Grape",
+            "closure": "Closure",
+            "typwWine": "typeWine",
+            "image": "Image (optional)",
+            "camera": "Camera",
+            "gallery": "Gallery",
+            "submit": "Save Wine"
+        },
+        "diaryRating": {
+            "title": "Evaluate Wine",
+            "color": "Color",
+            "aroma": "Aroma",
+            "flavor": "Flavor",
+            "notes": "Quick notes",
+            "submit": "Send Evaluation",
+            "loadingSbmit": "Sending..."
+        },
+        "editProfile": {
+            "title": "Edit Profile",
+            "name": "Name",
+            "alterPassword": "Alter password",
+            "currentPassword": "Current password",
+            "newPassword": "New password",
+            "languague": "Language",
+            "cancel": "Cancel",
+            "submit": "Save changes"
+        },
+        "newDiaryWineList": {
+            "title": "My Diary",
+            "new": "New evaluation"
+        },
+        "newEvent": {
+            "title": "Event details",
+            "buttonDetails": "Details",
+            "buttonWines": "Wines",
+            "placeholderName": "Name of event",
+            "date": "Final date (optional)",
+            "titleimage": "Image background (optional)",
+            "camera": "Take picture",
+            "gallery": "Take from gallery",
+            "buttonBack": "Previous",
+            "buttonNext": "Next",
+            "buttonSubmit": "Submit",
+            "title2": "Event's wines",
+            "emptyList1": "No wines added",
+            "emptyList2": "your wines will appear here",
+            "yourWines": "Your wines",
+            "addWine": "Add New Wine"
+        },
+        "newWineEvent": {
+            "title": "Add Wine",
+            "name": "Name",
+            "harvest": "Harvest",
+            "country": "Country",
+            "grape": "Grape",
+            "closure": "Closure",
+            "typwWine": "typeWine",
+            "image": "Image (optional)",
+            "camera": "Camera",
+            "gallery": "Gallery",
+            "submit": "Save Wine"
+        },
+        "newWine": {
+            "title": "Add Wine",
+            "name": "Name",
+            "harvest": "Harvest",
+            "country": "Country",
+            "grape": "Grape",
+            "closure": "Closure",
+            "typwWine": "typeWine",
+            "image": "Image (optional)",
+            "camera": "Camera",
+            "gallery": "Gallery",
+            "submit": "Save Wine"
+        },
+        "wineCalculator": {
+            "title": "Wine Calculator",
+            "howMany": "How many people?",
+            "period": "When is the event?",
+            "level": "What is the consumption level?",
+            "morning": "Morning",
+            "afternoon": "Afternoon",
+            "evening": "Evening",
+            "night": "Night",
+            "high": "High",
+            "medium": "Medium",
+            "low": "Low",
+            "submit": "Calculate Necessary Wines"
+        }
+    },
+    "eventRoom": {
+        "title": "Event",
+        "evaluated": "Evaluated",
+        "blocked": "Blocked",
+        "typeWine": "Click on the released wine to review. The next ones will be enabled after all participants submit their reviews.",
+        "leave": "Leave the event"
+    },
+    "guestJoinEvent": {
+        "join": "Join as a Guest",
+        "name": "Name",
+        "submit": "Join Event",
+        "loadingSubmit": "Loading"
+    },
+    "joinEvent": {
+        "title": "You have been invited to an event!",
+        "submit": "Join Event",
+        "loadingSubmit": "Loading..."
+    },
+    "ranking": {
+        "emptyList": "No evaluations registered.",
+        "finish": "Finish event"
+    },
+    "settings": {
+        "invite": "Invite friends",
+        "share": "Share invite",
+        "generate": "Generate new code",
+        "finish": "Finish event",
+        "participants": "Participants"
+    },
+    "diary": {
+        "title": "My Diary",
+        "emptyList": "No notes added",
+        "notes": "Notes",
+        "color": "Color",
+        "aroma": "Aroma",
+        "flavor": "Flavor",
+        "close": "Close",
+        "addFirst": "Add First Note"
+    },
+    "privacy": {
+        "title": "Terms of Use",
+        "text1": "By using the WineApp app, you agree to our terms and conditions. This app was developed for wine tasting and evaluation purposes. We are not responsible for any misuse of its features.",
+        "text2": "Data provided by users, such as name, email, and ratings, is securely stored and used only to improve the platform experience.",
+        "text3": "Privacy Policy",
+        "text4": "All personal information is treated confidentially and will never be shared with third parties without consent.",
+        "text5": "By registering, you authorize WineApp to use your data only within the scope of the application. You can request the deletion of your account at any time.",
+        "text6": "Last updated: July 2, 2025"
+    },
+
+    "general": {
+        "loading": "Loading...",
+        "noItems": "No items found",
+        "noWines": "No wines evaluated yet. Be the first!"
+    }
+}

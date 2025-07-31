@@ -1,0 +1,213 @@
+{
+    "login": {
+        "wellcome": "¡Bienvenido!",
+        "phrase": "Vive la experiencia.",
+        "phrase2": "¡Descubre el club del vino!",
+        "join": "Unirse",
+        "forgot": "Olvidé mi contraseña",
+        "or": "o",
+        "signIn": "Iniciar sesión con",
+        "new": "¿Nuevo aquí?",
+        "create": "Crear una cuenta"
+    },
+    "register": {
+        "create": "Crear Cuenta",
+        "name": "nombre",
+        "email": "correo electrónico",
+        "dateBirth": "Fecha de Nacimiento",
+        "lang": "Idioma",
+        "password": "Contraseña",
+        "confirmPassword": "Confirmar Contraseña"
+    },
+    "forgot": {
+        "recover": "Recuperar Contraseña",
+        "text": "Ingrese su correo electrónico registrado para recibir el enlace de restablecimiento",
+        "email": "Correo electrónico",
+        "submit": "Enviar Enlace"
+    },
+    "home": {
+        "today": "¿Qué quieres hacer hoy?",
+        "diary": "Diario Personal",
+        "calculator": "Calculadora de Vinos",
+        "event": "Crear Evento",
+        "wine": "Añadir Vino",
+        "highToday": "¿Qué está de moda hoy?",
+        "checkout": "Consulta los vinos mejor valorados del momento",
+        "details": "Ver detalles"
+    },
+    "events": {
+        "title": "Eventos",
+        "now": "Sucediendo ahora",
+        "closed": "Cerrados",
+        "emptyList": "Los eventos aparecerán aquí"
+    },
+    "wines": {
+        "title": "Mis Vinos",
+        "emptyList": "Tus vinos aparecerán aquí",
+        "add": "Añadir Vino"
+    },
+    "me": {
+        "title": "Mi Perfil",
+        "edit": "Editar perfil",
+        "invite": "Invitar Amigos",
+        "created": "Creados por mí",
+        "joined": "Unido",
+        "emptyList": "Tus vinos aparecerán aquí"
+    },
+    "forms": {
+        "rating": {
+            "title": "Evaluar Vino",
+            "color": "Color",
+            "aroma": "Aroma",
+            "flavor": "Sabor",
+            "notes": "Notas rápidas",
+            "submit": "Enviar Evaluación",
+            "loadingSbmit": "Enviando..."
+        },
+        "addWineDiary": {
+            "title": "Añadir Vino",
+            "name": "Nombre",
+            "harvest": "Cosecha",
+            "country": "País",
+            "grape": "Uva",
+            "closure": "Cierre",
+            "typwWine": "Tipo de Vino",
+            "image": "Imagen (opcional)",
+            "camera": "Cámara",
+            "gallery": "Galería",
+            "submit": "Guardar Vino"
+        },
+        "diaryRating": {
+            "title": "Evaluar Vino",
+            "color": "Color",
+            "aroma": "Aroma",
+            "flavor": "Sabor",
+            "notes": "Notas rápidas",
+            "submit": "Enviar Evaluación",
+            "loadingSbmit": "Enviando..."
+        },
+        "editProfile": {
+            "title": "Editar Perfil",
+            "name": "Nombre",
+            "alterPassword": "Cambiar contraseña",
+            "currentPassword": "Contraseña actual",
+            "newPassword": "Nueva contraseña",
+            "languague": "Idioma",
+            "cancel": "Cancelar",
+            "submit": "Guardar cambios"
+        },
+        "newDiaryWineList": {
+            "title": "Mi Diario",
+            "new": "Nueva evaluación"
+        },
+        "newEvent": {
+            "title": "Detalles del Evento",
+            "buttonDetails": "Detalles",
+            "buttonWines": "Vinos",
+            "placeholderName": "Nombre del evento",
+            "date": "Fecha final (opcional)",
+            "titleimage": "Imagen de fondo (opcional)",
+            "camera": "Tomar foto",
+            "gallery": "Tomar de la galería",
+            "buttonBack": "Anterior",
+            "buttonNext": "Siguiente",
+            "buttonSubmit": "Enviar",
+            "title2": "Vinos del evento",
+            "emptyList1": "No se añadieron vinos",
+            "emptyList2": "tus vinos aparecerán aquí",
+            "yourWines": "Tus vinos",
+            "addWine": "Añadir Nuevo Vino"
+        },
+        "newWineEvent": {
+            "title": "Añadir Vino",
+            "name": "Nombre",
+            "harvest": "Cosecha",
+            "country": "País",
+            "grape": "Uva",
+            "closure": "Cierre",
+            "typwWine": "Tipo de Vino",
+            "image": "Imagen (opcional)",
+            "camera": "Cámara",
+            "gallery": "Galería",
+            "submit": "Guardar Vino"
+        },
+        "newWine": {
+            "title": "Añadir Vino",
+            "name": "Nombre",
+            "harvest": "Cosecha",
+            "country": "País",
+            "grape": "Uva",
+            "closure": "Cierre",
+            "typwWine": "Tipo de Vino",
+            "image": "Imagen (opcional)",
+            "camera": "Cámara",
+            "gallery": "Galería",
+            "submit": "Guardar Vino"
+        },
+        "wineCalculator": {
+            "title": "Calculadora de Vinos",
+            "howMany": "¿Cuántas personas?",
+            "period": "¿Cuándo es el evento?",
+            "level": "¿Cuál es el nivel de consumo?",
+            "morning": "Mañana",
+            "afternoon": "Tarde",
+            "evening": "Noche",
+            "night": "Madrugada",
+            "high": "Alto",
+            "medium": "Medio",
+            "low": "Bajo",
+            "submit": "Calcular Vinos Necesarios"
+        }
+    },
+    "eventRoom": {
+        "title": "Evento",
+        "evaluated": "Evaluado",
+        "blocked": "Bloqueado",
+        "typeWine": "Haz clic en el vino liberado para evaluar. Los siguientes se habilitarán después de que todos los participantes envíen sus evaluaciones.",
+        "leave": "Salir del evento"
+    },
+    "guestJoinEvent": {
+        "join": "Unirse como Invitado",
+        "name": "Nombre",
+        "submit": "Unirse al Evento",
+        "loadingSubmit": "Cargando"
+    },
+    "joinEvent": {
+        "title": "¡Has sido invitado a un evento!",
+        "submit": "Unirse al Evento",
+        "loadingSubmit": "Cargando..."
+    },
+    "ranking": {
+        "emptyList": "No hay evaluaciones registradas.",
+        "finish": "Finalizar evento"
+    },
+    "settings": {
+        "invite": "Invitar amigos",
+        "share": "Compartir invitación",
+        "generate": "Generar nuevo código",
+        "finish": "Finalizar evento",
+        "participants": "Participantes"
+    },
+    "diary": {
+        "emptyList": "No se añadieron notas",
+        "notes": "Notas",
+        "color": "Color",
+        "aroma": "Aroma",
+        "flavor": "Sabor",
+        "close": "Cerrar"
+    },
+    "privacy": {
+        "title": "Términos de Uso",
+        "text1": "Al usar la aplicación WineApp, aceptas nuestros términos y condiciones. Esta aplicación fue desarrollada para fines de cata y evaluación de vinos. No nos hacemos responsables del mal uso de sus funciones.",
+        "text2": "Los datos proporcionados por los usuarios, como nombre, correo electrónico y evaluaciones, se almacenan de forma segura y se utilizan solo para mejorar la experiencia de la plataforma.",
+        "text3": "Política de Privacidad",
+        "text4": "Toda la información personal se trata de forma confidencial y nunca se compartirá con terceros sin consentimiento.",
+        "text5": "Al registrarte, autorizas a WineApp a usar tus datos solo dentro del ámbito de la aplicación. Puedes solicitar la eliminación de tu cuenta en cualquier momento.",
+        "text6": "Última actualización: 2 de julio de 2025"
+    },
+    "general": {
+        "loading": "Cargando...",
+        "noItems": "No se encontraron artículos",
+        "noWines": "Aún no hay vinos calificados. ¡Sé el primero!"
+    }
+}
