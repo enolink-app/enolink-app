@@ -7,18 +7,15 @@ import { auth } from "@/lib/firebase";
 export default function AppleLoginButton() {
     const handleAppleLogin = async () => {
         try {
-            // Inicia o fluxo de autenticação
             const appleAuthRequestResponse = await appleAuth.performRequest({
                 requestedOperation: appleAuth.Operation.LOGIN,
                 requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
             });
 
-            // Verifica se a autenticação foi bem-sucedida
             if (!appleAuthRequestResponse.identityToken) {
                 throw new Error("Apple Sign-In failed - no identify token returned");
             }
 
-            // Cria uma credencial Firebase com o token da Apple
             const { identityToken, nonce } = appleAuthRequestResponse;
             const provider = new OAuthProvider("apple.com");
             const credential = provider.credential({
@@ -26,7 +23,6 @@ export default function AppleLoginButton() {
                 rawNonce: nonce,
             });
 
-            // Autentica com Firebase
             const userCredential = await signInWithCredential(auth, credential);
             console.log("Usuário Apple logado:", userCredential.user);
         } catch (error) {
