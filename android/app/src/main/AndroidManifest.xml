@@ -28,8 +28,8 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="com.wine.app"/>
-        <data android:scheme="com.wine.app"/>
+        <data android:scheme="com.vivavinho.enolink"/>
+        <data android:scheme="com.vivavinho.enolink"/>
       </intent-filter>
       <intent-filter data-generated="true">
         <action android:name="android.intent.action.VIEW"/>

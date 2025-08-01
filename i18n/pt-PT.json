@@ -31,8 +31,8 @@
         "calculator": "Calculadora de Vinhos",
         "event": "Criar Evento",
         "wine": "Adicionar Vinho",
-        "highToday": "O que está em alta hoje?",
-        "checkout": "Confira os vinhos mais bem avaliados do momento",
+        "highToday": "O que está a dar hoje?",
+        "checkout": "Confira os vinhos mais bem avaliados no momento",
         "details": "Ver detalhes"
     },
     "events": {
@@ -62,7 +62,38 @@
             "flavor": "Sabor",
             "notes": "Notas rápidas",
             "submit": "Enviar Avaliação",
-            "loadingSbmit": "A enviar..."
+            "loadingSbmit": "A enviar...",
+            "validation": {
+                "title": "Avaliação Incompleta",
+                "message": "Por favor, avalie todos os critérios com notas entre 1 e 5 estrelas.",
+                "button": "OK"
+            },
+            "authRequired": {
+                "title": "Autenticação Necessária",
+                "message": "Precisa de estar autenticado para avaliar. Faça login e tente novamente.",
+                "button": "OK"
+            },
+            "dataError": {
+                "title": "Dados Incompletos",
+                "message": "As informações do evento ou do vinho não foram carregadas corretamente. Tente novamente.",
+                "button": "OK"
+            },
+            "success": {
+                "title": "✅ Avaliação Registada!",
+                "message": "A sua avaliação foi guardada com sucesso.",
+                "rateAnother": "Avaliar Outro Vinho",
+                "goBack": "Voltar"
+            },
+            "errors": {
+                "title": "Ops!",
+                "generic": "Ocorreu um erro ao enviar a sua avaliação.",
+                "alreadyRated": "Já avaliou este vinho. Apenas uma avaliação por vinho é permitida.",
+                "networkTitle": "Problema de Ligação",
+                "networkMessage": "Não foi possível ligar ao servidor. Verifique a sua internet e tente novamente.",
+                "unexpectedTitle": "Erro Inesperado",
+                "unexpectedMessage": "Ocorreu um erro inesperado ao processar a sua avaliação. Tente novamente mais tarde."
+            },
+            "notesPlaceholder": "O que achou do vinho?"
         },
         "addWineDiary": {
             "title": "Adicionar Vinho",
@@ -70,7 +101,7 @@
             "harvest": "Safra",
             "country": "País",
             "grape": "Uva",
-            "closure": "Tampa",
+            "closure": "Rolha",
             "typwWine": "Tipo de Vinho",
             "image": "Imagem (opcional)",
             "camera": "Câmara",
@@ -107,15 +138,15 @@
             "placeholderName": "Nome do evento",
             "date": "Data final (opcional)",
             "titleimage": "Imagem de fundo (opcional)",
-            "camera": "Tirar fotografia",
+            "camera": "Tirar foto",
             "gallery": "Obter da galeria",
             "buttonBack": "Anterior",
-            "buttonNext": "Próximo",
-            "buttonSubmit": "Enviar",
-            "title2": "Vinhos do evento",
+            "buttonNext": "Seguinte",
+            "buttonSubmit": "Submeter",
+            "title2": "Vinhos do Evento",
             "emptyList1": "Nenhum vinho adicionado",
             "emptyList2": "os seus vinhos aparecerão aqui",
-            "yourWines": "Os seus vinhos",
+            "yourWines": "Os Seus Vinhos",
             "addWine": "Adicionar Novo Vinho"
         },
         "newWineEvent": {
@@ -124,7 +155,7 @@
             "harvest": "Safra",
             "country": "País",
             "grape": "Uva",
-            "closure": "Tampa",
+            "closure": "Rolha",
             "typwWine": "Tipo de Vinho",
             "image": "Imagem (opcional)",
             "camera": "Câmara",
@@ -137,7 +168,7 @@
             "harvest": "Safra",
             "country": "País",
             "grape": "Uva",
-            "closure": "Tampa",
+            "closure": "Rolha",
             "typwWine": "Tipo de Vinho",
             "image": "Imagem (opcional)",
             "camera": "Câmara",
@@ -163,11 +194,11 @@
         "title": "Evento",
         "evaluated": "Avaliado",
         "blocked": "Bloqueado",
-        "typeWine": "Clique no vinho liberado para avaliar. Os próximos serão ativados após todos os participantes enviarem as suas avaliações.",
+        "typeWine": "Clique no vinho liberado para avaliar. Os próximos serão ativados após todos os participantes submeterem as suas avaliações.",
         "leave": "Sair do evento"
     },
     "guestJoinEvent": {
-        "join": "Entrar como Convidado",
+        "join": "Participar como Convidado",
         "name": "Nome",
         "submit": "Entrar no Evento",
         "loadingSubmit": "A carregar"
@@ -179,30 +210,38 @@
     },
     "ranking": {
         "emptyList": "Nenhuma avaliação registada.",
-        "finish": "Finalizar evento"
+        "finish": "Terminar evento"
     },
     "settings": {
         "invite": "Convidar amigos",
         "share": "Partilhar convite",
         "generate": "Gerar novo código",
-        "finish": "Finalizar evento",
+        "finish": "Terminar evento",
         "participants": "Participantes"
     },
     "diary": {
+        "title": "O Meu Diário",
         "emptyList": "Nenhuma nota adicionada",
         "notes": "Notas",
         "color": "Cor",
         "aroma": "Aroma",
         "flavor": "Sabor",
-        "close": "Fechar"
+        "close": "Fechar",
+        "addFirst": "Adicionar Primeira Nota"
     },
     "privacy": {
         "title": "Termos de Utilização",
-        "text1": "Ao utilizar a aplicação WineApp, concorda com os nossos termos e condições. Esta aplicação foi desenvolvida para fins de prova e avaliação de vinhos. Não nos responsabilizamos por qualquer uso indevido das suas funcionalidades.",
-        "text2": "Os dados fornecidos pelos utilizadores, como nome, e-mail e avaliações, são armazenados com segurança e utilizados apenas para melhorar a experiência da plataforma.",
+        "text1": "Ao utilizar a aplicação WineApp, concorda com os nossos termos e condições. Esta aplicação foi desenvolvida para degustação e avaliação de vinhos. Não nos responsabilizamos por qualquer uso indevido das suas funcionalidades.",
+        "text2": "Os dados fornecidos pelos utilizadores, como nome, e-mail e avaliações, são armazenados com segurança e utilizados apenas para melhorar a experiência na plataforma.",
         "text3": "Política de Privacidade",
-        "text4": "Todas as informações pessoais são tratadas de forma confidencial e nunca serão partilhadas com terceiros sem consentimento.",
+        "text4": "Todas as informações pessoais são tratadas com confidencialidade e nunca serão partilhadas com terceiros sem consentimento.",
         "text5": "Ao registar-se, autoriza o WineApp a utilizar os seus dados apenas no âmbito da aplicação. Pode solicitar a eliminação da sua conta a qualquer momento.",
         "text6": "Última atualização: 2 de julho de 2025"
+    },
+    "general": {
+        "required": "obrigatório",
+        "loading": "A carregar...",
+        "noItems": "Nenhum item encontrado",
+        "noWines": "Nenhum vinho avaliado ainda. Seja o primeiro!"
     }
 }

@@ -13,7 +13,7 @@
     "register": {
         "create": "Crea Account",
         "name": "nome",
-        "email": "e-mail",
+        "email": "email",
         "dateBirth": "Data di Nascita",
         "lang": "Lingua",
         "password": "Password",
@@ -22,17 +22,17 @@
     "forgot": {
         "recover": "Recupera Password",
         "text": "Inserisci la tua email registrata per ricevere il link di reimpostazione",
-        "email": "E-mail",
+        "email": "Email",
         "submit": "Invia Link"
     },
     "home": {
         "today": "Cosa vuoi fare oggi?",
         "diary": "Diario Personale",
-        "calculator": "Calcolatore del Vino",
+        "calculator": "Calcolatore di Vini",
         "event": "Crea Evento",
         "wine": "Aggiungi Vino",
         "highToday": "Cosa va di moda oggi?",
-        "checkout": "Scopri i vini meglio valutati del momento",
+        "checkout": "Scopri i vini meglio valutati al momento",
         "details": "Vedi dettagli"
     },
     "events": {
@@ -59,10 +59,41 @@
             "title": "Valuta Vino",
             "color": "Colore",
             "aroma": "Aroma",
-            "flavor": "Sapore",
+            "flavor": "Gusto",
             "notes": "Note veloci",
             "submit": "Invia Valutazione",
-            "loadingSbmit": "Invio in corso..."
+            "loadingSbmit": "Invio in corso...",
+            "validation": {
+                "title": "Valutazione Incompleta",
+                "message": "Per favore, valuta tutti i criteri con punteggi tra 1 e 5 stelle.",
+                "button": "OK"
+            },
+            "authRequired": {
+                "title": "Autenticazione Richiesta",
+                "message": "Devi essere loggato per valutare. Accedi e riprova.",
+                "button": "OK"
+            },
+            "dataError": {
+                "title": "Dati Incompleti",
+                "message": "Le informazioni sull'evento o sul vino non sono state caricate correttamente. Riprova.",
+                "button": "OK"
+            },
+            "success": {
+                "title": "✅ Valutazione Registrata!",
+                "message": "La tua valutazione è stata salvata con successo.",
+                "rateAnother": "Valuta un Altro Vino",
+                "goBack": "Indietro"
+            },
+            "errors": {
+                "title": "Oops!",
+                "generic": "Si è verificato un errore durante l'invio della tua valutazione.",
+                "alreadyRated": "Hai già valutato questo vino. È consentita solo una valutazione per vino.",
+                "networkTitle": "Problema di Connessione",
+                "networkMessage": "Impossibile connettersi al server. Controlla la tua connessione internet e riprova.",
+                "unexpectedTitle": "Errore Inaspettato",
+                "unexpectedMessage": "Si è verificato un errore inaspettato durante l'elaborazione della tua valutazione. Riprova più tardi."
+            },
+            "notesPlaceholder": "Cosa ne pensi del vino?"
         },
         "addWineDiary": {
             "title": "Aggiungi Vino",
@@ -81,7 +112,7 @@
             "title": "Valuta Vino",
             "color": "Colore",
             "aroma": "Aroma",
-            "flavor": "Sapore",
+            "flavor": "Gusto",
             "notes": "Note veloci",
             "submit": "Invia Valutazione",
             "loadingSbmit": "Invio in corso..."
@@ -108,14 +139,14 @@
             "date": "Data finale (opzionale)",
             "titleimage": "Immagine di sfondo (opzionale)",
             "camera": "Scatta foto",
-            "gallery": "Prendi dalla galleria",
+            "gallery": "Scegli dalla galleria",
             "buttonBack": "Precedente",
             "buttonNext": "Successivo",
             "buttonSubmit": "Invia",
-            "title2": "Vini dell'evento",
+            "title2": "Vini dell'Evento",
             "emptyList1": "Nessun vino aggiunto",
             "emptyList2": "i tuoi vini appariranno qui",
-            "yourWines": "I tuoi vini",
+            "yourWines": "I Tuoi Vini",
             "addWine": "Aggiungi Nuovo Vino"
         },
         "newWineEvent": {
@@ -145,7 +176,7 @@
             "submit": "Salva Vino"
         },
         "wineCalculator": {
-            "title": "Calcolatore del Vino",
+            "title": "Calcolatore di Vini",
             "howMany": "Quante persone?",
             "period": "Quando è l'evento?",
             "level": "Qual è il livello di consumo?",
@@ -164,10 +195,10 @@
         "evaluated": "Valutato",
         "blocked": "Bloccato",
         "typeWine": "Clicca sul vino rilasciato per valutare. I prossimi saranno abilitati dopo che tutti i partecipanti avranno inviato le loro valutazioni.",
-        "leave": "Lascia l'evento"
+        "leave": "Abbandona l'evento"
     },
     "guestJoinEvent": {
-        "join": "Unisciti come Ospite",
+        "join": "Partecipa come Ospite",
         "name": "Nome",
         "submit": "Unisciti all'Evento",
         "loadingSubmit": "Caricamento"
@@ -189,20 +220,28 @@
         "participants": "Partecipanti"
     },
     "diary": {
+        "title": "Il Mio Diario",
         "emptyList": "Nessuna nota aggiunta",
         "notes": "Note",
         "color": "Colore",
         "aroma": "Aroma",
-        "flavor": "Sapore",
-        "close": "Chiudi"
+        "flavor": "Gusto",
+        "close": "Chiudi",
+        "addFirst": "Aggiungi Prima Nota"
     },
     "privacy": {
         "title": "Termini di Utilizzo",
-        "text1": "Utilizzando l'app WineApp, accetti i nostri termini e condizioni. Questa app è stata sviluppata per scopi di degustazione e valutazione del vino. Non siamo responsabili per qualsiasi uso improprio delle sue funzionalità.",
-        "text2": "I dati forniti dagli utenti, come nome, email e valutazioni, sono archiviati in modo sicuro e utilizzati solo per migliorare l'esperienza della piattaforma.",
-        "text3": "Privacy Policy",
+        "text1": "Utilizzando l'app WineApp, accetti i nostri termini e condizioni. Questa app è stata sviluppata per la degustazione e valutazione di vini. Non siamo responsabili per eventuali usi impropri delle sue funzionalità.",
+        "text2": "I dati forniti dagli utenti, come nome, email e valutazioni, sono archiviati in modo sicuro e utilizzati solo per migliorare l'esperienza sulla piattaforma.",
+        "text3": "Politica sulla Privacy",
         "text4": "Tutte le informazioni personali sono trattate in modo confidenziale e non saranno mai condivise con terzi senza consenso.",
         "text5": "Registrandoti, autorizzi WineApp a utilizzare i tuoi dati solo nell'ambito dell'applicazione. Puoi richiedere la cancellazione del tuo account in qualsiasi momento.",
         "text6": "Ultimo aggiornamento: 2 luglio 2025"
+    },
+    "general": {
+        "required": "obbligatorio",
+        "loading": "Caricamento...",
+        "noItems": "Nessun elemento trovato",
+        "noWines": "Nessun vino valutato ancora. Sii il primo!"
     }
 }

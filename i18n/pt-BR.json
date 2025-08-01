@@ -32,7 +32,7 @@
         "event": "Criar Evento",
         "wine": "Adicionar Vinho",
         "highToday": "O que está bombando hoje?",
-        "checkout": "Confira os vinhos mais bem avaliados do momento",
+        "checkout": "Confira os vinhos mais bem avaliados no momento",
         "details": "Ver detalhes"
     },
     "events": {
@@ -60,13 +60,13 @@
             "color": "Cor",
             "aroma": "Aroma",
             "flavor": "Sabor",
-            "notes": "Anotações rápidas",
+            "notes": "Notas rápidas",
             "submit": "Enviar Avaliação",
             "loadingSbmit": "Enviando...",
             "validation": {
                 "title": "Avaliação Incompleta",
                 "message": "Por favor, avalie todos os critérios com notas entre 1 e 5 estrelas.",
-                "button": "Entendi"
+                "button": "OK"
             },
             "authRequired": {
                 "title": "Autenticação Necessária",
@@ -75,7 +75,7 @@
             },
             "dataError": {
                 "title": "Dados Incompletos",
-                "message": "Informações do evento ou vinho não foram carregadas corretamente. Tente novamente.",
+                "message": "As informações do evento ou do vinho não foram carregadas corretamente. Tente novamente.",
                 "button": "OK"
             },
             "success": {
@@ -87,13 +87,13 @@
             "errors": {
                 "title": "Ops!",
                 "generic": "Ocorreu um erro ao enviar sua avaliação.",
-                "alreadyRated": "Você já avaliou este vinho. Só é permitido uma avaliação por vinho.",
+                "alreadyRated": "Você já avaliou este vinho. Apenas uma avaliação por vinho é permitida.",
                 "networkTitle": "Problema de Conexão",
                 "networkMessage": "Não foi possível conectar ao servidor. Verifique sua internet e tente novamente.",
                 "unexpectedTitle": "Erro Inesperado",
                 "unexpectedMessage": "Ocorreu um erro inesperado ao processar sua avaliação. Tente novamente mais tarde."
             },
-            "notesPlaceholder": "O que achou do vinho?"
+            "notesPlaceholder": "O que você achou do vinho?"
         },
         "addWineDiary": {
             "title": "Adicionar Vinho",
@@ -113,7 +113,7 @@
             "color": "Cor",
             "aroma": "Aroma",
             "flavor": "Sabor",
-            "notes": "Anotações rápidas",
+            "notes": "Notas rápidas",
             "submit": "Enviar Avaliação",
             "loadingSbmit": "Enviando..."
         },
@@ -143,10 +143,10 @@
             "buttonBack": "Anterior",
             "buttonNext": "Próximo",
             "buttonSubmit": "Enviar",
-            "title2": "Vinhos do evento",
+            "title2": "Vinhos do Evento",
             "emptyList1": "Nenhum vinho adicionado",
             "emptyList2": "seus vinhos aparecerão aqui",
-            "yourWines": "Seus vinhos",
+            "yourWines": "Seus Vinhos",
             "addWine": "Adicionar Novo Vinho"
         },
         "newWineEvent": {
@@ -198,7 +198,7 @@
         "leave": "Sair do evento"
     },
     "guestJoinEvent": {
-        "join": "Entrar como Convidado",
+        "join": "Participar como Convidado",
         "name": "Nome",
         "submit": "Entrar no Evento",
         "loadingSubmit": "Carregando"
@@ -210,33 +210,36 @@
     },
     "ranking": {
         "emptyList": "Nenhuma avaliação registrada.",
-        "finish": "Finalizar evento"
+        "finish": "Encerrar evento"
     },
     "settings": {
         "invite": "Convidar amigos",
         "share": "Compartilhar convite",
         "generate": "Gerar novo código",
-        "finish": "Finalizar evento",
+        "finish": "Encerrar evento",
         "participants": "Participantes"
     },
     "diary": {
-        "emptyList": "Nenhuma anotação adicionada",
-        "notes": "Anotações",
+        "title": "Meu Diário",
+        "emptyList": "Nenhuma nota adicionada",
+        "notes": "Notas",
         "color": "Cor",
         "aroma": "Aroma",
         "flavor": "Sabor",
-        "close": "Fechar"
+        "close": "Fechar",
+        "addFirst": "Adicionar Primeira Nota"
     },
     "privacy": {
         "title": "Termos de Uso",
-        "text1": "Ao usar o aplicativo WineApp, você concorda com nossos termos e condições. Este aplicativo foi desenvolvido para fins de degustação e avaliação de vinhos. Não nos responsabilizamos por qualquer uso indevido de seus recursos.",
-        "text2": "Os dados fornecidos pelos usuários, como nome, e-mail e avaliações, são armazenados com segurança e usados apenas para melhorar a experiência da plataforma.",
+        "text1": "Ao usar o aplicativo WineApp, você concorda com nossos termos e condições. Este aplicativo foi desenvolvido para degustação e avaliação de vinhos. Não nos responsabilizamos por qualquer uso indevido de suas funcionalidades.",
+        "text2": "Os dados fornecidos pelos usuários, como nome, e-mail e avaliações, são armazenados com segurança e usados apenas para melhorar a experiência na plataforma.",
         "text3": "Política de Privacidade",
-        "text4": "Todas as informações pessoais são tratadas de forma confidencial e nunca serão compartilhadas com terceiros sem consentimento.",
-        "text5": "Ao se registrar, você autoriza o WineApp a usar seus dados apenas no âmbito do aplicativo. Você pode solicitar a exclusão de sua conta a qualquer momento.",
+        "text4": "Todas as informações pessoais são tratadas com confidencialidade e nunca serão compartilhadas com terceiros sem consentimento.",
+        "text5": "Ao se registrar, você autoriza o WineApp a usar seus dados apenas no âmbito do aplicativo. Você pode solicitar a exclusão da sua conta a qualquer momento.",
         "text6": "Última atualização: 2 de julho de 2025"
     },
     "general": {
+        "required": "obrigatório",
         "loading": "Carregando...",
         "noItems": "Nenhum item encontrado",
         "noWines": "Nenhum vinho avaliado ainda. Seja o primeiro!"

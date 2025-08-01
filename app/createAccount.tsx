@@ -27,7 +27,7 @@ import * as Google from "expo-auth-session/providers/google";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
+import AppleLoginButton from "@/components/AppleButtonLogin";
 import { auth } from "@/lib/firebase";
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { useState, useEffect } from "react";
@@ -220,6 +220,7 @@ export default function LoginScreen() {
                         Cadastrar com Google
                     </ButtonText>
                 </Button>
+                <AppleLoginButton />
                 {/*                 <Button variant="solid" size="lg" h={70} bgColor="white" borderRadius="$full" onPress={signInWithApple} isDisabled={isLoading}>
                     {isLoading ? (
                         <ActivityIndicator color="black" />

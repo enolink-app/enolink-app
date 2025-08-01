@@ -240,6 +240,7 @@
     },
 
     "general": {
+        "required": "required",
         "loading": "Loading...",
         "noItems": "No items found",
         "noWines": "No wines evaluated yet. Be the first!"

@@ -1,3 +1,5 @@
+import React, { useCallback } from "react";
+import { useFocusEffect } from "expo-router";
 import { Box, Text, ScrollView, Heading, Image, HStack, VStack, Button, Badge, BadgeText, ButtonText } from "@gluestack-ui/themed";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { ChevronLeft, ShareIcon, Copy, SettingsIcon, Star } from "lucide-react-native";
@@ -8,10 +10,11 @@ import { useEventRoom } from "@/hooks/useEventRoom";
 import { auth } from "@/lib/firebase";
 import * as Clipboard from "expo-clipboard";
 import { Alert } from "react-native";
-
+import { useEventParticipants } from "@/hooks/useEventParticipants";
 export default function EventRoomScreen() {
     const router = useRouter();
     const { id: eventId } = useLocalSearchParams<{ id: string }>();
+    const { newParticipants, resetNewParticipants } = useEventParticipants(eventId);
     const { currentEvent, rankings, myEvaluations, isLoading } = useEventStore();
     useEventRoom(eventId);
 
@@ -26,6 +29,13 @@ export default function EventRoomScreen() {
     const userAlreadyEvaluated = (wineId: string) => {
         return myEvaluations.some((ev) => ev.wineId === wineId);
     };
+
+    useFocusEffect(
+        useCallback(() => {
+            resetNewParticipants();
+            return () => {};
+        }, [])
+    );
 
     // Função para verificar se um vinho está desbloqueado para avaliação
     const isWineUnlocked = (index: number): boolean => {
@@ -112,6 +122,11 @@ export default function EventRoomScreen() {
                             <SettingsIcon size={20} color={primary} />
                         </Button>
                     </HStack>
+                )}
+                {newParticipants > 0 && (
+                    <Badge ml="$2" bg="$green500" borderRadius="$full">
+                        <BadgeText>+{newParticipants}</BadgeText>
+                    </Badge>
                 )}
             </HStack>
 

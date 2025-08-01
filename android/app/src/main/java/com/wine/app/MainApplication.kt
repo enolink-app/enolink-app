@@ -1,4 +1,4 @@
-package com.wine.app
+package com.vivavinho.enolink
 
 import android.app.Application
 import android.content.res.Configuration

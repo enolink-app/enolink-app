@@ -5,7 +5,7 @@
         "version": "1.0.0",
         "orientation": "portrait",
         "icon": "./assets/images/icon.jpeg",
-        "scheme": "com.wine.app",
+        "scheme": "com.vivavinho.enolink",
         "userInterfaceStyle": "automatic",
         "assetBundlePatterns": ["**/*"],
         "newArchEnabled": true,
@@ -47,7 +47,7 @@
                     "category": ["BROWSABLE", "DEFAULT"]
                 }
             ],
-            "package": "com.wine.app",
+            "package": "com.vivavinho.enolink",
             "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE", "CAMERA", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"]
         },
         "web": {

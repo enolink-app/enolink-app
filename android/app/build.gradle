@@ -86,9 +86,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.wine.app'
+    namespace 'com.vivavinho.enolink'
     defaultConfig {
-        applicationId 'com.wine.app'
+        applicationId 'com.vivavinho.enolink'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

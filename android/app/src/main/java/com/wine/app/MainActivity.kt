@@ -1,4 +1,4 @@
-package com.wine.app
+package com.vivavinho.enolink
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

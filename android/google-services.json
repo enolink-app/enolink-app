@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:27430021409:android:87e4881106b60243e87660",
+        "android_client_info": {
+          "package_name": "com.vivavinho.enolink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "27430021409-n25b5e2urcnv1m0sot5stg8m81muo386.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ2tEDHn2gaiaOtDaHZWltjht2oiagjhQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "27430021409-n25b5e2urcnv1m0sot5stg8m81muo386.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "27430021409-s0s3ttbgkjefeai5e3elhe5h9go2a5gj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wine.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:27430021409:android:e5a5cceef284a67de87660",
         "android_client_info": {
           "package_name": "com.wineapp"

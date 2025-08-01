@@ -39,6 +39,7 @@ import { config } from "@/gluestack-ui.config";
 import { useNavigation } from "expo-router";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { handleAppleLogin } from "@/lib/auth/handleAppleLogin";
+import AppleLoginButton from "@/components/AppleButtonLogin";
 WebBrowser.maybeCompleteAuthSession();
 
 // Configuração corrigida do Google SignIn
@@ -243,6 +244,7 @@ export default function LoginScreen() {
                         Continuar com Google
                     </ButtonText>
                 </Button>
+                <AppleLoginButton />
                 {/*                 {AppleAuthentication.isAvailableAsync() ? (
                     <AppleAuthentication.AppleAuthenticationButton
                         buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
