@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>27430021409-uqcg92jgpji2nj2ik5vo3ogmu3qvlp6j.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.27430021409-uqcg92jgpji2nj2ik5vo3ogmu3qvlp6j</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>27430021409-nmhb7q72shobhp7h3vi3okvoaetf2rv8.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC46lkFBMwmOHweud3oUH_w8NXHNK2_s00</string>
+	<key>GCM_SENDER_ID</key>
+	<string>27430021409</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.vivavinho.enolink</string>
+	<key>PROJECT_ID</key>
+	<string>ivino-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ivino-app.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:27430021409:ios:d05cf1fe377d7f3fe87660</string>
+</dict>
+</plist>
