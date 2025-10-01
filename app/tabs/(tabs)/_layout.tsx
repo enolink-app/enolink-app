@@ -1,31 +1,40 @@
-import React from "react";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import React, { useState, useEffect } from "react";
 import { Tabs } from "expo-router";
-import { useClientOnlyValue } from "@/components/useClientOnlyValue";
-import { GluestackUIProvider } from "@gluestack-ui/themed";
-import { config } from "@/gluestack-ui.config"; // Caminho ajustado ao seu projeto
-import { House, Wine, Calendar, User, PlusIcon } from "lucide-react-native";
-
-function TabBarIcon(props: { name: React.ComponentProps<typeof Ionicons>["name"]; color: string }) {
-    return <Ionicons size={22} style={{ marginBottom: -3 }} {...props} />;
-}
-
+import { House, Wine, Calendar, User } from "lucide-react-native";
+import useLanguageStore from "@/stores/useLanguageStore";
+import { config } from "@/gluestack-ui.config";
 export default function TabLayout() {
+    const { t, forceUpdate } = useLanguageStore();
+    const [updateKey, setUpdateKey] = useState(0);
+    const primary = config.tokens.colors.primary["500"];
+    const neutralDark = config.tokens.colors.primary["600"];
+    const neutralLight = config.tokens.colors.primary["700"];
+    const accent = config.tokens.colors.primary["800"];
+    const gold = config.tokens.colors.primary["900"];
+
+    useEffect(() => {
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
+
     return (
         <Tabs
+            key={updateKey}
             screenOptions={{
                 headerShown: false,
-                tabBarActiveTintColor: "#5D1728", // sua cor primária
+                tabBarActiveTintColor: primary,
                 tabBarLabelStyle: { fontSize: 11 },
                 tabBarStyle: {
                     height: 60,
+                },
+                sceneStyle: {
+                    backgroundColor: neutralLight,
                 },
             }}
         >
             <Tabs.Screen
                 name="home"
                 options={{
-                    title: "Home",
+                    title: t("general.home"),
                     headerShown: false,
                     tabBarIcon: ({ color }) => <House key="half" size={20} color={color} />,
                 }}
@@ -34,44 +43,15 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="events"
                 options={{
-                    title: "Eventos",
+                    title: t("general.events"),
                     headerShown: false,
                     tabBarIcon: ({ color }) => <Calendar key="half" size={20} color={color} />,
                 }}
             />
-
-            {/* TAB do botão de novo evento */}
-            {/*                 <Tabs.Screen
-                    name="redirect"
-                    options={{
-                        title: "Novo Evento",
-                        headerShown: false,
-                        tabBarIcon: ({ color }) => (
-                            <Ionicons
-                                name="add-circle"
-                                size={60}
-                                color="#5D1728"
-                                style={{
-                                    bottom: 10,
-                                    shadowColor: "#000",
-                                    shadowOffset: { width: 0, height: 2 },
-                                    shadowOpacity: 0.3,
-                                    shadowRadius: 4,
-                                    position: "absolute",
-                                    zIndex: 9999,
-                                    width: 70,
-                                    textAlign: "center",
-                                }}
-                            />
-                        ),
-                        tabBarLabelStyle: { marginTop: 0 },
-                    }}
-                /> */}
-
             <Tabs.Screen
                 name="wines"
                 options={{
-                    title: "Vinhos",
+                    title: t("general.wines"),
                     headerShown: false,
                     tabBarIcon: ({ color }) => <Wine key="half" size={20} color={color} />,
                 }}
@@ -80,7 +60,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="profile"
                 options={{
-                    title: "Eu",
+                    title: t("general.me"),
                     headerShown: false,
                     tabBarIcon: ({ color }) => <User key="half" size={20} color={color} />,
                 }}

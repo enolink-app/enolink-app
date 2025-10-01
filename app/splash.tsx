@@ -36,10 +36,8 @@ import { useRouter } from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { config } from "@/gluestack-ui.config";
 import { Star, Wine, Grape, MapPin, PlusIcon } from "lucide-react-native";
-
+import useLanguageStore from "@/stores/useLanguageStore";
 WebBrowser.maybeCompleteAuthSession();
-
-// Configuração corrigida do Google SignIn
 
 type LoginFormData = {
     email: string;
@@ -54,12 +52,21 @@ const loginSchema = yup.object({
 export default function LoginScreen() {
     const router = useRouter();
     const primary = config.tokens.colors.primary["500"];
-    const [isLoading, setIsLoading] = useState(false);
+    const neutralDark = config.tokens.colors.primary["600"];
+    const neutralLight = config.tokens.colors.primary["700"];
+    const accent = config.tokens.colors.primary["800"];
+    const gold = config.tokens.colors.primary["900"];
 
-    // Configuração corrigida do Google Auth Request
+    const [isLoading, setIsLoading] = useState(false);
+    const { t, forceUpdate } = useLanguageStore();
+    const [updateKey, setUpdateKey] = useState(0);
+
+    useEffect(() => {
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
     const [request, response, promptAsync] = Google.useAuthRequest({
         webClientId: "27430021409-n25b5e2urcnv1m0sot5stg8m81muo386.apps.googleusercontent.com",
-        iosClientId: "27430021409-s0s3ttbgkjefeai5e3elhe5h9go2a5gj.apps.googleusercontent.com", // Corrigido
+        iosClientId: "27430021409-uqcg92jgpji2nj2ik5vo3ogmu3qvlp6j.apps.googleusercontent.com", // Corrigido
         androidClientId: "27430021409-nmhb7q72shobhp7h3vi3okvoaetf2rv8.apps.googleusercontent.com",
     });
 
@@ -70,52 +77,6 @@ export default function LoginScreen() {
     } = useForm<LoginFormData>({
         resolver: yupResolver(loginSchema),
     });
-
-    const handleEmailLogin = async ({ email, password }: LoginFormData) => {
-        setIsLoading(true);
-        try {
-            console.log("🔥 Tentando login com:", auth, email, password);
-
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log("✅ Login realizado com sucesso:", userCredential.user.email);
-            router.replace("/tabs/(tabs)/home");
-            // Navegação será feita automaticamente pelo useAuth hook
-        } catch (error: any) {
-            console.error("❌ Firebase login error:", error);
-
-            let errorMessage = "Erro de autenticação";
-
-            if (error.code === "auth/network-request-failed") {
-                errorMessage = "Erro de conexão. Verifique sua internet e tente novamente.";
-            } else if (error.code === "auth/user-not-found") {
-                errorMessage = "Usuário não encontrado.";
-            } else if (error.code === "auth/wrong-password") {
-                errorMessage = "Senha incorreta.";
-            } else if (error.code === "auth/invalid-email") {
-                errorMessage = "E-mail inválido.";
-            }
-
-            Alert.alert("Erro de Login", errorMessage);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-    const handleGoogleLogin = async () => {
-        setIsLoading(true);
-        try {
-            const result = await promptAsync();
-            if (result?.type === "success") {
-                const { id_token } = result.params;
-                const credential = GoogleAuthProvider.credential(id_token);
-                await signInWithCredential(auth, credential);
-                showToast("success", "Login com Google realizado!");
-            }
-        } catch (error) {
-            showToast("error", "Erro ao fazer login com Google");
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
     const showToast = (type: "success" | "error", message: string) => {
         const toast = useToast();
@@ -130,31 +91,37 @@ export default function LoginScreen() {
     };
 
     return (
-        <Box flex={1} style={{ backgroundColor: "#FFF8EC" }} bg="#FFF8EC" justifyContent="center" p="$8">
+        <Box key={updateKey} flex={1} bg={neutralLight} justifyContent="center" p="$8">
             <VStack flex={1} space="xl">
                 <VStack flex={1} justifyContent="center" alignItems="center" marginBottom={12}>
                     <Image
-                        source={require("@/assets/images/logo.jpeg")}
+                        source={require("@/assets/images/icon.png")}
                         alt="Logo do Aplicativo"
                         size="lg"
+                        height={120}
+                        width={120}
                         alignSelf="center"
-                        className=" w-full max-w-[320px] bg-violet-500 justify-center items-center"
+                        className=" w-96 h-96 bg-violet-500 justify-center items-center"
                     />
-                    <Heading size="xl" color="$textDark800" textAlign="center">
-                        Bem-vindo!
+                    <Heading size="xl" color={primary} textAlign="center">
+                        {t("login.wellcome")}
                     </Heading>
-                    <Text bold>Viva a experiência.</Text>
-                    <Text bold>Descubra o clube dos vinhos!</Text>
+                    <Text bold color="$textDark800">
+                        {t("login.phrase")}
+                    </Text>
+                    <Text bold color="$textDark800">
+                        {t("login.phrase2")}
+                    </Text>
                 </VStack>
 
                 <Button variant="solid" size="lg" h={70} bgColor={primary} borderRadius="$full" onPress={() => router.push("/createAccount")} isDisabled={!request || isLoading}>
                     <ButtonText color="white" className="p-3" mx="$3">
-                        Crie sua conta
+                        {t("login.create")}
                     </ButtonText>
                 </Button>
                 <Button variant="outline" size="lg" h={70} borderColor={primary} borderRadius="$full" onPress={() => router.push("/login")} isDisabled={!request || isLoading}>
                     <ButtonText color={primary} className="p-3" mx="$3">
-                        Entrar
+                        {t("login.join")}
                     </ButtonText>
                 </Button>
             </VStack>

@@ -1,8 +1,9 @@
 // app/tabs/guest-join-event.tsx
 import { Button, Text, Box, VStack, Input, InputField, ButtonText } from "@gluestack-ui/themed";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRequest } from "@/hooks/useRequest";
+import useLanguageStore from "@/stores/useLanguageStore";
 
 export default function GuestJoinScreen() {
     const router = useRouter();
@@ -10,6 +11,12 @@ export default function GuestJoinScreen() {
     const { joinEvent } = useRequest();
     const [loading, setLoading] = useState(false);
     const [guestName, setGuestName] = useState("");
+    const [updateKey, setUpdateKey] = useState(0);
+    const { t, forceUpdate } = useLanguageStore();
+
+    useEffect(() => {
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
 
     const handleJoinAsGuest = async () => {
         if (!guestName.trim()) {
@@ -35,17 +42,17 @@ export default function GuestJoinScreen() {
     };
 
     return (
-        <Box p="$4">
+        <Box key={updateKey} p="$4">
             <Text fontSize="$xl" mb="$4">
-                Entrar como Convidado
+                {t("guestJoinEvent.join")}
             </Text>
 
             <Input mb="$4">
-                <InputField placeholder="Seu nome" value={guestName} onChangeText={setGuestName} />
+                <InputField placeholder={t("guestJoinEvent.name")} value={guestName} onChangeText={setGuestName} />
             </Input>
 
             <Button onPress={handleJoinAsGuest} isDisabled={loading}>
-                <ButtonText>{loading ? "Entrando..." : "Entrar no Evento"}</ButtonText>
+                <ButtonText>{loading ? t("guestJoinEvent.loadingSubmit") : t("guestJoinEvent.submit")}</ButtonText>
             </Button>
         </Box>
     );

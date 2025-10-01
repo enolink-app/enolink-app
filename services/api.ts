@@ -17,9 +17,7 @@ const useRequest = () => {
                     Authorization: `Bearer ${token}`,
                 },
             })
-            .then((response) => {
-                console.log("Sucesso", response);
-            })
+            .then((response) => {})
             .catch((error) => {
                 throw Error("Não foi possível criar o evento!", error);
             });

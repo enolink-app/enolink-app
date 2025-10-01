@@ -3,6 +3,7 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { useState, useEffect } from "react";
 import { useRequest } from "@/hooks/useRequest";
 import { auth } from "@/lib/firebase";
+import useLanguageStore from "@/stores/useLanguageStore";
 
 export default function JoinEventScreen() {
     const router = useRouter();
@@ -10,6 +11,12 @@ export default function JoinEventScreen() {
     const { joinEvent } = useRequest();
     const [loading, setLoading] = useState(false);
     const currentUser = auth.currentUser;
+    const { t, forceUpdate } = useLanguageStore();
+    const [updateKey, setUpdateKey] = useState(0);
+
+    useEffect(() => {
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
 
     useEffect(() => {
         if (!inviteCode) {
@@ -40,13 +47,13 @@ export default function JoinEventScreen() {
     };
 
     return (
-        <Box p="$4">
+        <Box key={updateKey} p="$4">
             <Text fontSize="$xl" mb="$4">
-                Você foi convidado para um evento!
+                {t("joinEvent.title")}
             </Text>
 
             <Button onPress={handleJoinEvent} isDisabled={loading}>
-                <ButtonText>{loading ? "Entrando..." : "Entrar no Evento"}</ButtonText>
+                <ButtonText>{loading ? t("joinEvent.ladingSubmit") : t("joinEvent.submit")}</ButtonText>
             </Button>
         </Box>
     );

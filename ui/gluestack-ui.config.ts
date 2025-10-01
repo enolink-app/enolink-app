@@ -1,4 +1,3 @@
-// wine-app/ui/gluestack-ui.config.ts
 import { createConfig } from "@gluestack-ui/themed";
 import { config as defaultConfig } from "@gluestack-ui/config";
 
@@ -14,20 +13,22 @@ export const config = createConfig({
                 200: "#FCC3D7",
                 300: "#FA96BD",
                 400: "#F868A3",
-                500: "#5D1728", // #E71F65
-                600: "#B9154E",
-                700: "#8A103A",
-                800: "#5C0A26",
-                900: "#2D0513",
+                500: "#6B2232",
+                600: "#2D2D2D",
+                700: "#ECE7E1",
+                800: "#1E6F5C",
+                900: "#B89F5B",
             },
-            backgroundLight: "#FFF8EC",
-            backgroundDark: "#0A0A13",
-            textLight: "#0A0A13",
-            textDark: "#FFF8EC",
+            backgroundLight: "#ECE7E1",
+            backgroundDark: "#2D2D2D",
+            textLight: "#2D2D2D",
+            textDark: "#ECE7E1",
             muted: "#A1A1AA",
             border: "#E4E4E7",
             error: "#EF4444",
             success: "#22C55E",
+            accent: "#1E6F5C",
+            gold: "#B89F5B",
         },
     },
 });

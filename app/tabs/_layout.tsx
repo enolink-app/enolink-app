@@ -1,27 +1,30 @@
-export {
-    // Catch any errors thrown by the Layout component.
-    ErrorBoundary,
-} from "expo-router";
+export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
-    // Ensure that reloading on `/modal` keeps a back button present.
     initialRouteName: "(tabs)/home.tsx",
 };
 import { GluestackUIProvider } from "@gluestack-ui/themed";
-import { config } from "@/gluestack-ui.config"; // Caminho ajustado ao seu projeto
+import { config } from "@/gluestack-ui.config";
 import { Slot } from "expo-router";
 import { Stack } from "expo-router";
 
+const primary = config.tokens.colors.primary["500"];
+const neutralDark = config.tokens.colors.primary["600"];
+const neutralLight = config.tokens.colors.primary["700"];
+const accent = config.tokens.colors.primary["800"];
+const gold = config.tokens.colors.primary["900"];
 export default function AppLayout() {
-    console.log("🌈 Tema carregado com primary500 no layout TABS:", config.tokens.colors.primary?.["500"]);
     return (
         <GluestackUIProvider config={config}>
             <Stack
                 screenOptions={{
                     headerShown: false,
+                    contentStyle: {
+                        backgroundColor: neutralLight,
+                    },
                 }}
             >
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="(tabs)" options={{ headerShown: false, headerStyle: { backgroundColor: primary } }} />
             </Stack>
         </GluestackUIProvider>
     );

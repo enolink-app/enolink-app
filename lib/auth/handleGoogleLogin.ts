@@ -1,4 +1,3 @@
-// lib/auth/handleGoogleLogin.ts
 import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";

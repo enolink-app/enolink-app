@@ -1,12 +1,20 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { updateProfile } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { Alert } from "react-native";
 import { Button, Box, Text, ButtonText, Input } from "@gluestack-ui/themed";
+import useLanguageStore from "@/stores/useLanguageStore";
+
 export default function CompleteProfile() {
     const router = useRouter();
     const [name, setName] = useState("");
+    const [updateKey, setUpdateKey] = useState(0);
+    const { t, forceUpdate } = useLanguageStore();
+
+    useEffect(() => {
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
 
     const handleSubmit = async () => {
         try {
@@ -18,7 +26,7 @@ export default function CompleteProfile() {
     };
 
     return (
-        <Box>
+        <Box key={updateKey}>
             <Text>Complete seu perfil</Text>
             <Input value={name} onChangeText={setName} placeholder="Nome completo" />
             <Button onPress={handleSubmit}>

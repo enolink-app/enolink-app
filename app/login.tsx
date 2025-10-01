@@ -30,6 +30,7 @@ import * as yup from "yup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { auth } from "@/lib/firebase";
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import { createUserInFirestore } from "@/lib/auth/createUserInFirestore";
 import { useState, useEffect } from "react";
 import { TouchableOpacity, Alert } from "react-native";
 import { useRouter } from "expo-router";
@@ -40,9 +41,9 @@ import { useNavigation } from "expo-router";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { handleAppleLogin } from "@/lib/auth/handleAppleLogin";
 import AppleLoginButton from "@/components/AppleButtonLogin";
-WebBrowser.maybeCompleteAuthSession();
+import useLanguageStore from "@/stores/useLanguageStore";
 
-// Configuração corrigida do Google SignIn
+WebBrowser.maybeCompleteAuthSession();
 
 type LoginFormData = {
     email: string;
@@ -54,22 +55,108 @@ const loginSchema = yup.object({
     password: yup.string().min(6, "Mínimo 6 caracteres").required("Senha é obrigatória"),
 });
 
+const discovery = {
+    tokenEndpoint: "https://oauth2.googleapis.com/token",
+};
+
 export default function LoginScreen() {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const { t, forceUpdate } = useLanguageStore();
     const navigation = useNavigation();
+    const [updateKey, setUpdateKey] = useState(0);
+    const toast = useToast();
     const primary = config.tokens.colors.primary["500"];
-    const primaryLight = config.tokens.colors.primary["200"];
-    const neutralLight = config.tokens.colors.muted;
-    const textDark = config.tokens.colors.textDark;
-    const textLight = config.tokens.colors.textLight;
+    const neutralDark = config.tokens.colors.primary["600"];
+    const neutralLight = config.tokens.colors.primary["700"];
+    const accent = config.tokens.colors.primary["800"];
+    const gold = config.tokens.colors.primary["900"];
 
-    // Configuração corrigida do Google Auth Request
+    useEffect(() => {
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
+
     const [request, response, promptAsync] = Google.useAuthRequest({
         webClientId: "27430021409-n25b5e2urcnv1m0sot5stg8m81muo386.apps.googleusercontent.com",
-        iosClientId: "27430021409-s0s3ttbgkjefeai5e3elhe5h9go2a5gj.apps.googleusercontent.com", // Corrigido
+        iosClientId: "27430021409-uqcg92jgpji2nj2ik5vo3ogmu3qvlp6j.apps.googleusercontent.com",
         androidClientId: "27430021409-nmhb7q72shobhp7h3vi3okvoaetf2rv8.apps.googleusercontent.com",
+        scopes: ["openid", "profile", "email"],
+        selectAccount: true,
     });
+
+    async function exchangeCodeWithFetch({
+        tokenEndpoint,
+        clientId,
+        code,
+        redirectUri,
+        codeVerifier,
+    }: {
+        tokenEndpoint: string;
+        clientId: string;
+        code: string;
+        redirectUri: string;
+        codeVerifier: string;
+    }) {
+        const body = new URLSearchParams({
+            client_id: clientId,
+            grant_type: "authorization_code",
+            code,
+            redirect_uri: redirectUri,
+            code_verifier: codeVerifier,
+        }).toString();
+
+        const res = await fetch(tokenEndpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body,
+        });
+
+        const json = await res.json();
+        if (!res.ok) {
+            throw new Error(`Token endpoint error: ${res.status} ${JSON.stringify(json)}`);
+        }
+        return json;
+    }
+
+    useEffect(() => {
+        console.log("RESPONSE", request?.codeVerifier);
+        if (response?.type === "success" && response.params?.code) {
+            (async () => {
+                try {
+                    const tokenResponse = await AuthSession.exchangeCodeAsync(
+                        {
+                            clientId: "27430021409-n25b5e2urcnv1m0sot5stg8m81muo386.apps.googleusercontent.com",
+                            code: response.params.code,
+                            redirectUri: AuthSession.makeRedirectUri({ scheme: "com.vivavinho.enolink" }),
+                            clientSecret: "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",
+                            codeVerifier: response?.params?.codeVerifier,
+                            grantType: "authorization_code",
+                        },
+                        discovery
+                    ).catch((error) => {
+                        console.log("OPS! Algo deu errado: ", error);
+                    });
+
+                    console.log("Tokens do Google:", tokenResponse);
+                    const id_token = (tokenResponse as any).id_token || tokenResponse.idToken;
+
+                    if (!id_token) {
+                        throw new Error("id_token não retornado pelo servidor (verifique client/redirect).");
+                    }
+
+                    const credential = GoogleAuthProvider.credential(id_token);
+                    const userCredential = await signInWithCredential(auth, credential);
+                    console.log("Usuário Firebase:", userCredential.user.uid);
+                } catch (err) {
+                    console.error("Erro trocando code por token:", err);
+                }
+            })();
+        } else if (response?.type === "error") {
+            console.error("Google Auth Error:", response.error);
+        }
+    }, [response]);
 
     const {
         control,
@@ -82,13 +169,10 @@ export default function LoginScreen() {
     const handleEmailLogin = async ({ email, password }: LoginFormData) => {
         setIsLoading(true);
         try {
-            console.log("🔥 Tentando login com:", auth, email, password);
-
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            console.log("✅ Login realizado com sucesso:", userCredential.user.stsTokenManager.accessToken);
+
             await AsyncStorage.setItem("token", userCredential.user.stsTokenManager.accessToken);
             router.replace("/tabs/(tabs)/home");
-            // Navegação será feita automaticamente pelo useAuth hook
         } catch (error: any) {
             console.error("❌ Firebase login error:", error);
 
@@ -109,41 +193,84 @@ export default function LoginScreen() {
             setIsLoading(false);
         }
     };
+
     const handleGoogleLogin = async () => {
         setIsLoading(true);
         try {
-            const result = await promptAsync();
-            if (result?.type === "success") {
-                const { id_token } = result.params;
-                const credential = GoogleAuthProvider.credential(id_token);
-                const signin = await signInWithCredential(auth, credential);
-                console.log(`sucesso: ${signin}`);
-                showToast("success", "Login com Google realizado!");
+            if (!request) {
+                console.error("Google request não inicializado.");
+                setIsLoading(false);
+                return;
             }
-        } catch (error) {
-            showToast("error", "Erro ao fazer login com Google");
+
+            const result = await promptAsync({ useProxy: true }); // ajuste useProxy conforme ambiente
+            console.log("Resultado do promptAsync:", result);
+
+            if (result.type !== "success") {
+                setIsLoading(false);
+                return;
+            }
+
+            const code = result.params?.code;
+            if (!code) {
+                console.error("Authorization code não veio no resultado:", result);
+                setIsLoading(false);
+                return;
+            }
+
+            const clientIdToUse = (request as any).clientId || (request as any).extraParams?.client_id;
+            const redirectUriToUse = (request as any).redirectUri || AuthSession.makeRedirectUri({ scheme: "com.vivavinho.enolink" });
+            const codeVerifierToUse = (request as any).codeVerifier;
+
+            console.log("USANDO PARA EXCHANGE:", { clientIdToUse, redirectUriToUse, codeVerifierToUse });
+
+            const tokenResponse = await exchangeCodeWithFetch({
+                tokenEndpoint: discovery.tokenEndpoint,
+                clientId: clientIdToUse,
+                code,
+                redirectUri: redirectUriToUse,
+                codeVerifier: codeVerifierToUse,
+            });
+
+            console.log("Token response:", tokenResponse);
+            const idToken = (tokenResponse as any).id_token || (tokenResponse as any).idToken;
+            if (!idToken) throw new Error("id_token não retornado");
+
+            const credential = GoogleAuthProvider.credential(idToken);
+            const userCredential = await signInWithCredential(auth, credential);
+            const user = userCredential.user;
+
+            console.log("✅ Usuário autenticado:", user.uid);
+
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+
+            if (!auth.currentUser) {
+                throw new Error("Usuário não está autenticado após login");
+            }
+
+            try {
+                await createUserInFirestore({
+                    uid: user.uid,
+                    name: user.displayName || "",
+                    email: user.email || "",
+                    provider: "google",
+                    language: "pt-BR",
+                });
+                console.log("✅ Usuário salvo no Firestore");
+            } catch (firestoreError) {
+                console.error("⚠️ Erro ao salvar no Firestore, mas login realizado:", firestoreError);
+            }
+            showToast("success", "Sucesso!");
+            router.replace("/tabs/(tabs)/home");
+        } catch (err) {
+            showToast("error", "Algo deu errado!");
+            console.error("Erro no handleGoogleLogin:", err);
         } finally {
             setIsLoading(false);
         }
     };
 
-    const signInWithApple = async () => {
-        try {
-            const result = await handleAppleLogin();
-            if (result.success) {
-                router.replace("/tabs/(tabs)/home");
-            } else {
-                console.error("Apple login failed:", result.error);
-                Alert.alert("Erro", "Falha no login com Apple: " + result.error.message);
-            }
-        } catch (error) {
-            console.error("Apple login error:", error);
-            Alert.alert("Erro", "Ocorreu um erro durante o login com Apple");
-        }
-    };
-
     const showToast = (type: "success" | "error", message: string) => {
-        const toast = useToast();
         toast.show({
             placement: "top",
             render: () => (
@@ -155,27 +282,25 @@ export default function LoginScreen() {
     };
 
     return (
-        <Box flex={1} style={{ backgroundColor: "#FFF8EC" }} bg="#FFF8EC" justifyContent="center" p="$8">
-            <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb="$4">
-                <HStack justifyContent="space-between" alignItems="center">
-                    <ChevronLeft color={textLight} size={40} onPress={() => router.back()} />
-                    <Heading size="lg">Editar Perfil</Heading>
-                </HStack>
-            </Box>
+        <Box key={updateKey} flex={1} bg={neutralLight} justifyContent="center" p="$8">
             <VStack space="xl">
                 <Image
-                    source={require("@/assets/images/logo.jpeg")}
+                    source={require("@/assets/images/icon.png")}
                     alt="Logo do Aplicativo"
                     size="lg"
                     alignSelf="center"
-                    className=" w-full max-w-[320px] bg-violet-500 justify-center items-center"
+                    className=" w-full max-w-[420px] justify-center items-center"
                 />
-                <Heading size="xl" color="$textDark800" textAlign="center">
-                    Bem-vindo!
+                <Heading size="xl" color={primary} textAlign="center">
+                    {t("login.wellcome")}
                 </Heading>
                 <Box justifyContent="center" alignItems="center" marginBottom={12}>
-                    <Text bold>Viva a experiência.</Text>
-                    <Text bold>Descubra o clube dos vinhos!</Text>
+                    <Text color={neutralDark} bold>
+                        {t("login.phrase")}
+                    </Text>
+                    <Text color={neutralDark} bold>
+                        {t("login.phrase2")}
+                    </Text>
                 </Box>
 
                 <VStack space="md">
@@ -189,6 +314,7 @@ export default function LoginScreen() {
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <Input borderRadius="$lg" className="ring-pink-600" $active-borderColor="pink-600">
                                     <InputField
+                                        backgroundColor="#FFFFFF"
                                         placeholder="seu@email.com"
                                         keyboardType="email-address"
                                         autoCapitalize="none"
@@ -199,6 +325,7 @@ export default function LoginScreen() {
                                 </Input>
                             )}
                         />
+
                         <FormControlError>
                             <FormControlErrorText>{errors.email?.message}</FormControlErrorText>
                         </FormControlError>
@@ -206,14 +333,14 @@ export default function LoginScreen() {
 
                     <FormControl isInvalid={!!errors.password}>
                         <FormControlLabel>
-                            <FormControlLabelText>Senha</FormControlLabelText>
+                            <FormControlLabelText>{t("register.password")}</FormControlLabelText>
                         </FormControlLabel>
                         <Controller
                             control={control}
                             name="password"
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <Input borderRadius="$lg">
-                                    <InputField placeholder="******" secureTextEntry value={value || ""} onChangeText={onChange} onBlur={onBlur} />
+                                    <InputField backgroundColor="#FFFFFF" placeholder="******" secureTextEntry value={value || ""} onChangeText={onChange} onBlur={onBlur} />
                                 </Input>
                             )}
                         />
@@ -222,50 +349,32 @@ export default function LoginScreen() {
                         </FormControlError>
                     </FormControl>
 
-                    <Button size="lg" bg={config.tokens.colors.primary["500"]} borderRadius="$lg" onPress={handleSubmit(handleEmailLogin)} isDisabled={isLoading}>
-                        <ButtonText>{isLoading ? "Entrando..." : "Entrar"}</ButtonText>
+                    <Button size="lg" bg={accent} borderRadius="$lg" onPress={handleSubmit(handleEmailLogin)} isDisabled={isLoading}>
+                        <ButtonText color={neutralLight}>{isLoading ? t("general.loading") : t("login.join")}</ButtonText>
                     </Button>
                     <Link onPress={() => router.push("/forgot-password")}>
-                        <LinkText>Esqueci minha senha</LinkText>
+                        <LinkText color={primary}>{t("login.forgot")}</LinkText>
                     </Link>
                 </VStack>
 
-                {/* Divisor */}
                 <HStack alignItems="center" space="md">
                     <Divider flex={1} />
-                    <Text color="$textDark400">OU</Text>
+                    <Text color={neutralDark}>{t("login.or")}</Text>
                     <Divider flex={1} />
                 </HStack>
 
-                {/* Botão do Google */}
-                <Button h={50} variant="outline" size="lg" borderColor="$primary600" borderRadius="$full" onPress={() => promptAsync()} isDisabled={!request || isLoading}>
+                <Button h={70} variant="outline" size="lg" borderColor={neutralDark} borderRadius="$full" onPress={() => handleGoogleLogin()} isDisabled={!request || isLoading}>
                     <Image source={require("../assets/images/logo-google.png")} style={{ width: 18, height: 18 }} resizeMode="contain" />
-                    <ButtonText color={"$primary600"} className="p-3" mx="$3">
-                        Continuar com Google
+                    <ButtonText color={neutralDark} className="p-3" mx="$3">
+                        {t("login.signIn")} Google
                     </ButtonText>
                 </Button>
-                <AppleLoginButton />
-                {/*                 {AppleAuthentication.isAvailableAsync() ? (
-                    <AppleAuthentication.AppleAuthenticationButton
-                        buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-                        buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-                        cornerRadius={70}
-                        onPress={signInWithApple}
-                        disabled={isLoading}
-                        style={{ width: "100%", height: 50 }}
-                    />
-                ) : (
-                    <Button onPress={signInWithApple} bg="black" borderRadius="$full" h={50}>
-                        <ButtonText>Continue with Apple</ButtonText>
-                    </Button>
-                )} */}
-
-                {/* Link para Cadastro */}
+                {Platform.OS == "ios" && <AppleLoginButton />}
                 <HStack justifyContent="center" space="sm">
-                    <Text color="$textDark400">Novo por aqui?</Text>
-                    <TouchableOpacity onPress={() => router.push("/register")}>
-                        <Text color="$primary600" fontWeight="$bold">
-                            Criar conta
+                    <Text color={neutralDark}>{t("login.new")}</Text>
+                    <TouchableOpacity onPress={() => router.push("/createAccount")}>
+                        <Text color={primary} fontWeight="$bold">
+                            {t("login.create")}
                         </Text>
                     </TouchableOpacity>
                 </HStack>

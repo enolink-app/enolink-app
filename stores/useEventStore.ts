@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { useRequest } from "@/hooks/useRequest";
 import { auth } from "@/lib/firebase";
-// Tipos de dados
 interface Wine {
     id: string;
     name: string;
@@ -65,7 +64,6 @@ interface TopWine extends Ranking {
 }
 
 interface EventState {
-    // Dados principais
     allEvents: Event[];
     currentEvent: Event | null;
     rankings: Ranking[];
@@ -73,12 +71,10 @@ interface EventState {
     topWines: TopWine[];
     isLoading: boolean;
 
-    // Sistema de cache
     eventsCache: Record<string, Event>;
     evaluationsCache: Record<string, Evaluation[]>;
     topWinesCache: TopWine[];
 
-    // Setters básicos
     setAllEvents: (events: Event[]) => void;
     setCurrentEvent: (event: Event) => void;
     setRankings: (rankings: Ranking[]) => void;
@@ -86,7 +82,6 @@ interface EventState {
     setTopWines: (wines: TopWine[]) => void;
     setIsLoading: (loading: boolean) => void;
 
-    // Gerenciamento de cache
     addEventToCache: (event: Event) => void;
     getEventFromCache: (eventId: string) => Event | null;
     addEvaluationsToCache: (eventId: string, evaluations: Evaluation[]) => void;
@@ -96,13 +91,12 @@ interface EventState {
     clearCache: () => void;
     refreshEventData: (eventId: string) => Promise<void>;
     addEvaluation: (evaluation: Evaluation) => void;
-    // Métodos para rankings
+
     updateWineRanking: (wineId: string, rating: number) => void;
     getTop10Wines: () => Promise<void>;
 }
 
 export const useEventStore = create<EventState>((set, get) => ({
-    // Estado inicial
     allEvents: [],
     currentEvent: null,
     rankings: [],
@@ -113,7 +107,6 @@ export const useEventStore = create<EventState>((set, get) => ({
     evaluationsCache: {},
     topWinesCache: [],
 
-    // Setters básicos
     setAllEvents: (events) => set({ allEvents: events }),
     setCurrentEvent: (event) => set({ currentEvent: event }),
     setRankings: (rankings) => set({ rankings }),
@@ -124,7 +117,7 @@ export const useEventStore = create<EventState>((set, get) => ({
         set((state) => ({
             myEvaluations: [...state.myEvaluations, evaluation],
         })),
-    // Sistema de cache de eventos
+
     addEventToCache: (event) =>
         set((state) => ({
             eventsCache: { ...state.eventsCache, [event.id]: event },
@@ -135,7 +128,6 @@ export const useEventStore = create<EventState>((set, get) => ({
         return cache[eventId] || null;
     },
 
-    // Sistema de cache de avaliações
     addEvaluationsToCache: (eventId, evaluations) =>
         set((state) => ({
             evaluationsCache: { ...state.evaluationsCache, [eventId]: evaluations },
@@ -146,11 +138,9 @@ export const useEventStore = create<EventState>((set, get) => ({
         return cache[eventId] || null;
     },
 
-    // Cache para top vinhos
     addTopWinesToCache: (wines) => set({ topWinesCache: wines }),
     getTopWinesFromCache: () => get().topWinesCache,
 
-    // Limpeza de cache
     clearCache: () =>
         set({
             eventsCache: {},
@@ -158,7 +148,6 @@ export const useEventStore = create<EventState>((set, get) => ({
             topWinesCache: [],
         }),
 
-    // Métodos para rankings
     updateWineRanking: (wineId, rating) => {
         set((state) => {
             const updatedRankings = state.rankings.map((ranking) =>
@@ -197,8 +186,6 @@ export const useEventStore = create<EventState>((set, get) => ({
         try {
             set({ isLoading: true });
 
-            // Aqui você deve implementar a lógica para buscar os dados atualizados do evento
-            // Exemplo:
             const response = await getEventById(eventId);
             const eventData = await response;
 
@@ -214,7 +201,6 @@ export const useEventStore = create<EventState>((set, get) => ({
     },
 }));
 
-// Hook personalizado para uso conveniente
 export const useEventCache = () => {
     const { addEventToCache, getEventFromCache, addEvaluationsToCache, getEvaluationsFromCache, addTopWinesToCache, getTopWinesFromCache, clearCache, getTop10Wines } =
         useEventStore();

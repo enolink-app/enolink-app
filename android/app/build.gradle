@@ -101,6 +101,12 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        debug {
+            storeFile file('release.keystore')
+            storePassword '123456'
+            keyAlias 'wine-app'
+            keyPassword '123456'
+        }
     }
     buildTypes {
         debug {

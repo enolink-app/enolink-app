@@ -3,7 +3,7 @@ import axios from "axios";
 import { getCurrentUserToken } from "../lib/firebase";
 import { api } from "@/lib/axios";
 import { object } from "yup";
-import { useWineStore } from "@/stores/useWineStores"; // Verifique o caminho correto da sua store!
+import { useWineStore } from "@/stores/useWineStores";
 
 import { auth } from "@/lib/firebase";
 import { useEventStore } from "@/stores/useEventStore";
@@ -17,16 +17,13 @@ export const useRequest = () => {
 
     async function createEvent(data: object) {
         const token = await getCurrentUserToken();
-        console.log("3");
-        console.log("4");
         return await api
             .post("/events", data)
             .then((response) => {
-                console.log(`5 - criando evento...`);
                 return response.data;
             })
             .catch((error) => {
-                console.log(`ERRO: ${error} ${token}`);
+                console.log(`ERRO: ${error}`);
                 throw Error("Não foi possível criar o evento!", error);
             });
     }
@@ -37,7 +34,7 @@ export const useRequest = () => {
         return await api
             .get("/events")
             .then((response) => {
-                setAllEvents(response.data); // Armazena no estado global
+                setAllEvents(response.data);
                 return response.data;
             })
             .catch((error) => {
@@ -48,28 +45,27 @@ export const useRequest = () => {
 
     async function getEventById(id: string) {
         const allEvents = useEventStore.getState().allEvents;
-
         const cachedEvent = allEvents.find((event) => event.id === id);
         if (cachedEvent) return cachedEvent;
 
         const response = await api
             .get(`/events/${id}`)
             .then((response) => {
-                return response.data;
+                return JSON.stringify(response.data);
             })
             .catch((error) => {
-                console.log(`Não foi poss;ivel buscar os eventos por ID: ${error.response.data}`);
-                throw Error(`Não foi poss;ivel buscar os eventos por ID: ${error.response.data}`);
+                console.log(`Não foi poss;ivel buscar os eventos por ID: ${JSON.stringify(error.response.data)}`);
+                throw Error(`Não foi poss;ivel buscar os eventos por ID: ${JSON.stringify(error.response.data)}`);
             });
         return response.data;
     }
+
     async function getEventByUser() {
         const uid = getCurrentUserId();
-        console.log(uid, `UID`);
+
         return await api
             .get(`/events/${uid}/user`)
             .then((response) => {
-                console.log("sucesso ao buscar eventos do usuário!", response.data);
                 return response.data;
             })
             .catch((error) => {
@@ -79,7 +75,6 @@ export const useRequest = () => {
     }
 
     async function evaluateWineEvent(data: { eventId: string; wineId: string; wineIndex: number; userId: string; aroma: number; color: number; flavor: number; notes?: string }) {
-        console.log(data, "data");
         const newData = {
             wineId: data.wineId,
             wineIndex: data.wineIndex,
@@ -92,7 +87,6 @@ export const useRequest = () => {
         return await api
             .post(`/events/${data.eventId}/evaluate`, newData)
             .then((response) => {
-                console.log("Sucesso!");
                 return "success";
                 response.data;
             })
@@ -106,7 +100,6 @@ export const useRequest = () => {
         return await api
             .get(`/ranking/${eventId}`)
             .then((response) => {
-                console.log(`Buscou rankings: ${JSON.stringify(response.data)}`);
                 return response.data;
             })
             .catch((error) => {
@@ -122,7 +115,7 @@ export const useRequest = () => {
                 return response?.data;
             })
             .catch((error) => {
-                console.log(`Algo deu errado: ${error}`);
+                console.log(`Algo deu errado: ${JSON.stringify(error.response.data)}`);
                 throw Error("Algo deu errado", error);
             });
     }
@@ -175,18 +168,9 @@ export const useRequest = () => {
             });
     }
 
-    // hooks/useRequest.ts
-    // Adicione estas funções:
-    async function joinEvent(
-        inviteCode: string,
-        participantData: {
-            userId: string;
-            userName: string;
-            isGuest?: boolean;
-        }
-    ) {
+    async function joinEvent(eventId: string, participantData: { userId: string; userName: string; isGuest?: boolean }) {
         return await api
-            .post(`/events/join/${inviteCode}`, participantData)
+            .post(`/events/join/${eventId}`, participantData)
             .then((response) => {
                 return response.data;
             })
@@ -256,6 +240,16 @@ export const useRequest = () => {
             });
     }
 
+    async function updateDiaryEntry(id: string, data: object) {
+        return await api
+            .put(`/diary/${id}`, data)
+            .then((response) => response.data)
+            .catch((error) => {
+                console.error("Erro ao atualizar avaliação:", error.response || error);
+                throw error;
+            });
+    }
+
     async function closeEvent(eventId: string) {
         const currentUser = auth.currentUser;
         if (!currentUser) throw new Error("Usuário não autenticado");
@@ -289,6 +283,7 @@ export const useRequest = () => {
         getTopWines,
         createDiaryEntry,
         getDiaryEntries,
+        updateDiaryEntry,
         closeEvent,
     };
 };

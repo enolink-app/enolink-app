@@ -2,7 +2,7 @@
     "login": {
         "wellcome": "Bem-vindo!",
         "phrase": "Viva a experiência.",
-        "phrase2": "Descubra o clube do vinho!",
+        "phrase2": "Descubra o wine club!",
         "join": "Entrar",
         "forgot": "Esqueci minha senha",
         "or": "ou",
@@ -12,12 +12,21 @@
     },
     "register": {
         "create": "Criar Conta",
-        "name": "nome",
-        "email": "e-mail",
+        "name": "Nome",
+        "email": "E-mail",
         "dateBirth": "Data de Nascimento",
         "lang": "Idioma",
         "password": "Senha",
-        "confirmPassword": "Confirmar Senha"
+        "haveAccount": "Já tem uma conta? Fazer login",
+        "confirmPassword": "Confirmar Senha",
+        "quit": "Sair",
+        "mustContain0": "A senha deve conter:",
+        "mustContain1": "• Mínimo de 8 caracteres",
+        "mustContain2": "• Pelo menos uma letra minúscula",
+        "mustContain3": "• Pelo menos uma letra maiúscula",
+        "mustContain4": "• Pelo menos um número",
+        "mustContain5": "• Pelo menos um símbolo (!@#$%^&*(), etc.)",
+        "notMatch": "As senhas não coincidem"
     },
     "forgot": {
         "recover": "Recuperar Senha",
@@ -29,22 +38,30 @@
         "today": "O que você quer fazer hoje?",
         "diary": "Diário Pessoal",
         "calculator": "Calculadora de Vinhos",
-        "event": "Criar Evento",
+        "event": "Criar Evento de Degustação",
         "wine": "Adicionar Vinho",
-        "highToday": "O que está bombando hoje?",
-        "checkout": "Confira os vinhos mais bem avaliados no momento",
+        "highToday": "O que está em alta hoje?",
+        "checkout": "Confira os vinhos mais bem avaliados do momento",
         "details": "Ver detalhes"
     },
     "events": {
         "title": "Eventos",
         "now": "Acontecendo agora",
         "closed": "Encerrados",
-        "emptyList": "Os eventos aparecerão aqui"
+        "emptyList": "Os eventos aparecerão aqui",
+        "allEvents": "Todos os eventos",
+        "myEvents": "Meus eventos",
+        "searchPlaceholder": "Buscar...",
+        "notFound": "Nenhum evento encontrado para",
+        "see": "Ver",
+        "join": "Participar"
     },
     "wines": {
         "title": "Meus Vinhos",
         "emptyList": "Seus vinhos aparecerão aqui",
-        "add": "Adicionar Vinho"
+        "add": "Adicionar Vinho",
+        "searchPlaceholder": "Buscar...",
+        "notFound": "Nenhum vinho encontrado para"
     },
     "me": {
         "title": "Meu Perfil",
@@ -52,7 +69,9 @@
         "invite": "Convidar Amigos",
         "created": "Criados por mim",
         "joined": "Participando",
-        "emptyList": "Seus vinhos aparecerão aqui"
+        "emptyList": "Seus vinhos aparecerão aqui",
+        "anonymous": "Você",
+        "myEvents": "Ver Meus Eventos"
     },
     "forms": {
         "rating": {
@@ -70,12 +89,12 @@
             },
             "authRequired": {
                 "title": "Autenticação Necessária",
-                "message": "Você precisa estar logado para avaliar. Faça login e tente novamente.",
+                "message": "Você precisa estar logado para avaliar. Por favor, faça login e tente novamente.",
                 "button": "OK"
             },
             "dataError": {
                 "title": "Dados Incompletos",
-                "message": "As informações do evento ou do vinho não foram carregadas corretamente. Tente novamente.",
+                "message": "As informações do evento ou vinho não foram carregadas corretamente. Por favor, tente novamente.",
                 "button": "OK"
             },
             "success": {
@@ -91,7 +110,7 @@
                 "networkTitle": "Problema de Conexão",
                 "networkMessage": "Não foi possível conectar ao servidor. Verifique sua internet e tente novamente.",
                 "unexpectedTitle": "Erro Inesperado",
-                "unexpectedMessage": "Ocorreu um erro inesperado ao processar sua avaliação. Tente novamente mais tarde."
+                "unexpectedMessage": "Ocorreu um erro inesperado ao processar sua avaliação. Por favor, tente novamente mais tarde."
             },
             "notesPlaceholder": "O que você achou do vinho?"
         },
@@ -101,8 +120,9 @@
             "harvest": "Safra",
             "country": "País",
             "grape": "Uva",
-            "closure": "Tampa",
+            "closure": "Tipo de Fechamento",
             "typwWine": "Tipo de Vinho",
+            "abv": "Graduação alcoólica %",
             "image": "Imagem (opcional)",
             "camera": "Câmera",
             "gallery": "Galeria",
@@ -123,31 +143,53 @@
             "alterPassword": "Alterar senha",
             "currentPassword": "Senha atual",
             "newPassword": "Nova senha",
-            "languague": "Idioma",
+            "language": "Idioma",
             "cancel": "Cancelar",
-            "submit": "Salvar alterações"
+            "submit": "Salvar alterações",
+            "remove": "Remover"
         },
         "newDiaryWineList": {
             "title": "Meu Diário",
-            "new": "Nova avaliação"
+            "new": "Novo vinho",
+            "searchPlaceholder": "Buscar...",
+            "notFound": "Nenhum vinho encontrado para"
         },
         "newEvent": {
-            "title": "Detalhes do Evento",
-            "buttonDetails": "Detalhes",
+            "titleForm": "Criar Novo Evento",
+            "title": "Detalhes",
+            "titleWine": "Vinhos no evento",
+            "buttonDetails": "Detalhes do Evento",
+            "buttonDetailsDescription": "Preencha as informações básicas para seu evento de degustação.",
             "buttonWines": "Vinhos",
-            "placeholderName": "Nome do evento",
+            "creation": "Criação de Evento",
+            "placeholderName": "Nome do Evento",
+            "dateStart": "Data de Início",
             "date": "Data final (opcional)",
-            "titleimage": "Imagem de fundo (opcional)",
+            "titleImage": "Imagem de fundo (opcional)",
+            "imageDescription": "Adicione uma imagem para identificar seu evento",
             "camera": "Tirar foto",
-            "gallery": "Pegar da galeria",
+            "gallery": "Tirar da galeria",
+            "selectedimage": "Imagem Selecionada",
             "buttonBack": "Anterior",
-            "buttonNext": "Próximo",
-            "buttonSubmit": "Enviar",
-            "title2": "Vinhos do Evento",
+            "buttonNext": "Continuar para Vinhos",
+            "nextStep": "Próxima Etapa",
+            "nextStepDescription": "Na próxima etapa, você poderá adicionar os vinhos que serão degustados neste evento.",
+            "buttonSubmit": "Criar evento",
+            "title2": "Vinhos",
+            "eventWines": "Vinhos do Evento",
+            "eventWinesDescription": "Nenhum vinho adicionado ainda. Selecione vinhos abaixo para adicionar ao evento.",
+            "addedWines": "Vinhos Adicionados",
             "emptyList1": "Nenhum vinho adicionado",
             "emptyList2": "seus vinhos aparecerão aqui",
             "yourWines": "Seus Vinhos",
-            "addWine": "Adicionar Novo Vinho"
+            "selectWines": "Selecione vinhos da sua coleção para adicionar ao evento",
+            "addWine": "Adicionar Novo Vinho",
+            "addWineDescription": "Se não encontrou o vinho que procurava, você pode adicionar um novo à sua coleção e ao evento.",
+            "selectDate": "Selecionar Data",
+            "noWines": "Seus vinhos aparecerão aqui.",
+            "emptyList": "Nenhum vinho adicionado ainda. Selecione vinhos abaixo para adicionar ao evento.",
+            "searchPlaceholder": "Buscar...",
+            "notFound": "Nenhum vinho encontrado para"
         },
         "newWineEvent": {
             "title": "Adicionar Vinho",
@@ -155,12 +197,15 @@
             "harvest": "Safra",
             "country": "País",
             "grape": "Uva",
-            "closure": "Tampa",
+            "closure": "Tipo de Fechamento",
             "typwWine": "Tipo de Vinho",
             "image": "Imagem (opcional)",
             "camera": "Câmera",
             "gallery": "Galeria",
-            "submit": "Salvar Vinho"
+            "submit": "Salvar Vinho",
+            "abv": "Graduação alcoólica %",
+            "searchPlaceholder": "Buscar...",
+            "notFound": "Nenhum vinho encontrado para"
         },
         "newWine": {
             "title": "Adicionar Vinho",
@@ -168,18 +213,22 @@
             "harvest": "Safra",
             "country": "País",
             "grape": "Uva",
-            "closure": "Tampa",
+            "closure": "Tipo de Fechamento",
             "typwWine": "Tipo de Vinho",
             "image": "Imagem (opcional)",
             "camera": "Câmera",
             "gallery": "Galeria",
-            "submit": "Salvar Vinho"
+            "submit": "Salvar Vinho",
+            "abv": "Graduação alcoólica %",
+            "selectWine": "Selecionar Vinho",
+            "selectCountry": "Selecionar País",
+            "selectGrape": "Selecionar Uva"
         },
         "wineCalculator": {
             "title": "Calculadora de Vinhos",
             "howMany": "Quantas pessoas?",
             "period": "Quando é o evento?",
-            "level": "Qual é o nível de consumo?",
+            "level": "Qual o nível de consumo?",
             "morning": "Manhã",
             "afternoon": "Tarde",
             "evening": "Noite",
@@ -187,18 +236,78 @@
             "high": "Alto",
             "medium": "Médio",
             "low": "Baixo",
-            "submit": "Calcular Vinhos Necessários"
+            "submit": "Calcular Vinhos Necessários",
+            "result": "Resultado",
+            "suggestions": "Sugestões",
+            "based": "Baseado em",
+            "guests": "convidados",
+            "morning2": "pela manhã",
+            "afternoon2": "pela tarde",
+            "evening2": "pela noite",
+            "and": "e",
+            "consumption": "consumo",
+            "lowC": "consumo baixo",
+            "mediumC": "consumo médio",
+            "highC": "consumo alto",
+            "lowEx": "1-2 taças",
+            "mediumEx": "3-4 taças",
+            "highEx": "5+ taças",
+            "variety": "Dicas de Variedade:",
+            "totalBottle": "garrafa",
+            "recommended": "recomendado",
+            "suggestedTypes": {
+                "morning": [
+                    "Espumante Brut (ex: Prosecco, Cava)",
+                    "Branco Leve (ex: Sauvignon Blanc, Pinot Grigio)",
+                    "Rosé Seco (ex: Provence, Pinot Noir Rosé)",
+                    "Vinho Verde (leve e levemente frisante)",
+                    "Moscato d'Asti (doce e leve)",
+                    "Riesling (leve e aromático)"
+                ],
+                "afternoon": [
+                    "Tinto de Corpo Médio (ex: Merlot, Pinot Noir)",
+                    "Branco Estruturado (ex: Chardonnay não envelhecido em carvalho)",
+                    "Rosé Encorpado (ex: Tavel)",
+                    "Orange Wine (opção ousada)",
+                    "Beaujolais (frutado e fácil de beber)"
+                ],
+                "evening": [
+                    "Tinto Encorpado (ex: Cabernet Sauvignon, Malbec)",
+                    "Espumante Extra Brut (seco e elegante)",
+                    "Branco Encorpado (ex: Chardonnay envelhecido em carvalho)",
+                    "Vinho do Porto (para finalizar a noite)",
+                    "Barolo/Barbaresco (tinto nobre italiano)",
+                    "Bordeaux Tinto (clássico e estruturado)"
+                ]
+            },
+            "bottleSuggestions": {
+                "large": [
+                    "Sugerimos 2–3 tipos diferentes de vinho para variedade",
+                    "Inclua pelo menos 1 espumante para celebração",
+                    "Considere 1 vinho doce para harmonizar com sobremesas"
+                ],
+                "medium": ["Escolha 2 tipos diferentes para oferecer opções", "Um branco e um tinto atenderão a maioria das preferências"]
+            }
         }
     },
     "eventRoom": {
         "title": "Evento",
         "evaluated": "Avaliado",
         "blocked": "Bloqueado",
-        "typeWine": "Clique no vinho liberado para avaliar. Os próximos serão liberados após todos os participantes enviarem suas avaliações.",
-        "leave": "Sair do evento"
+        "typeWine": "Clique no vinho liberado para avaliar. Os próximos serão habilitados após todos os participantes enviarem suas avaliações.",
+        "typeWine2": "Este é um evento de degustação privado. Cada vinho será liberado sequencialmente após todos os participantes avaliarem o anterior.",
+        "leave": "Sair do evento",
+        "participants": "participantes",
+        "newParticipant": "novo participante entrou no evento!",
+        "winesForTasting": "Vinhos para Degustação",
+        "wines": "vinhos",
+        "harvest": "Safra",
+        "wait": "Aguarde a avaliação do vinho anterior",
+        "details": "Detalhes do evento",
+        "seeRanking": "Ver Classificação"
     },
     "guestJoinEvent": {
-        "join": "Participar como Convidado",
+        "join": "Entrar como Convidado",
         "name": "Nome",
         "submit": "Entrar no Evento",
         "loadingSubmit": "Carregando"
@@ -210,14 +319,17 @@
     },
     "ranking": {
         "emptyList": "Nenhuma avaliação registrada.",
-        "finish": "Encerrar evento"
+        "finish": "Encerrar evento",
+        "view": "Ver classificação no navegador"
     },
     "settings": {
+        "title": "Configurações",
         "invite": "Convidar amigos",
         "share": "Compartilhar convite",
         "generate": "Gerar novo código",
         "finish": "Encerrar evento",
-        "participants": "Participantes"
+        "participants": "Participantes",
+        "sureQuit": "Tem certeza que deseja sair da sua conta?"
     },
     "diary": {
         "title": "Meu Diário",
@@ -227,21 +339,75 @@
         "aroma": "Aroma",
         "flavor": "Sabor",
         "close": "Fechar",
-        "addFirst": "Adicionar Primeira Nota"
+        "addFirst": "Adicionar Primeira Nota",
+        "detailed": "Avaliações Detalhadas",
+        "searchPlaceholder": "Buscar...",
+        "notFound": "Nenhuma nota encontrada para",
+        "edit": "Editar nota",
+        "creationDate": "Data de Criação",
+        "successUpdateNote": "Avaliação atualizada!",
+        "newDiary": "Adicionar novo diário"
     },
     "privacy": {
         "title": "Termos de Uso",
-        "text1": "Ao usar o aplicativo WineApp, você concorda com nossos termos e condições. Este aplicativo foi desenvolvido para degustação e avaliação de vinhos. Não nos responsabilizamos por qualquer uso indevido de suas funcionalidades.",
-        "text2": "Os dados fornecidos pelos usuários, como nome, e-mail e avaliações, são armazenados com segurança e usados apenas para melhorar a experiência na plataforma.",
-        "text3": "Política de Privacidade",
-        "text4": "Todas as informações pessoais são tratadas com confidencialidade e nunca serão compartilhadas com terceiros sem consentimento.",
-        "text5": "Ao se registrar, você autoriza o WineApp a usar seus dados apenas no âmbito do aplicativo. Você pode solicitar a exclusão da sua conta a qualquer momento.",
+        "text1": "Ao usar o Aplicativo Enolink, você concorda com nossos termos e condições. Este aplicativo foi desenvolvido para fins de degustação e avaliação de vinhos. Não nos responsabilizamos por qualquer uso indevido de suas funcionalidades.",
+        "text2": "Os dados fornecidos pelos usuários, como nome, e-mail e avaliações, são armazenados com segurança e usados apenas para melhorar a experiência da plataforma.",
+        "text3": "Política de Privacidade e ",
+        "text4": "Todas as informações pessoais são tratadas de forma confidencial e nunca serão compartilhadas com terceiros sem consentimento.",
+        "text5": "Ao se registrar, você autoriza o Aplicativo Enolink a usar seus dados apenas no âmbito do aplicativo. Você pode solicitar a exclusão de sua conta a qualquer momento.",
         "text6": "Última atualização: 2 de julho de 2025"
     },
     "general": {
-        "required": "obrigatório",
+        "home": "Início",
+        "events": "Eventos",
+        "wines": "Vinhos",
+        "me": "Eu",
+        "required": "é obrigatório",
+        "invalid": "é inválido",
         "loading": "Carregando...",
         "noItems": "Nenhum item encontrado",
-        "noWines": "Nenhum vinho avaliado ainda. Seja o primeiro!"
+        "noWines": "Nenhum vinho avaliado ainda. Seja o primeiro!",
+        "add": "adicionar",
+        "added": "adicionado",
+        "remove": "remover",
+        "removed": "removido",
+        "test": "TESTE",
+        "open": "Abrir",
+        "close": "Fechar",
+        "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "errorDefault": "Algo deu errado!",
+        "successDefault": "Sucesso!",
+        "search": "Buscar...",
+        "linkEventTitle": "Convite para o evento",
+        "linkEvent": "Olá! Você foi convidado para o evento de degustação",
+        "linkAppTitle": "Venha para o EnoLink!",
+        "linkApp": "🍷 Junte-se a mim no EnoLink! \n\nDescubra e avalie vinhos incríveis comigo. \n\nBaixe o aplicativo:",
+        "copied": "Copiado para a área de transferência!"
+    },
+    "onboarding": {
+        "titleApp1": "Fique por Dentro dos Vinhos em Alta",
+        "subtitleApp1": "Descubra o que as pessoas estão curtindo com os 10 vinhos mais bem avaliados.",
+        "titleApp2": "Avaliação de Vinhos e Eventos",
+        "subtitleApp2": "Conecte amantes do vinho, aproveite e avalie vinhos juntos.",
+        "titleApp3": "Suas Notas Pessoais",
+        "subtitleApp3": "Avalie seus vinhos e registre suas ideias. Seu paladar evolui, e seu diário acompanha.",
+        "titleApp4": "Tudo na Palma da Sua Mão",
+        "subtitleApp4": "Transforme cada taça em uma memória registrada. Capture momentos únicos e construa sua história enológica.",
+        "titleDiary1": "Seu Diário de Vinhos",
+        "subtitleDiary1": "Aqui você pode salvar todas as suas experiências com vinhos.",
+        "descriptionDiary1": "Toque em um card para ver detalhes e editar",
+        "titleDiary2": "Avalie em Detalhes",
+        "subtitleDiary2": "Avalie cor, aroma e sabor de 0 a 5 estrelas",
+        "descriptionDiary2": "Você pode editar suas avaliações depois.",
+        "titleDiary3": "Faça Anotações",
+        "subtitleDiary3": "Registre suas impressões e lembranças sobre cada vinho",
+        "descriptionDiary3": "Use as notas para lembrar de detalhes importantes",
+        "titleDiary4": "Adicione Novos Vinhos",
+        "subtitleDiary4": "Use o botão + para registrar novas degustações",
+        "descriptionDiary4": "Pesquise em nossa base ou adicione manualmente",
+        "skip": "Pular",
+        "next": "Próximo",
+        "gotIt": "Entendi, vamos lá!"
     }
 }

@@ -8,22 +8,24 @@ type EventCardProps = {
     date: string;
     distance?: string;
     isNearby?: boolean;
+    text: string;
     onPress: () => void;
 };
 
-export function EventCard({ image, title, date, distance, isNearby, onPress }: EventCardProps) {
+export function EventCard({ image, title, date, distance, isNearby, onPress, text }: EventCardProps) {
     return (
         <Button
             onPress={onPress}
             variant="solid"
-            mr="$4"
             flex={1}
-            h={150}
+            h={100}
+            minWidth={"$full"}
+            maxWidth={"$full"}
             elevation={5}
             shadowColor="#505050"
             shadowOffset={{ width: 2, height: 3 }}
             shadowOpacity={0.2}
-            m={3}
+            my={3}
             shadowRadius={2}
             flexDirection="row"
             aspectRatio={2.5}
@@ -39,17 +41,7 @@ export function EventCard({ image, title, date, distance, isNearby, onPress }: E
                 </Badge>
             )}
             <HStack p="$2" borderRadius="$lg" space="md">
-                <Image
-                    source={image}
-                    alt="Foto do evento"
-                    width={120}
-                    height={120}
-                    borderRadius={6}
-                    // Adicionar propriedades para melhor carregamento
-                    resizeMode="cover"
-                    // Fallback para erro no carregamento
-                    defaultSource={require("../assets/images/placeholder.png")}
-                />
+                <Image source={image} alt="Foto do evento" width={80} height={80} borderRadius={6} resizeMode="cover" defaultSource={require("../assets/images/placeholder.png")} />
                 <VStack justifyContent="flex-start" alignItems="flex-start" flex={1}>
                     <Box width={160} my={3}>
                         <Text fontWeight="$bold" fontSize="$md" color="$textLight" numberOfLines={2} ellipsizeMode="tail">
@@ -65,6 +57,9 @@ export function EventCard({ image, title, date, distance, isNearby, onPress }: E
                         </Text>
                     )}
                 </VStack>
+                <Box justifyContent="center" alignItems="center">
+                    <Text fontWeight="$bold">{text}</Text>
+                </Box>
             </HStack>
         </Button>
     );

@@ -1,4 +1,3 @@
-// lib/firebase.ts
 import { initializeApp } from "firebase/app";
 import { getAuth, initializeAuth, getReactNativePersistence, onAuthStateChanged, User } from "firebase/auth";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
@@ -14,7 +13,7 @@ const firebaseConfig = {
     appId: "1:27430021409:web:5dd494dff3faa3cce87660",
 };
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 export const auth = initializeAuth(app, {
     persistence: getReactNativePersistence(ReactNativeAsyncStorage),
@@ -22,13 +21,12 @@ export const auth = initializeAuth(app, {
 
 export const db = getFirestore(app);
 
-// Função para obter o token atualizado
 export const getCurrentUserToken = async (): Promise<string | null> => {
     const user = auth.currentUser;
     if (!user) return null;
 
     try {
-        const token = await user.getIdToken(true); // Força a atualização do token
+        const token = await user.getIdToken(true);
         return token;
     } catch (error) {
         console.error("Erro ao obter token:", error);
@@ -36,9 +34,8 @@ export const getCurrentUserToken = async (): Promise<string | null> => {
     }
 };
 
-// Listener para autenticação
 export const setupAuthListener = (callback: (user: User | null) => void) => {
     return onAuthStateChanged(auth, callback);
 };
 
-export const storage = getStorage(app);
+export const storage = getStorage(app, "gs://ivino-app.firebasestorage.app");

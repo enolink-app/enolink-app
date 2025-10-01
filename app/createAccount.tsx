@@ -20,24 +20,24 @@ import {
     LinkText,
     Image,
 } from "@gluestack-ui/themed";
-import { Platform } from "react-native";
-import { Linking, ActivityIndicator } from "react-native";
+import { Linking, Platform } from "react-native";
 import * as WebBrowser from "expo-web-browser";
 import * as Google from "expo-auth-session/providers/google";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import AppleLoginButton from "@/components/AppleButtonLogin";
 import { auth } from "@/lib/firebase";
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { useState, useEffect } from "react";
-import { TouchableOpacity, Alert } from "react-native";
 import { useRouter } from "expo-router";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import { Star, Wine, Grape, MapPin, PlusIcon, Apple } from "lucide-react-native";
 import { config } from "@/gluestack-ui.config";
 import { createUserInFirestore } from "@/lib/auth/createUserInFirestore";
-import { handleAppleLogin } from "@/lib/auth/handleAppleLogin";
+import useLanguageStore from "@/stores/useLanguageStore";
+import * as AuthSession from "expo-auth-session";
+import { exchangeCodeAsync, TokenResponse } from "expo-auth-session";
+import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
+import { useAuth } from "@/hooks/useAuth";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -51,31 +51,110 @@ const loginSchema = yup.object({
     password: yup.string().min(6, "Mínimo 6 caracteres").required("Senha é obrigatória"),
 });
 
+const discovery = {
+    tokenEndpoint: "https://oauth2.googleapis.com/token",
+};
+
 export default function LoginScreen() {
     const router = useRouter();
     const primary = config.tokens.colors.primary["500"];
-    const primariLight = config.tokens.colors.primary["300"];
-    const primariLightest = config.tokens.colors.primary["100"];
+    const neutralDark = config.tokens.colors.primary["600"];
+    const neutralLight = config.tokens.colors.primary["700"];
+    const accent = config.tokens.colors.primary["800"];
+    const gold = config.tokens.colors.primary["900"];
+    const { t, forceUpdate } = useLanguageStore();
+    const [updateKey, setUpdateKey] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    const { user, loading } = useAuth();
 
-    // Configuração corrigida do Google Auth
+    useEffect(() => {
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
+
     const [request, response, promptAsync] = Google.useAuthRequest({
-        // Web Client ID (obrigatório para todos os casos)
         webClientId: "27430021409-n25b5e2urcnv1m0sot5stg8m81muo386.apps.googleusercontent.com",
-        // iOS Client ID
         iosClientId: "27430021409-s0s3ttbgkjefeai5e3elhe5h9go2a5gj.apps.googleusercontent.com",
-        // Android Client ID (mesmo que web para Android)
         androidClientId: "27430021409-nmhb7q72shobhp7h3vi3okvoaetf2rv8.apps.googleusercontent.com",
-        // Scopes necessários
         scopes: ["openid", "profile", "email"],
-        // Configurações adicionais
         selectAccount: true,
     });
 
-    // Monitorar a resposta do Google Auth
+    async function exchangeCodeWithFetch({
+        tokenEndpoint,
+        clientId,
+        code,
+        redirectUri,
+        codeVerifier,
+    }: {
+        tokenEndpoint: string;
+        clientId: string;
+        code: string;
+        redirectUri: string;
+        codeVerifier: string;
+    }) {
+        const body = new URLSearchParams({
+            client_id: clientId,
+            grant_type: "authorization_code",
+            code,
+            redirect_uri: redirectUri,
+            code_verifier: codeVerifier,
+        }).toString();
+
+        const res = await fetch(tokenEndpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body,
+        });
+
+        const json = await res.json();
+        if (!res.ok) {
+            throw new Error(`Token endpoint error: ${res.status} ${JSON.stringify(json)}`);
+        }
+        return json;
+    }
+
     useEffect(() => {
-        if (response?.type === "success") {
-            handleGoogleSignIn(response);
+        if (user) {
+            console.log("Usuário já autenticado, redirecionando...");
+            router.replace("/tabs/(tabs)/home");
+        }
+    }, [user]);
+
+    useEffect(() => {
+        console.log("RESPONSE", request?.codeVerifier);
+        if (response?.type === "success" && response.params?.code) {
+            (async () => {
+                try {
+                    const tokenResponse = await AuthSession.exchangeCodeAsync(
+                        {
+                            clientId: "27430021409-n25b5e2urcnv1m0sot5stg8m81muo386.apps.googleusercontent.com",
+                            code: response.params.code,
+                            redirectUri: AuthSession.makeRedirectUri({ scheme: "com.vivavinho.enolink" }),
+                            clientSecret: "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",
+                            codeVerifier: response?.params?.codeVerifier,
+                            grantType: "authorization_code",
+                        },
+                        discovery
+                    ).catch((error) => {
+                        console.log("OPS! Algo deu errado: ", error);
+                    });
+
+                    console.log("Tokens do Google:", tokenResponse);
+                    const id_token = (tokenResponse as any).id_token || tokenResponse.idToken;
+
+                    if (!id_token) {
+                        throw new Error("id_token não retornado pelo servidor (verifique client/redirect).");
+                    }
+
+                    const credential = GoogleAuthProvider.credential(id_token);
+                    const userCredential = await signInWithCredential(auth, credential);
+                    console.log("Usuário Firebase:", userCredential.user.uid);
+                } catch (err) {
+                    console.error("Erro trocando code por token:", err);
+                }
+            })();
         } else if (response?.type === "error") {
             console.error("Google Auth Error:", response.error);
         }
@@ -89,28 +168,6 @@ export default function LoginScreen() {
         resolver: yupResolver(loginSchema),
     });
 
-    async function signInWithApple() {
-        setIsLoading(true);
-        try {
-            const result = await handleAppleLogin();
-
-            if (result.success) {
-                // Se for um novo usuário, redirecione para completar o perfil
-                if (result.user?.metadata?.creationTime === result.user?.metadata?.lastSignInTime) {
-                    router.push("/complete-profile"); // Página opcional para dados adicionais
-                } else {
-                    router.replace("/tabs/(tabs)/home");
-                }
-            } else {
-                Alert.alert("Erro", "Não foi possível fazer login com Apple.");
-            }
-        } catch (error) {
-            console.error("Erro:", error);
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
     const handleGoogleSignIn = async (response: any) => {
         setIsLoading(true);
         try {
@@ -120,22 +177,18 @@ export default function LoginScreen() {
                 throw new Error("ID token não encontrado");
             }
 
-            // Primeiro, autentica no Firebase
             const credential = GoogleAuthProvider.credential(id_token);
             const userCredential = await signInWithCredential(auth, credential);
             const user = userCredential.user;
 
             console.log("✅ Usuário autenticado:", user.uid);
 
-            // Aguarda um pouco para garantir que o usuário está totalmente autenticado
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
-            // Verifica se o usuário atual está definido
             if (!auth.currentUser) {
                 throw new Error("Usuário não está autenticado após login");
             }
 
-            // Agora salva no Firestore
             try {
                 await createUserInFirestore({
                     uid: user.uid,
@@ -147,16 +200,13 @@ export default function LoginScreen() {
 
                 console.log("✅ Usuário salvo no Firestore");
             } catch (firestoreError) {
-                // Se falhar ao salvar no Firestore, ainda permite o login
                 console.error("⚠️ Erro ao salvar no Firestore, mas login realizado:", firestoreError);
-                // Você pode decidir se quer continuar ou não
             }
 
             router.replace("/tabs/(tabs)/home");
         } catch (error) {
             console.error("❌ Erro no login com Google:", error);
 
-            // Tratamento específico de erros
             let errorMessage = "Erro ao fazer login com Google";
 
             if (error.code == "auth/network-request-failed") {
@@ -176,9 +226,77 @@ export default function LoginScreen() {
     const handleGoogleLogin = async () => {
         setIsLoading(true);
         try {
-            await promptAsync();
-        } catch (error) {
-            console.error("Erro ao iniciar login com Google:", error);
+            if (!request) {
+                console.error("Google request não inicializado.");
+                setIsLoading(false);
+                return;
+            }
+
+            const result = await promptAsync({ useProxy: true }); // ajuste useProxy conforme ambiente
+            console.log("Resultado do promptAsync:", result);
+
+            if (result.type !== "success") {
+                setIsLoading(false);
+                return;
+            }
+
+            const code = result.params?.code;
+            if (!code) {
+                console.error("Authorization code não veio no resultado:", result);
+                setIsLoading(false);
+                return;
+            }
+
+            const clientIdToUse = (request as any).clientId || (request as any).extraParams?.client_id;
+            const redirectUriToUse = (request as any).redirectUri || AuthSession.makeRedirectUri({ scheme: "com.vivavinho.enolink" });
+            const codeVerifierToUse = (request as any).codeVerifier;
+
+            console.log("USANDO PARA EXCHANGE:", { clientIdToUse, redirectUriToUse, codeVerifierToUse });
+
+            const tokenResponse = await exchangeCodeWithFetch({
+                tokenEndpoint: discovery.tokenEndpoint,
+                clientId: clientIdToUse,
+                code,
+                redirectUri: redirectUriToUse,
+                codeVerifier: codeVerifierToUse,
+            });
+
+            console.log("Token response:", tokenResponse);
+            const idToken = (tokenResponse as any).id_token || (tokenResponse as any).idToken;
+            if (!idToken) throw new Error("id_token não retornado");
+
+            const credential = GoogleAuthProvider.credential(idToken);
+            const userCredential = await signInWithCredential(auth, credential);
+            const user = userCredential.user;
+
+            console.log("✅ Usuário autenticado:", user.uid);
+
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+
+            if (!auth.currentUser) {
+                throw new Error("Usuário não está autenticado após login");
+            }
+
+            try {
+                await createUserInFirestore({
+                    uid: user.uid,
+                    name: user.displayName || "",
+                    email: user.email || "",
+
+                    provider: "google",
+                    language: "pt-BR",
+                }).catch((error) => {
+                    console.log("OPS! Algo deu errado: ", error);
+                });
+                console.log("✅ Usuário salvo no Firestore");
+                router.replace("/tabs/(tabs)/home");
+            } catch (firestoreError) {
+                console.error("⚠️ Erro ao salvar no Firestore, mas login realizado:", firestoreError);
+            }
+            showToast("success", "Sucesso!");
+        } catch (err) {
+            showToast("error", "Algo deu errado!");
+            console.error("Erro no handleGoogleLogin:", err);
         } finally {
             setIsLoading(false);
         }
@@ -197,45 +315,36 @@ export default function LoginScreen() {
     };
 
     return (
-        <Box flex={1} style={{ backgroundColor: "#FFF8EC" }} bg="#FFF8EC" justifyContent="center" p="$8">
+        <Box key={updateKey} flex={1} bg={neutralLight} justifyContent="center" p="$8">
             <VStack flex={1} space="xl">
-                <Image
-                    source={require("@/assets/images/logo.jpeg")}
-                    alt="Logo do Aplicativo"
-                    size="lg"
-                    alignSelf="center"
-                    className=" w-full max-w-[320px] bg-violet-500 justify-center items-center"
-                />
                 <VStack flex={1} justifyContent="center" alignItems="center" marginBottom={12} px={50}>
-                    <Heading size="3xl" color="$textDark800" textAlign="center">
-                        Escolha como se cadastrar
+                    <Image
+                        source={require("@/assets/images/icon.png")}
+                        alt="Logo do Aplicativo"
+                        size="lg"
+                        alignSelf="center"
+                        className=" w-96 h-96 bg-violet-500 justify-center items-center"
+                    />
+                    <Heading size="2xl" color={primary} textAlign="center">
+                        {t("register.create")}
                     </Heading>
                 </VStack>
                 <Link onPress={() => router.push("/login")}>
-                    <LinkText alignSelf="center">Já tem uma conta? Faça login</LinkText>
+                    <LinkText color={primary} alignSelf="center">
+                        {t("register.haveAccount")}
+                    </LinkText>
                 </Link>
-                <Button variant="solid" size="lg" h={70} bgColor="white" borderRadius="$full" onPress={handleGoogleLogin} isDisabled={!request || isLoading}>
+                <Button variant="outline" size="lg" h={70} borderColor={neutralDark} borderRadius="$full" onPress={handleGoogleLogin} isDisabled={!request || isLoading}>
                     <Image source={require("../assets/images/logo-google.png")} style={{ width: 24, height: 24 }} resizeMode="contain" />
                     <ButtonText color="black" className="p-3" mx="$3">
-                        Cadastrar com Google
+                        {t("login.signIn")} Google
                     </ButtonText>
                 </Button>
-                <AppleLoginButton />
-                {/*                 <Button variant="solid" size="lg" h={70} bgColor="white" borderRadius="$full" onPress={signInWithApple} isDisabled={isLoading}>
-                    {isLoading ? (
-                        <ActivityIndicator color="black" />
-                    ) : (
-                        <>
-                            <AntDesign name="apple1" size={24} color="black" />
-                            <ButtonText color="black" className="p-3" mx="$3">
-                                Cadastrar com Apple
-                            </ButtonText>
-                        </>
-                    )}
-                </Button> */}
+                {Platform.OS == "ios" && <AppleLoginButton />}
+
                 <Button variant="outline" size="lg" h={70} borderColor={primary} borderRadius="$full" onPress={() => router.push("/register")} isDisabled={isLoading}>
                     <ButtonText color={primary} className="p-3" mx="$3">
-                        Cadastrar com e-mail
+                        {t("login.signIn")} e-mail
                     </ButtonText>
                 </Button>
             </VStack>

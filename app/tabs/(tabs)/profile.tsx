@@ -1,86 +1,117 @@
-import EditScreenInfo from "@/components/EditScreenInfo";
-import { Center } from "@/components/ui/center";
-import { Heading } from "@/components/ui/heading";
-
-import { auth } from "@/lib/firebase";
+import { Box, ScrollView, Text, HStack, Pressable, Divider, Avatar, AvatarImage, Button, ButtonText, VStack } from "@gluestack-ui/themed";
 import { useRouter } from "expo-router";
-import { Settings } from "lucide-react-native";
-import { Button, ButtonText, Avatar, AvatarBadge, AvatarFallbackText, AvatarImage } from "@gluestack-ui/themed";
-import { Box, ScrollView, Text, HStack, Pressable, Divider } from "@gluestack-ui/themed";
-import { useState, useEffect } from "react";
-import { EventUserCard } from "@/components/EventUserCard";
-import { events } from "@/constants/data";
-import dayjs from "dayjs";
-import "dayjs/locale/pt-br";
-import { config } from "@/ui/gluestack-ui.config";
-import { useRequest } from "@/hooks/useRequest";
+import { Settings, ShareIcon } from "lucide-react-native";
+import { useEffect, useState } from "react";
+import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { config } from "@/ui/gluestack-ui.config";
 import useLanguageStore from "@/stores/useLanguageStore";
-function formatDate(dateInput: Date | string | number) {
-    const date = new Date(dateInput);
-    return dayjs(date).locale("pt-br").format("DD MMM · YYYY");
-}
+import { db } from "@/lib/firebase";
+import { doc, onSnapshot } from "firebase/firestore";
+import { Platform, Share, Alert } from "react-native";
 
-export default function Tab2() {
-    const [selectedTab, setSelectedTab] = useState<"created" | "joined">("created");
-    const [eventsUser, setEventsUser] = useState([]);
-    const { getEventByUser } = useRequest();
+export default function ProfileScreen() {
     const router = useRouter();
     const [user, setUser] = useState(auth.currentUser);
-    const { t } = useLanguageStore();
+    const [token, setToken] = useState();
+    const { t, forceUpdate } = useLanguageStore();
+    const [updateKey, setUpdateKey] = useState(0);
+    const primary = config.tokens.colors.primary["500"];
+    const neutralDark = config.tokens.colors.primary["600"];
+    const neutralLight = config.tokens.colors.primary["700"];
+    const accent = config.tokens.colors.primary["800"];
+    const gold = config.tokens.colors.primary["900"];
+    const textDark = config.tokens.colors.textDark;
+    const textLight = config.tokens.colors.textLight;
+    const goldTransparent = "#B89F5B30";
+    const primaryTransparent = "#6B223230";
+    const bgLight = config.tokens.colors.backgroundLight;
 
     useEffect(() => {
-        setEvent();
-    }, [0]);
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Recarrega o usuário para pegar os dados mais recentes
-                await user.reload();
-                setUser({ ...auth.currentUser });
+                try {
+                    await user.reload();
+
+                    const updatedUser = {
+                        ...auth.currentUser,
+                        displayName: auth.currentUser?.displayName,
+                        photoURL: auth.currentUser?.photoURL,
+                    };
+                    const token = await auth.currentUser?.getIdToken();
+                    setToken(token);
+                    setUser(updatedUser);
+                } catch (error) {
+                    console.error("Erro ao recarregar usuário:", error);
+                }
             } else {
                 setUser(null);
             }
         });
+
         return () => unsubscribe();
     }, []);
 
     useEffect(() => {
-        setEvent();
-    }, []);
+        if (!user?.uid) return;
 
-    async function setEvent() {
-        const response = await getEventByUser();
-        setEventsUser(response);
-    }
+        const userDocRef = doc(db, "users", user.uid);
+        const unsubscribe = onSnapshot(userDocRef, (doc) => {
+            if (doc.exists()) {
+                const userData = doc.data();
+                setUser((prev) => ({
+                    ...prev,
+                    ...userData,
+                }));
+            }
+        });
+        return () => unsubscribe();
+    }, [user?.uid]);
 
-    const happeningNow = eventsUser.filter((event) => {
-        const now = new Date();
-        const start = new Date(event.dateStart);
-        const end = event.dateEnd ? new Date(event.dateEnd) : null;
+    const handleInviteFriends = async () => {
+        try {
+            const inviteLink = "https://come-to-enolink/invite";
+            const message = `${t("general.linkApp")} ${inviteLink}`;
 
-        return event.status === "STARTED" && start <= now && (!end || end > now);
-    });
+            const result = await Share.share({
+                message: message,
+                title: `${t("general.linkAppTitle")}`,
+                url: inviteLink,
+            });
 
-    const ended = eventsUser.filter((event) => {
-        const now = new Date();
-        const end = event.dateEnd ? new Date(event.dateEnd) : null;
-
-        return event.status === "CLOSED" || end != null;
-    });
-
+            if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                    console.log("Compartilhado com:", result.activityType);
+                } else {
+                    console.log("Compartilhado com sucesso");
+                }
+            } else if (result.action === Share.dismissedAction) {
+                console.log("Compartilhamento cancelado");
+            }
+        } catch (error) {
+            console.error("Erro ao compartilhar:", error);
+            Alert.alert("Erro", "Não foi possível compartilhar o convite.");
+        }
+    };
+    console.log(token);
     return (
-        <Box flex={1} bg="$backgroundLight" p="$4" mt={50}>
+        <Box key={updateKey} flex={1} bg="$backgroundLight" p="$4" mt={Platform.OS == "ios" ? 50 : 0}>
             <Box mt={20} mb={50} flexDirection="row" justifyContent="space-between">
-                <Text bold size="xl">
+                <Text color={neutralDark} bold size="xl">
                     {t("me.title")}
                 </Text>
-                <Settings onPress={() => router.push("/(settings)/settings")} key="half" size={36} color={config.tokens.colors.textLight} />
+                <Settings onPress={() => router.push("/tabs/settings")} size={36} color={config.tokens.colors.textLight} />
             </Box>
-            <Box justifyContent="center" alignItems="center">
+
+            <VStack justifyContent="center" alignItems="center" space="lg">
                 <Avatar size="2xl" my={3}>
                     <AvatarImage
+                        borderColor={primary}
+                        borderWidth={0.5}
                         source={
                             user?.photoURL
                                 ? {
@@ -88,55 +119,32 @@ export default function Tab2() {
                                   }
                                 : require("../../../assets/images/placeholder.png")
                         }
+                        defaultSource={require("../../../assets/images/placeholder.png")}
                         alt="User avatar"
                     />
                 </Avatar>
-                <Box my={"$4"} alignItems="center">
+
+                <Box alignItems="center">
                     <Text bold size="lg">
-                        {user?.displayName || "User"}
+                        {user?.displayName || t("me.anonymous")}
                     </Text>
-                    {/*                     <Text size="sm">@renzo123</Text>
-                     */}
                 </Box>
+
                 <HStack justifyContent="space-evenly" w="$96">
-                    <Button onPress={() => router.push("/(forms)/edit-profile")} variant="outline" borderRadius={24} borderColor={config.tokens.colors.primary?.["500"]}>
-                        <ButtonText color={config.tokens.colors.primary?.["500"]}>{t("me.edit")}</ButtonText>
+                    <Button onPress={() => router.push("/(forms)/edit-profile")} variant="outline" borderRadius={24} borderColor={neutralDark} bg="#FFFFFF">
+                        <ButtonText color={neutralDark}>{t("me.edit")}</ButtonText>
                     </Button>
-                    <Button variant="solid" borderRadius={24} bg={config.tokens.colors.primary?.["500"]}>
-                        <ButtonText color={config.tokens.colors.textDark}>{t("me.invite")}</ButtonText>
+                    <Button onPress={handleInviteFriends} variant="solid" borderRadius={24} bg={primary}>
+                        <ButtonText color={neutralLight}>{t("me.invite")}</ButtonText>
                     </Button>
                 </HStack>
-            </Box>
-            <Box bg="$backgroundLight" p="$4" mt={50}>
-                {/* Tabs */}
-                <HStack space="lg" mb="$4">
-                    <Pressable onPress={() => setSelectedTab("created")}>
-                        <Text fontWeight="$bold" mb={6} color={selectedTab === "created" ? config.tokens.colors.primary?.["500"] : "$muted"}>
-                            {t("me.created")}
-                        </Text>
-                        {selectedTab == "created" && <Divider className="my-1" bgColor={config.tokens.colors.primary?.["500"]} />}
-                    </Pressable>
 
-                    <Pressable onPress={() => setSelectedTab("joined")}>
-                        <Text fontWeight="$bold" mb={6} color={selectedTab === "joined" ? config.tokens.colors.primary?.["500"] : "$muted"}>
-                            {t("me.joined")}
-                        </Text>
-                        {selectedTab == "joined" && <Divider className="my-1" bgColor={config.tokens.colors.primary?.["500"]} />}
-                    </Pressable>
-                </HStack>
-
-                <ScrollView showsVerticalScrollIndicator={false} horizontal>
-                    {(selectedTab === "created" ? happeningNow : ended).map((event, index) => (
-                        <EventUserCard
-                            onPress={() => router.push(`/forms/[id]/ranking`)}
-                            key={event.id || index}
-                            image={event.wines[0]?.image || require("../../../assets/images/placeholder.png")}
-                            title={event.name}
-                            date={formatDate(event.dateStart)}
-                        />
-                    ))}
-                </ScrollView>
-            </Box>
+                <Box mt="$8">
+                    <Button size="md" variant="solid" onPress={() => router.push("/tabs/(tabs)/events")} bg={primaryTransparent}>
+                        <ButtonText color={primary}>{t("me.myEvents")}</ButtonText>
+                    </Button>
+                </Box>
+            </VStack>
         </Box>
     );
 }

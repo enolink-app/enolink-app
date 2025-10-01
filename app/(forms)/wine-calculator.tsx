@@ -1,10 +1,9 @@
+// components/WineCalculator.tsx (ou screens/WineCalculator.tsx)
 import { useState, useEffect } from "react";
 import {
     Box,
     VStack,
     FormControl,
-    Input,
-    InputField,
     Button,
     ButtonText,
     Select,
@@ -28,12 +27,14 @@ import {
     FormControlLabelText,
     Heading,
 } from "@gluestack-ui/themed";
-import { Wine, Clock } from "lucide-react-native";
+import { Platform } from "react-native";
+import { Clock } from "lucide-react-native";
 import { useRouter } from "expo-router";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { ChevronLeft } from "lucide-react-native";
+import useLanguageStore from "@/stores/useLanguageStore";
+import { Minus, Plus } from "lucide-react-native";
 import { config } from "@/gluestack-ui.config";
-import { Plus, ChevronLeft } from "lucide-react-native";
-import { useNavigation } from "expo-router";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
 type Wine = {
     id: string;
@@ -41,21 +42,22 @@ type Wine = {
     type: string;
 };
 
-type EventFormData = {
-    name: string;
-    startDate: Date;
-    description: string;
-    wines: Wine[];
-    calculator: {
-        guests: number;
-        period: "morning" | "afternoon" | "evening";
-        consumptionLevel: "low" | "medium" | "high";
-        totalBottles?: number; // Nova propriedade
-        suggestedTypes?: string[]; // Nova propriedade
-    };
-};
-
 export default function WineCalculator() {
+    type EventFormData = {
+        name: string;
+        startDate: Date;
+        description: string;
+        wines: Wine[];
+        calculator: {
+            guests: number;
+            period: "morning" | "afternoon" | "evening";
+            consumptionLevel: "low" | "medium" | "high";
+            totalBottles?: number;
+            suggestedTypes?: string[];
+            bottleSuggestions?: string[];
+        };
+    };
+
     const [formData, setFormData] = useState<EventFormData>({
         name: "",
         startDate: new Date(),
@@ -63,34 +65,58 @@ export default function WineCalculator() {
         wines: [],
         calculator: {
             guests: 0,
-            period: "evening",
+            period: "morning",
             consumptionLevel: "medium",
         },
     });
-    const navigation = useNavigation();
-    const router = useRouter();
+
+    const route = useRouter();
     const [userWines, setUserWines] = useState<Wine[]>([]);
-    const [showDatePicker, setShowDatePicker] = useState(false);
     const [title, setTitle] = useState("Próximo");
     const [activeTab, setActiveTab] = useState<"details" | "wines" | "calculator">("calculator");
-    const primary = config.tokens.colors.primary?.["500"];
-    const bgLight = config.tokens.colors.backgroundLight;
-    const neutralLight = config.tokens.colors.muted;
-    const textDark = config.tokens.colors.textDark;
-    const textLight = config.tokens.colors.textLight;
+    const { t, forceUpdate } = useLanguageStore();
+    const [updateKey, setUpdateKey] = useState(0);
+
+    const primary = config.tokens.colors.primary["500"];
+    const neutralDark = config.tokens.colors.primary["600"];
+    const neutralLight = config.tokens.colors.primary["700"];
+    const accent = config.tokens.colors.primary["800"];
+
+    const PERIOD_OPTIONS = [
+        { value: "morning", label: t("forms.wineCalculator.morning") },
+        { value: "afternoon", label: t("forms.wineCalculator.afternoon") },
+        { value: "evening", label: t("forms.wineCalculator.evening") },
+    ];
 
     useEffect(() => {
-        const fetchUserWines = async () => {
-            const mockWines: Wine[] = [
-                { id: "1", name: "Vinho do Porto", type: "Tinto" },
-                { id: "2", name: "Château Margaux", type: "Tinto" },
-                { id: "3", name: "Cloudy Bay", type: "Branco" },
-            ];
-            setUserWines(mockWines);
-        };
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
 
-        fetchUserWines();
+    useEffect(() => {
+        const mockWines: Wine[] = [
+            { id: "1", name: "Vinho do Porto", type: "Tinto" },
+            { id: "2", name: "Château Margaux", type: "Tinto" },
+            { id: "3", name: "Cloudy Bay", type: "Branco" },
+        ];
+        setUserWines(mockWines);
     }, []);
+
+    function getTranslatedArray(keyBase: string, maxItems = 40): string[] {
+        try {
+            const arr = t(keyBase, { returnObjects: true });
+            if (Array.isArray(arr)) return arr as string[];
+        } catch (e) {
+            console.log("Ops! Algo deu errado: ", e);
+        }
+        const out: string[] = [];
+        for (let i = 0; i < maxItems; i++) {
+            const k = `${keyBase}.${i}`;
+            const v = t(k);
+            if (!v || v === k) break;
+            out.push(v);
+        }
+        return out;
+    }
 
     const handleCalculateWines = () => {
         const { guests, period, consumptionLevel } = formData.calculator;
@@ -99,107 +125,131 @@ export default function WineCalculator() {
         if (consumptionLevel === "low") multiplier = 0.75;
         if (consumptionLevel === "high") multiplier = 1.5;
 
-        // Ajuste baseado no período
         if (period === "morning") multiplier *= 0.7;
         if (period === "afternoon") multiplier *= 0.9;
 
-        const totalBottles = Math.ceil(guests * 0.5 * multiplier);
+        const totalBottles = Math.max(0, Math.ceil(guests * 0.5 * multiplier));
 
-        // Tipos sugeridos baseados no período
-        let suggestedTypes = [];
+        let suggestedTypes = getTranslatedArray(`forms.wineCalculator.suggestedTypes.${period}`);
 
-        if (period === "morning") {
-            suggestedTypes = ["Espumante Brut", "Branco leve", "Rosé seco"];
-        } else if (period === "afternoon") {
-            suggestedTypes = ["Tinto suave", "Branco seco", "Rosé leve"];
-        } else {
-            // evening
-            suggestedTypes = ["Tinto seco", "Espumante Extra Brut", "Branco encorpado"];
+        if (!suggestedTypes || suggestedTypes.length === 0) {
+            if (period === "morning") {
+                suggestedTypes = [
+                    t("forms.wineCalculator.suggestedFallback.sparkling"),
+                    t("forms.wineCalculator.suggestedFallback.lightWhite"),
+                    t("forms.wineCalculator.suggestedFallback.rose"),
+                ];
+            } else if (period === "afternoon") {
+                suggestedTypes = [t("forms.wineCalculator.suggestedFallback.mediumRed"), t("forms.wineCalculator.suggestedFallback.structuredWhite")];
+            } else {
+                suggestedTypes = [t("forms.wineCalculator.suggestedFallback.fullRed"), t("forms.wineCalculator.suggestedFallback.port")];
+            }
         }
 
-        setFormData({
-            ...formData,
+        const bottleSuggestions =
+            totalBottles >= 6
+                ? getTranslatedArray(`forms.wineCalculator.bottleSuggestions.large`)
+                : totalBottles >= 3
+                ? getTranslatedArray(`forms.wineCalculator.bottleSuggestions.medium`)
+                : [];
+
+        setFormData((prev) => ({
+            ...prev,
             calculator: {
-                ...formData.calculator,
+                ...prev.calculator,
                 totalBottles,
                 suggestedTypes,
+                bottleSuggestions,
             },
-        });
+        }));
     };
 
-    const handleNext = () => {
-        if (activeTab == "details") {
-            setActiveTab("calculator");
-        } else if (activeTab == "calculator") {
-            setActiveTab("wines");
-            setTitle("Criar evento");
-        }
+    const getCurrentPeriodLabel = () => {
+        const periodOption = PERIOD_OPTIONS.find((option) => option.value === formData.calculator.period);
+        return periodOption ? periodOption.label : t("forms.wineCalculator.period");
     };
 
-    const handlePrevious = () => {
-        if (activeTab == "details") {
-            router.push("/tabs/(tabs)/events");
-        } else if (activeTab == "calculator") {
-            setActiveTab("details");
-        } else if (activeTab == "wines") {
-            setActiveTab("calculator");
-            setTitle("Próximo");
+    const getTranslatedPeriodForText = (periodValue: string) => {
+        switch (periodValue) {
+            case "morning":
+                return t("forms.wineCalculator.morning2");
+            case "afternoon":
+                return t("forms.wineCalculator.afternoon2");
+            case "evening":
+                return t("forms.wineCalculator.evening2");
+            default:
+                return periodValue;
         }
     };
 
     return (
-        <Box flex={1} p="$4" mt={50}>
+        <Box key={updateKey} flex={1} p="$4" mt={Platform.OS == "ios" ? 50 : 0} bg={neutralLight}>
             <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb="$4">
                 <HStack justifyContent="space-between" alignItems="center">
-                    <ChevronLeft color={textLight} size={40} onPress={() => router.back()} />
-                    <Heading size="lg">Calculadora de Vinhos</Heading>
+                    <ChevronLeft key="half" size={30} style={{ marginRight: 6 }} color={accent} onPress={() => route.back()} />
+                    <Heading size="lg" color={accent}>
+                        {t("forms.wineCalculator.title")}
+                    </Heading>
                 </HStack>
             </Box>
+
             <ScrollView py={32} mb="$16">
                 {activeTab === "calculator" && (
                     <VStack space="md">
                         <FormControl>
                             <FormControlLabel my={6}>
-                                <FormControlLabelText>Quantas pessoas?</FormControlLabelText>
+                                <FormControlLabelText>{t("forms.wineCalculator.howMany")}</FormControlLabelText>
                             </FormControlLabel>
-                            <Input borderColor={"$backgroundDark400"}>
-                                <InputField
-                                    placeholder="Número de convidados"
-                                    keyboardType="numeric"
-                                    value={formData.calculator.guests.toString()}
-                                    onChangeText={(text) =>
-                                        setFormData({
-                                            ...formData,
-                                            calculator: {
-                                                ...formData.calculator,
-                                                guests: parseInt(text) || 0,
-                                            },
-                                        })
+                            <HStack alignItems="center" space="md">
+                                <Button
+                                    size="sm"
+                                    onPress={() =>
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            calculator: { ...prev.calculator, guests: Math.max(0, prev.calculator.guests - 1) },
+                                        }))
                                     }
-                                />
-                            </Input>
+                                    disabled={formData.calculator.guests <= 0}
+                                    backgroundColor={formData.calculator.guests <= 0 ? accent + "50" : accent}
+                                >
+                                    <ButtonText>
+                                        <Minus size={20} color="white" />
+                                    </ButtonText>
+                                </Button>
+
+                                <Box minWidth="$16" alignItems="center" justifyContent="center" borderWidth={1} borderColor="$backgroundDark400" borderRadius="$md" px="$2" py="$1">
+                                    <Text fontSize="$lg" fontWeight="$bold">
+                                        {formData.calculator.guests}
+                                    </Text>
+                                </Box>
+
+                                <Button
+                                    size="sm"
+                                    onPress={() =>
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            calculator: { ...prev.calculator, guests: prev.calculator.guests + 1 },
+                                        }))
+                                    }
+                                    backgroundColor={accent}
+                                >
+                                    <ButtonText>
+                                        <Plus size={20} color="white" />
+                                    </ButtonText>
+                                </Button>
+                            </HStack>
                         </FormControl>
 
                         <FormControl>
                             <FormControlLabel my={6}>
-                                <FormControlLabelText>Qual é o período do evento?</FormControlLabelText>
+                                <FormControlLabelText>{t("forms.wineCalculator.period")}</FormControlLabelText>
                             </FormControlLabel>
                             <Select
-                                defaultValue="Manhã"
-                                borderColor={"$backgroundDark400"}
                                 selectedValue={formData.calculator.period}
-                                onValueChange={(value) =>
-                                    setFormData({
-                                        ...formData,
-                                        calculator: {
-                                            ...formData.calculator,
-                                            period: value as "morning" | "afternoon" | "evening",
-                                        },
-                                    })
-                                }
+                                onValueChange={(value) => setFormData((prev) => ({ ...prev, calculator: { ...prev.calculator, period: value as any } }))}
                             >
                                 <SelectTrigger borderColor={"$backgroundDark400"}>
-                                    <SelectInput borderColor={"$backgroundDark400"} placeholder="Período do evento" />
+                                    <SelectInput placeholder={t("forms.wineCalculator.period")} value={getCurrentPeriodLabel()} />
                                     <SelectIcon as={Clock} mx={8} />
                                 </SelectTrigger>
                                 <SelectPortal>
@@ -208,9 +258,10 @@ export default function WineCalculator() {
                                         <SelectDragIndicatorWrapper>
                                             <SelectDragIndicator />
                                         </SelectDragIndicatorWrapper>
-                                        <SelectItem label="Manhã" value="morning" />
-                                        <SelectItem label="Tarde" value="afternoon" />
-                                        <SelectItem label="Noite" value="evening" />
+
+                                        {PERIOD_OPTIONS.map((option) => (
+                                            <SelectItem key={option.value} label={option.label} value={option.value} />
+                                        ))}
                                     </SelectContent>
                                 </SelectPortal>
                             </Select>
@@ -218,105 +269,111 @@ export default function WineCalculator() {
 
                         <FormControl>
                             <FormControlLabel my={6}>
-                                <FormControlLabelText>Qual é o nível de consumo?</FormControlLabelText>
+                                <FormControlLabelText>{t("forms.wineCalculator.level")}</FormControlLabelText>
                             </FormControlLabel>
 
-                            <HStack space="sm">
+                            <VStack space="sm">
                                 <Checkbox
                                     value="low"
                                     isChecked={formData.calculator.consumptionLevel === "low"}
-                                    onChange={(isSelected) =>
-                                        isSelected &&
-                                        setFormData({
-                                            ...formData,
-                                            calculator: {
-                                                ...formData.calculator,
-                                                consumptionLevel: "low",
-                                            },
-                                        })
-                                    }
+                                    onChange={(isSelected) => isSelected && setFormData((prev) => ({ ...prev, calculator: { ...prev.calculator, consumptionLevel: "low" } }))}
                                 >
                                     <CheckboxIndicator borderRadius={5} borderColor={"$backgroundDark200"}>
-                                        <CheckboxIcon backgroundColor={primary} borderRadius={3} borderColor={primary} />
+                                        <CheckboxIcon backgroundColor={accent} borderRadius={3} borderColor={accent} />
                                     </CheckboxIndicator>
-                                    <CheckboxLabel>Baixo</CheckboxLabel>
+                                    <CheckboxLabel fontWeight={"$bold"} mx="$4">
+                                        {t("forms.wineCalculator.low")}
+                                    </CheckboxLabel>
+                                    <CheckboxLabel>{t("forms.wineCalculator.lowEx")}</CheckboxLabel>
                                 </Checkbox>
 
                                 <Checkbox
                                     value="medium"
                                     isChecked={formData.calculator.consumptionLevel === "medium"}
-                                    onChange={(isSelected) =>
-                                        isSelected &&
-                                        setFormData({
-                                            ...formData,
-                                            calculator: {
-                                                ...formData.calculator,
-                                                consumptionLevel: "medium",
-                                            },
-                                        })
-                                    }
+                                    onChange={(isSelected) => isSelected && setFormData((prev) => ({ ...prev, calculator: { ...prev.calculator, consumptionLevel: "medium" } }))}
                                 >
                                     <CheckboxIndicator borderRadius={5} borderColor={"$backgroundDark200"}>
-                                        <CheckboxIcon backgroundColor={primary} borderRadius={3} borderColor={primary} />
+                                        <CheckboxIcon backgroundColor={accent} borderRadius={3} borderColor={accent} />
                                     </CheckboxIndicator>
-                                    <CheckboxLabel>Médio</CheckboxLabel>
+                                    <CheckboxLabel fontWeight={"$bold"} mx="$4">
+                                        {t("forms.wineCalculator.medium")}
+                                    </CheckboxLabel>
+                                    <CheckboxLabel>{t("forms.wineCalculator.mediumEx")}</CheckboxLabel>
                                 </Checkbox>
 
                                 <Checkbox
                                     value="high"
                                     isChecked={formData.calculator.consumptionLevel === "high"}
-                                    onChange={(isSelected) =>
-                                        isSelected &&
-                                        setFormData({
-                                            ...formData,
-                                            calculator: {
-                                                ...formData.calculator,
-                                                consumptionLevel: "high",
-                                            },
-                                        })
-                                    }
+                                    onChange={(isSelected) => isSelected && setFormData((prev) => ({ ...prev, calculator: { ...prev.calculator, consumptionLevel: "high" } }))}
                                 >
                                     <CheckboxIndicator borderRadius={5} borderColor={"$backgroundDark200"}>
-                                        <CheckboxIcon backgroundColor={primary} borderRadius={3} borderColor={primary} />
+                                        <CheckboxIcon backgroundColor={accent} borderRadius={3} borderColor={accent} />
                                     </CheckboxIndicator>
-                                    <CheckboxLabel>Alto</CheckboxLabel>
+                                    <CheckboxLabel fontWeight={"$bold"} mx="$4">
+                                        {t("forms.wineCalculator.high")}
+                                    </CheckboxLabel>
+                                    <CheckboxLabel>{t("forms.wineCalculator.highEx")}</CheckboxLabel>
                                 </Checkbox>
-                            </HStack>
+                            </VStack>
                         </FormControl>
 
-                        <Button mt="$4" onPress={handleCalculateWines} backgroundColor={primary}>
-                            <ButtonText>Calcular Vinhos Necessários</ButtonText>
+                        <Button mt="$4" onPress={handleCalculateWines} backgroundColor={accent}>
+                            <ButtonText>{t("forms.wineCalculator.submit")}</ButtonText>
                         </Button>
 
-                        {formData.calculator.totalBottles > 0 && (
+                        {formData.calculator.totalBottles! > 0 && (
                             <VStack mt="$4" space="sm">
                                 <Text fontSize="$lg" fontWeight="$bold">
-                                    Resultado:
+                                    {t("forms.wineCalculator.result")}:
                                 </Text>
 
-                                {/* Ícones de garrafas */}
-                                <HStack flexWrap="wrap">
-                                    {[...Array(formData.calculator.totalBottles)].map((_, index) => (
-                                        <MaterialCommunityIcons key={index} name="bottle-wine" size={24} color="#7f1d1d" style={{ marginRight: 4 }} />
+                                <HStack flexWrap="wrap" alignItems="center">
+                                    {[...Array(formData.calculator.totalBottles || 0)].map((_, index) => (
+                                        <MaterialCommunityIcons key={index} name="bottle-wine" size={24} color={primary} style={{ marginRight: 4 }} />
                                     ))}
-                                    <Text ml="$2">
-                                        {formData.calculator.totalBottles} unidade{[...Array(formData.calculator.totalBottles)].length > 1 ? "s" : ""}
+                                    <Text ml="$2" fontSize="$md">
+                                        {formData.calculator.totalBottles} {t("forms.wineCalculator.totalBottle")}
+                                        {formData.calculator.totalBottles! > 1 ? "s" : ""} {t("forms.wineCalculator.recommended")}
+                                        {formData.calculator.totalBottles! > 1 ? "s" : ""}
                                     </Text>
                                 </HStack>
 
-                                <Text fontSize="$lg" fontWeight="$bold">
-                                    Sugestões:
+                                <Text fontSize="$lg" fontWeight="$bold" mt="$2">
+                                    {t("forms.wineCalculator.suggestions")}:
                                 </Text>
+
                                 <VStack mb="$2" space="xs">
-                                    {formData.calculator.suggestedTypes.map((type, index) => (
-                                        <Text key={index}>• {type}</Text>
+                                    {formData.calculator.suggestedTypes?.map((type, index) => (
+                                        <Text key={index} fontSize="$sm">
+                                            • {type}
+                                        </Text>
                                     ))}
                                 </VStack>
 
+                                {formData.calculator.bottleSuggestions && formData.calculator.bottleSuggestions.length > 0 && (
+                                    <>
+                                        <Text fontSize="$md" fontWeight="$bold" mt="$2">
+                                            {t("forms.wineCalculator.variety")}
+                                        </Text>
+                                        <VStack space="xs">
+                                            {formData.calculator.bottleSuggestions.map((tip, index) => (
+                                                <Text key={index} fontSize="$sm" color="$blue600" fontStyle="italic">
+                                                    💡 {tip}
+                                                </Text>
+                                            ))}
+                                        </VStack>
+                                    </>
+                                )}
+
                                 <Text mt="$2" fontSize="$sm" color="$coolGray500">
-                                    Baseado em {formData.calculator.guests} convidados, período{" "}
-                                    {formData.calculator.period === "morning" ? "da manhã" : formData.calculator.period === "afternoon" ? "da tarde" : "da noite"} e consumo{" "}
-                                    {formData.calculator.consumptionLevel === "low" ? "baixo" : formData.calculator.consumptionLevel === "medium" ? "médio" : "alto"}.
+                                    {t("forms.wineCalculator.based")} {formData.calculator.guests} {t("forms.wineCalculator.guests")},{" "}
+                                    {getTranslatedPeriodForText(formData.calculator.period)}{" "}
+                                    {formData.calculator.consumptionLevel === "low"
+                                        ? t("forms.wineCalculator.lowC")
+                                        : formData.calculator.consumptionLevel === "medium"
+                                        ? t("forms.wineCalculator.mediumC")
+                                        : t("forms.wineCalculator.highC")}
+                                    .
                                 </Text>
                             </VStack>
                         )}

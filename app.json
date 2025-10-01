@@ -2,19 +2,20 @@
     "expo": {
         "name": "EnoLink",
         "slug": "ivino-app",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "orientation": "portrait",
-        "icon": "./assets/images/icon.jpeg",
+        "host": "invite-enolink.online",
+        "icon": "./assets/images/icon.png",
         "scheme": "com.vivavinho.enolink",
         "userInterfaceStyle": "automatic",
         "assetBundlePatterns": ["**/*"],
         "newArchEnabled": true,
         "ios": {
-            "icon": "./assets/images/icon.jpeg",
-            "associatedDomains": ["applinks:enolinkapp.com"],
+            "icon": "./assets/images/icon.png",
+            "associatedDomains": ["applinks:invite-enolink.online"],
             "supportsTablet": true,
             "bundleIdentifier": "com.vivavinho.enolink",
-            "buildNumber": "1.0.0",
+            "buildNumber": "1.1.0",
             "usesAppleSignIn": true,
             "infoPlist": {
                 "NSCameraUsageDescription": "Este app precisa acessar a câmera para adicionar imagens aos vinhos.",
@@ -24,27 +25,30 @@
                 "NSLocationWhenInUseUsageDescription": "Usamos sua localização para mostrar serviços próximos a você. Exemplo: encontrar restaurantes em um raio de 5 km.",
                 "NSLocationAlwaysAndWhenInUseUsageDescription": "Localização em segundo plano é necessária para notificá-lo sobre ofertas próximas mesmo com o app fechado."
             },
+            "entitlements": {
+                "com.apple.developer.associated-domains": ["applinks:invite-enolink.online"]
+            },
             "appleTeamId": "8J82XT42C9"
         },
         "android": {
             "adaptiveIcon": {
-                "foregroundImage": "./assets/images/adaptive-icon.jpeg",
-                "backgroundColor": "#FFF8EC"
+                "foregroundImage": "./assets/images/icon.png",
+                "backgroundColor": "#ECE7E1"
             },
             "intentFilters": [
                 {
                     "action": "VIEW",
                     "data": [
                         {
-                            "scheme": "wineapp"
-                        },
-                        {
                             "scheme": "https",
-                            "host": "enolinkapp.com",
-                            "pathPrefix": "/join/"
+                            "host": "invite-enolink.online",
+                            "pathPrefix": "/e/"
                         }
                     ],
                     "category": ["BROWSABLE", "DEFAULT"]
+                },
+                {
+                    "scheme": "enolink"
                 }
             ],
             "package": "com.vivavinho.enolink",
@@ -53,17 +57,17 @@
         "web": {
             "bundler": "metro",
             "output": "static",
-            "favicon": "./assets/images/favicon.jpeg"
+            "favicon": "./assets/images/favicon.png"
         },
         "plugins": [
             "expo-router",
             [
                 "expo-splash-screen",
                 {
-                    "image": "./assets/images/splash-icon.jpeg",
-                    "imageWidth": 200,
+                    "image": "./assets/images/icon.png",
+                    "imageWidth": 600,
                     "resizeMode": "contain",
-                    "backgroundColor": "#FFF8EC"
+                    "backgroundColor": "#ECE7E1"
                 }
             ],
             [

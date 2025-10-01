@@ -1,4 +1,3 @@
-// app/(auth)/register.tsx
 import {
     Box,
     Heading,
@@ -25,57 +24,109 @@ import {
     SelectDragIndicator,
     SelectItem,
 } from "@gluestack-ui/themed";
+import { Platform, ScrollView } from "react-native";
 import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "expo-router";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerUser } from "@/lib/auth/registerUser";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Alert } from "react-native";
 import { config } from "@/gluestack-ui.config";
 import { MaskedTextInput } from "react-native-mask-text";
 import { ChevronDownIcon, ChevronLeft } from "lucide-react-native";
 import { useNavigation } from "expo-router";
 import useLanguageStore from "@/stores/useLanguageStore";
-// 💡 Schema de validação
-const registerSchema = yup.object({
-    name: yup.string().required("Nome é obrigatório"),
-    email: yup.string().email("E-mail inválido").required("E-mail é obrigatório"),
-    birthDate: yup.string().required("Data de nascimento é obrigatória"),
-    language: yup.string().required("Idioma é obrigatório"),
-    password: yup.string().min(6, "Mínimo 6 caracteres").required("Senha é obrigatória"),
-    confirmPassword: yup
-        .string()
-        .oneOf([yup.ref("password")], "As senhas não coincidem")
-        .required("Confirme sua senha"),
-});
-
-type RegisterFormData = yup.InferType<typeof registerSchema>;
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { format } from "date-fns";
+import { ptBR, enUS, es, it, fr } from "date-fns/locale";
 
 export default function RegisterScreen() {
+    type RegisterFormData = yup.InferType<typeof registerSchema>;
     const navigation = useNavigation();
+    const { t, forceUpdate } = useLanguageStore();
     const primary = config.tokens.colors.primary["500"];
-    const primaryLight = config.tokens.colors.primary["200"];
-    const neutralLight = config.tokens.colors.muted;
-    const textDark = config.tokens.colors.textDark;
-    const textLight = config.tokens.colors.textLight;
+    const neutralDark = config.tokens.colors.primary["600"];
+    const neutralLight = config.tokens.colors.primary["700"];
+    const accent = config.tokens.colors.primary["800"];
+    const gold = config.tokens.colors.primary["900"];
+    const [updateKey, setUpdateKey] = useState(0);
+
+    useEffect(() => {
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
+
+    const registerSchema = yup.object({
+        name: yup.string().required(t("register.name") + " " + t("general.required")),
+        email: yup
+            .string()
+            .email(t("register.email") + " " + t("general.invalid"))
+            .required(t("register.email") + " " + t("general.required")),
+        birthDate: yup.string().required(t("register.dateBirth") + " " + t("general.required")),
+        language: yup.string().required(t("register.lang") + " " + t("general.required")),
+        password: yup
+            .string()
+            .min(8, t("register.mustContain1"))
+            .matches(/[a-z]/, t("register.mustContain2"))
+            .matches(/[A-Z]/, t("register.mustContain3"))
+            .matches(/\d/, t("register.mustContain4"))
+            .matches(/[!@#$%^&*(),.?":{}|<>]/, t("register.mustContain5"))
+            .required(t("register.password") + " " + t("general.required")),
+        confirmPassword: yup
+            .string()
+            .oneOf([yup.ref("password")], t("register.notMatch"))
+            .required(t("register.confirmPassword")),
+    });
 
     const {
         control,
         handleSubmit,
+        setValue,
+        watch,
         formState: { errors },
     } = useForm<RegisterFormData>({
         resolver: yupResolver(registerSchema),
     });
+
     const languageOptions = [
-        { label: "🇧🇷 Português", value: "pt-BR" },
-        { label: "🇺🇸 English", value: "en-US" },
+        { label: "🇧🇷 Português (Brasil)", value: "pt-BR" },
+        { label: "🇵🇹 Português (Portugal)", value: "pt-PT" },
+        { label: "🇺🇸 English", value: "en" },
         { label: "🇪🇸 Español", value: "es-ES" },
+        { label: "🇮🇹 Italiano", value: "it-IT" },
+        { label: "🇫🇷 Français", value: "fr-FR" },
     ];
 
     const [loading, setLoading] = useState(false);
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const router = useRouter();
     const toast = useToast();
+
+    const passwordValue = watch("password", "");
+    const selectedLanguage = watch("language", "pt-BR");
+
+    const formatDate = (date: Date, language: string) => {
+        const locales: { [key: string]: Locale } = {
+            "pt-BR": ptBR,
+            "pt-PT": ptBR,
+            en: enUS,
+            "es-ES": es,
+            "it-IT": it,
+            "fr-FR": fr,
+        };
+
+        return format(date, "dd/MM/yyyy", { locale: locales[language] || enUS });
+    };
+
+    const handleDateChange = (event: any, date?: Date) => {
+        setShowDatePicker(Platform.OS === "ios");
+
+        if (date) {
+            setSelectedDate(date);
+            setValue("birthDate", formatDate(date, selectedLanguage));
+        }
+    };
 
     const showToast = (type: "success" | "error", message: string) => {
         toast.show({
@@ -91,7 +142,6 @@ export default function RegisterScreen() {
     const onSubmit = async (data: RegisterFormData) => {
         setLoading(true);
         try {
-            // Registrar usuário
             const user = await registerUser({
                 email: data.email,
                 password: data.password,
@@ -100,7 +150,6 @@ export default function RegisterScreen() {
                 language: data.language,
             });
 
-            // Atualizar o idioma no estado global
             useLanguageStore.getState().setLanguage(data.language as LanguageCode);
 
             showToast("success", "Conta criada com sucesso!");
@@ -114,29 +163,26 @@ export default function RegisterScreen() {
     };
 
     return (
-        <Box flex={1} bg="$backgroundLight" p="$4" mt={50}>
-            <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb="$4">
-                <HStack justifyContent="space-between" alignItems="center">
-                    <ChevronLeft color={textLight} size={40} onPress={() => router.back()} />
-                    <Heading size="lg">Editar Perfil</Heading>
-                </HStack>
-            </Box>
-            <Heading size="lg" mb="$4">
-                Criar Conta
-            </Heading>
+        <ScrollView key={updateKey} style={{ backgroundColor: neutralLight, paddingTop: Platform.OS == "ios" ? 50 : 0 }}>
+            <VStack flex={1} space="xl" p="$4">
+                <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb="$4">
+                    <HStack justifyContent="space-between" alignItems="center">
+                        <ChevronLeft onPress={() => router.back()} key="half" size={30} style={{ marginRight: 6 }} color={config.tokens.colors.textLight} />
 
-            <VStack space="md">
-                {/* Nome */}
+                        <Heading size="lg">{t("register.create")}</Heading>
+                    </HStack>
+                </Box>
+
                 <FormControl isInvalid={!!errors.name}>
                     <FormControlLabel>
-                        <FormControlLabelText>Nome</FormControlLabelText>
+                        <FormControlLabelText>{t("register.name")}</FormControlLabelText>
                     </FormControlLabel>
                     <Controller
                         control={control}
                         name="name"
                         render={({ field: { onChange, value } }) => (
                             <Input>
-                                <InputField placeholder="Digite seu nome" value={value} onChangeText={onChange} />
+                                <InputField bg="#FFFFFF" placeholder={t("register.name")} value={value} onChangeText={onChange} />
                             </Input>
                         )}
                     />
@@ -146,63 +192,72 @@ export default function RegisterScreen() {
                 {/* Email */}
                 <FormControl isInvalid={!!errors.email}>
                     <FormControlLabel>
-                        <FormControlLabelText>Email</FormControlLabelText>
+                        <FormControlLabelText>{t("register.email")}</FormControlLabelText>
                     </FormControlLabel>
                     <Controller
                         control={control}
                         name="email"
                         render={({ field: { onChange, value } }) => (
                             <Input>
-                                <InputField placeholder="email@email.com" keyboardType="email-address" autoCapitalize="none" value={value} onChangeText={onChange} />
+                                <InputField
+                                    bg="#FFFFFF"
+                                    placeholder={t("register.email")}
+                                    keyboardType="email-address"
+                                    autoCapitalize="none"
+                                    value={value}
+                                    onChangeText={onChange}
+                                />
                             </Input>
                         )}
                     />
                     {errors.email && <Text color="$error500">{errors.email.message}</Text>}
                 </FormControl>
 
-                {/* Data de nascimento */}
                 <FormControl isInvalid={!!errors.birthDate}>
                     <FormControlLabel>
-                        <FormControlLabelText>Data de Nascimento</FormControlLabelText>
+                        <FormControlLabelText>{t("register.dateBirth")}</FormControlLabelText>
                     </FormControlLabel>
+
                     <Controller
                         control={control}
                         name="birthDate"
-                        render={({ field: { onChange, value } }) => (
-                            <Input>
-                                <MaskedTextInput
-                                    mask="99/99/9999"
-                                    placeholder="DD/MM/AAAA"
-                                    keyboardType="numeric"
-                                    onChangeText={onChange}
-                                    value={value}
-                                    style={{
-                                        padding: 10,
-                                        fontSize: 16,
-                                        color: "#000",
-                                        flex: 1,
-                                    }}
-                                />
-                            </Input>
+                        render={({ field: { value } }) => (
+                            <>
+                                <Pressable onPress={() => setShowDatePicker(true)}>
+                                    <Input pointerEvents="none">
+                                        <InputField bg="#FFFFFF" placeholder="DD/MM/AAAA" value={value} editable={false} />
+                                    </Input>
+                                </Pressable>
+
+                                {showDatePicker && (
+                                    <DateTimePicker
+                                        value={selectedDate}
+                                        mode="date"
+                                        display={Platform.OS === "ios" ? "spinner" : "default"}
+                                        onChange={handleDateChange}
+                                        maximumDate={new Date()}
+                                        locale={selectedLanguage}
+                                    />
+                                )}
+                            </>
                         )}
                     />
 
                     {errors.birthDate && <Text color="$error500">{errors.birthDate.message}</Text>}
                 </FormControl>
 
-                {/* Idioma */}
                 <FormControl isInvalid={!!errors.language}>
                     <FormControlLabel>
-                        <FormControlLabelText>Idioma</FormControlLabelText>
+                        <FormControlLabelText>{t("register.lang")}</FormControlLabelText>
                     </FormControlLabel>
                     <Controller
                         control={control}
                         name="language"
                         render={({ field: { onChange, value } }) => (
                             <Select selectedValue={value} onValueChange={onChange}>
-                                <SelectTrigger variant="outline" size="md">
-                                    <SelectInput placeholder="Selecione o idioma" />
-                                    <SelectIcon as={ChevronDownIcon} />
+                                <SelectTrigger bg="#FFFFFF" variant="outline" size="md">
+                                    <SelectInput bg="#FFFFFF" placeholder="Selecione o idioma" />
+                                    <SelectIcon as={ChevronDownIcon} mx={6} />
                                 </SelectTrigger>
                                 <SelectPortal>
                                     <SelectBackdrop />
@@ -221,34 +276,57 @@ export default function RegisterScreen() {
                     {errors.language && <Text color="$error500">{errors.language.message}</Text>}
                 </FormControl>
 
-                {/* Senha */}
                 <FormControl isInvalid={!!errors.password}>
                     <FormControlLabel>
-                        <FormControlLabelText>Senha</FormControlLabelText>
+                        <FormControlLabelText>{t("register.password")}</FormControlLabelText>
                     </FormControlLabel>
+
                     <Controller
                         control={control}
                         name="password"
                         render={({ field: { onChange, value } }) => (
-                            <Input>
-                                <InputField placeholder="Digite sua senha" secureTextEntry value={value} onChangeText={onChange} />
-                            </Input>
+                            <VStack space="xs">
+                                <Input>
+                                    <InputField bg="#FFFFFF" placeholder={t("register.password")} secureTextEntry value={value} onChangeText={onChange} />
+                                </Input>
+
+                                <Text fontSize="$xs" color="$textLight500" mt="$1">
+                                    {t("register.mustContain0")}
+                                </Text>
+                                <VStack space="xs" ml="$2">
+                                    <Text fontSize="$xs" color={value?.length >= 8 ? "$success500" : "$textLight400"}>
+                                        {t("register.mustContain1")}
+                                    </Text>
+                                    <Text fontSize="$xs" color={/[a-z]/.test(value || "") ? "$success500" : "$textLight400"}>
+                                        {t("register.mustContain2")}
+                                    </Text>
+                                    <Text fontSize="$xs" color={/[A-Z]/.test(value || "") ? "$success500" : "$textLight400"}>
+                                        {t("register.mustContain3")}
+                                    </Text>
+                                    <Text fontSize="$xs" color={/\d/.test(value || "") ? "$success500" : "$textLight400"}>
+                                        {t("register.mustContain4")}
+                                    </Text>
+                                    <Text fontSize="$xs" color={/[!@#$%^&*(),.?":{}|<>]/.test(value || "") ? "$success500" : "$textLight400"}>
+                                        {t("register.mustContain5")}
+                                    </Text>
+                                </VStack>
+                            </VStack>
                         )}
                     />
+
                     {errors.password && <Text color="$error500">{errors.password.message}</Text>}
                 </FormControl>
 
-                {/* Confirmar senha */}
                 <FormControl isInvalid={!!errors.confirmPassword}>
                     <FormControlLabel>
-                        <FormControlLabelText>Confirmar Senha</FormControlLabelText>
+                        <FormControlLabelText>{t("register.confirmPassword")}</FormControlLabelText>
                     </FormControlLabel>
                     <Controller
                         control={control}
                         name="confirmPassword"
                         render={({ field: { onChange, value } }) => (
                             <Input>
-                                <InputField placeholder="Confirme sua senha" secureTextEntry value={value} onChangeText={onChange} />
+                                <InputField bg="#FFFFFF" placeholder={t("register.confirmPassword")} secureTextEntry value={value} onChangeText={onChange} />
                             </Input>
                         )}
                     />
@@ -256,9 +334,9 @@ export default function RegisterScreen() {
                 </FormControl>
 
                 <Button variant="solid" mt="$4" bg={primary} onPress={handleSubmit(onSubmit)} isDisabled={loading}>
-                    <ButtonText>{loading ? "Criando..." : "Criar Conta"}</ButtonText>
+                    <ButtonText>{loading ? t("general.loading") : t("register.create")}</ButtonText>
                 </Button>
             </VStack>
-        </Box>
+        </ScrollView>
     );
 }

@@ -7,17 +7,27 @@
         "forgot": "Forgot my password",
         "or": "or",
         "signIn": "Signin with",
+        "signUp": "signUp with",
         "new": "New here?",
         "create": "Create an account"
     },
     "register": {
         "create": "Create Account",
-        "name": "name",
-        "email": "email",
+        "name": "Name",
+        "email": "Email",
         "dateBirth": "Date Birth",
         "lang": "Language",
         "password": "Password",
-        "confirmPassword": "Confirm Password"
+        "haveAccount": "Already have an account? Log in",
+        "confirmPassword": "Confirm Password",
+        "quit": "Quit",
+        "mustContain0": "The password must contain:",
+        "mustContain1": "• Minimum 8 characters",
+        "mustContain2": "• At least one lowercase letter",
+        "mustContain3": "• At least one capital letter",
+        "mustContain4": "• At least one number",
+        "mustContain5": "• At least one symbol (!@#$%^&*(), etc.)",
+        "notMatch": "Passwords do not match"
     },
     "forgot": {
         "recover": "Recover Password",
@@ -29,7 +39,7 @@
         "today": "What do you want to do today?",
         "diary": "Personal Diary",
         "calculator": "Wine Calculator",
-        "event": "Create Event",
+        "event": "Create Tasting Event",
         "wine": "Add Wine",
         "highToday": "What's hot today?",
         "checkout": "Check out the best-rated wines of the moment",
@@ -39,12 +49,20 @@
         "title": "Events",
         "now": "Happening now",
         "closed": "Closed",
-        "emptyList": "Events will appear here"
+        "emptyList": "Events will appear here",
+        "allEvents": "All events",
+        "myEvents": "My events",
+        "searchPlaceholder": "Search...",
+        "notFound": "No events found for",
+        "see": "See",
+        "join": "Join"
     },
     "wines": {
         "title": "My Wines",
         "emptyList": "Your wines will appear here",
-        "add": "Add Wine"
+        "add": "Add Wine",
+        "searchPlaceholder": "Search...",
+        "notFound": "No wines found for"
     },
     "me": {
         "title": "My Profile",
@@ -52,7 +70,9 @@
         "invite": "Invite Friends",
         "created": "Created by me",
         "joined": "Joined",
-        "emptyList": "Your wines will appear here"
+        "emptyList": "Your wines will appear here",
+        "anonymous": "You",
+        "myEvents": "See My Events"
     },
     "forms": {
         "rating": {
@@ -103,6 +123,7 @@
             "grape": "Grape",
             "closure": "Closure",
             "typwWine": "typeWine",
+            "abv": "Alcoholic graduation %",
             "image": "Image (optional)",
             "camera": "Camera",
             "gallery": "Gallery",
@@ -123,31 +144,53 @@
             "alterPassword": "Alter password",
             "currentPassword": "Current password",
             "newPassword": "New password",
-            "languague": "Language",
+            "language": "Language",
             "cancel": "Cancel",
-            "submit": "Save changes"
+            "submit": "Save changes",
+            "remove": "Remove"
         },
         "newDiaryWineList": {
             "title": "My Diary",
-            "new": "New evaluation"
+            "new": "New wine",
+            "searchPlaceholder": "Search...",
+            "notFound": "No wines found for"
         },
         "newEvent": {
-            "title": "Event details",
-            "buttonDetails": "Details",
+            "titleForm": "Create New Event",
+            "title": "Details",
+            "titleWine": "Wines at the event",
+            "buttonDetails": "Event Details",
+            "buttonDetailsDescription": "Fill in the basic information for your tasting event.",
             "buttonWines": "Wines",
-            "placeholderName": "Name of event",
+            "creation": "Event Creation",
+            "placeholderName": "Event Name",
+            "dateStart": "Date Start",
             "date": "Final date (optional)",
-            "titleimage": "Image background (optional)",
+            "titleImage": "Image background (optional)",
+            "imageDescription": "Add an image to identify your event",
             "camera": "Take picture",
             "gallery": "Take from gallery",
+            "selectedimage": "Selected Image",
             "buttonBack": "Previous",
-            "buttonNext": "Next",
-            "buttonSubmit": "Submit",
-            "title2": "Event's wines",
+            "buttonNext": "Continue to Wines",
+            "nextStep": "Next Step",
+            "nextStepDescription": "In the next step, you can add the wines that will be tasted at this event.",
+            "buttonSubmit": "Create event",
+            "title2": "Wines",
+            "eventWines": "Event Wines",
+            "eventWinesDescription": "No wines added yet. Select wines below to add to the event.",
+            "addedWines": "Added Wines",
             "emptyList1": "No wines added",
             "emptyList2": "your wines will appear here",
-            "yourWines": "Your wines",
-            "addWine": "Add New Wine"
+            "yourWines": "Your Wines",
+            "selectWines": "Select wines from your collection to add to the event",
+            "addWine": "Add New Wine",
+            "addWineDescription": "If you didn't find the wine you were looking for, you can add a new one to your collection and to the event.",
+            "selectDate": "Select Date",
+            "noWines": "Your wines will appear here.",
+            "emptyList": "No wines added yet. Select wines below to add to the event.",
+            "searchPlaceholder": "Search...",
+            "notFound": "No wines found for"
         },
         "newWineEvent": {
             "title": "Add Wine",
@@ -160,7 +203,10 @@
             "image": "Image (optional)",
             "camera": "Camera",
             "gallery": "Gallery",
-            "submit": "Save Wine"
+            "submit": "Save Wine",
+            "abv": "Alcoholic graduation %",
+            "searchPlaceholder": "Search...",
+            "notFound": "No wines found for"
         },
         "newWine": {
             "title": "Add Wine",
@@ -173,7 +219,11 @@
             "image": "Image (optional)",
             "camera": "Camera",
             "gallery": "Gallery",
-            "submit": "Save Wine"
+            "submit": "Save Wine",
+            "abv": "Alcoholic graduation %",
+            "selectWine": "Select Wine",
+            "selectCountry": "Select Country",
+            "selectGrape": "Select Grape"
         },
         "wineCalculator": {
             "title": "Wine Calculator",
@@ -187,7 +237,54 @@
             "high": "High",
             "medium": "Medium",
             "low": "Low",
-            "submit": "Calculate Necessary Wines"
+            "submit": "Calculate Necessary Wines",
+            "result": "Result",
+            "suggestions": "Suggestions",
+            "based": "Bassed on",
+            "guests": "quests",
+            "morning2": "in the morning",
+            "afternoon2": "in the afternoon",
+            "evening2": "in the evening",
+            "and": "and",
+            "consumption": "consumption",
+            "lowC": "low consumption",
+            "mediumC": "medium consumption",
+            "highC": "high consumption",
+            "lowEx": "1-2 glasses",
+            "mediumEx": "3-4 glasses",
+            "highEx": "5+ glasses",
+            "variety": "Variety Tips:",
+            "totalBottle": "bottle",
+            "recommended": "recommended",
+            "suggestedTypes": {
+                "morning": [
+                    "Brut Sparkling (e.g., Prosecco, Cava)",
+                    "Light White (e.g., Sauvignon Blanc, Pinot Grigio)",
+                    "Dry Rosé (e.g., Provence, Pinot Noir Rosé)",
+                    "Vinho Verde (light and slightly sparkling)",
+                    "Moscato d'Asti (sweet and light)",
+                    "Riesling (light and aromatic)"
+                ],
+                "afternoon": [
+                    "Medium-bodied Red (e.g., Merlot, Pinot Noir)",
+                    "Structured White (e.g., unoaked Chardonnay)",
+                    "Full-bodied Rosé (e.g., Tavel)",
+                    "Orange Wine (bold choice)",
+                    "Beaujolais (fruity and easy to drink)"
+                ],
+                "evening": [
+                    "Full-bodied Red (e.g., Cabernet Sauvignon, Malbec)",
+                    "Extra Brut Sparkling (dry and elegant)",
+                    "Full-bodied White (e.g., oaked Chardonnay)",
+                    "Port Wine (to finish the evening)",
+                    "Barolo/Barbaresco (noble Italian red)",
+                    "Red Bordeaux (classic and structured)"
+                ]
+            },
+            "bottleSuggestions": {
+                "large": ["We suggest 2–3 different wine types for variety", "Include at least 1 sparkling wine for celebration", "Consider 1 sweet wine to pair with desserts"],
+                "medium": ["Choose 2 different types to offer options", "One white and one red will cover most preferences"]
+            }
         }
     },
     "eventRoom": {
@@ -195,7 +292,16 @@
         "evaluated": "Evaluated",
         "blocked": "Blocked",
         "typeWine": "Click on the released wine to review. The next ones will be enabled after all participants submit their reviews.",
-        "leave": "Leave the event"
+        "typeWine2": "This is a private tasting event. Each wine will be released sequentially after all participants have evaluated the previous one.",
+        "leave": "Leave the event",
+        "participants": "participants",
+        "newParticipant": "new participant joined the event!",
+        "winesForTasting": "Wines for Tasting",
+        "wines": "wines",
+        "harvest": "Year",
+        "wait": "Wait for the evaluation of the previous wine",
+        "details": "Event details",
+        "seeRanking": "View Rankings"
     },
     "guestJoinEvent": {
         "join": "Join as a Guest",
@@ -210,14 +316,17 @@
     },
     "ranking": {
         "emptyList": "No evaluations registered.",
-        "finish": "Finish event"
+        "finish": "Finish event",
+        "view": "View ranking in browser"
     },
     "settings": {
+        "title": "Settings",
         "invite": "Invite friends",
         "share": "Share invite",
         "generate": "Generate new code",
         "finish": "Finish event",
-        "participants": "Participants"
+        "participants": "Participants",
+        "sureQuit": "Are you sure you want to log out of your account?"
     },
     "diary": {
         "title": "My Diary",
@@ -227,22 +336,75 @@
         "aroma": "Aroma",
         "flavor": "Flavor",
         "close": "Close",
-        "addFirst": "Add First Note"
+        "addFirst": "Add First Note",
+        "detailed": "Detailed Reviews",
+        "searchPlaceholder": "Search...",
+        "notFound": "No notes found for",
+        "edit": "Edit note",
+        "creationDate": "Creation Date",
+        "successUpdateNote": "Updated review!",
+        "newDiary": "Add new diary"
     },
     "privacy": {
         "title": "Terms of Use",
-        "text1": "By using the WineApp app, you agree to our terms and conditions. This app was developed for wine tasting and evaluation purposes. We are not responsible for any misuse of its features.",
+        "text1": "By using the Enolink App, you agree to our terms and conditions. This app was developed for wine tasting and evaluation purposes. We are not responsible for any misuse of its features.",
         "text2": "Data provided by users, such as name, email, and ratings, is securely stored and used only to improve the platform experience.",
-        "text3": "Privacy Policy",
+        "text3": "Privacy Policy and ",
         "text4": "All personal information is treated confidentially and will never be shared with third parties without consent.",
-        "text5": "By registering, you authorize WineApp to use your data only within the scope of the application. You can request the deletion of your account at any time.",
+        "text5": "By registering, you authorize Enolink App to use your data only within the scope of the application. You can request the deletion of your account at any time.",
         "text6": "Last updated: July 2, 2025"
     },
-
     "general": {
-        "required": "required",
+        "home": "Home",
+        "events": "Events",
+        "wines": "Wines",
+        "me": "Me",
+        "required": "is required",
+        "invalid": "is invalid",
         "loading": "Loading...",
         "noItems": "No items found",
-        "noWines": "No wines evaluated yet. Be the first!"
+        "noWines": "No wines evaluated yet. Be the first!",
+        "add": "add",
+        "added": "added",
+        "remove": "remove",
+        "removed": "removed",
+        "test": "TEST",
+        "open": "Open",
+        "close": "Close",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "errorDefault": "Something went wrong!",
+        "successDefault": "Success!",
+        "search": "Search...",
+        "linkEventTitle": "Invitation to the event",
+        "linkEvent": "Hello! You have been invited to the tasting event",
+        "linkAppTitle": "Come to EnoLink!",
+        "linkApp": "🍷 Join me on EnoLink! \n\nDiscover and review amazing wines with me. \n\nDownload the app:",
+        "copied": "Copied to clipboard!"
+    },
+    "onboarding": {
+        "titleApp1": "Stay Up to Date with Trending Wines",
+        "subtitleApp1": "Find out what people are enjoying with the top 10 highest-rated wines.",
+        "titleApp2": "Wine and Event Evaluation",
+        "subtitleApp2": "Connect wine lovers, enjoy and rate wines together.",
+        "titleApp3": "Your Personal Notes",
+        "subtitleApp3": "Evaluate your wines and record your ideas. Your palate evolves, and your diary follows suit.",
+        "titleApp4": "Everything in the Palm of Your Hand",
+        "subtitleApp4": "Transforme cada taça em uma memória registrada. Capture momentos únicos e construa sua história enológica.",
+        "titleDiary1": "Your Wine Diary",
+        "subtitleDiary1": "Here you can save all your wine experiences.",
+        "descriptionDiary1": "Tap a card to see details and edit",
+        "titleDiary2": "Evaluate in Detail",
+        "subtitleDiary2": "Rate color, aroma and flavor from 0 to 5 stars",
+        "descriptionDiary2": "You can edit your reviews later.",
+        "titleDiary3": "Take Notes",
+        "subtitleDiary3": "Record your impressions and memories about each wine",
+        "descriptionDiary3": "Use notes to remember important details",
+        "titleDiary4": "Add New Wines",
+        "subtitleDiary4": "Use the + button to register new tastings",
+        "descriptionDiary4": "Search our database or add manually",
+        "skip": "Skip",
+        "next": "Next",
+        "gotIt": "Got it, let's go!"
     }
 }

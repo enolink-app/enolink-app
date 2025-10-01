@@ -9,7 +9,6 @@ type Wine = {
     type: string;
     description: string;
     image: string;
-    // Adicione createdAt, updatedAt se precisar aqui no cliente também
 };
 
 interface WineState {
@@ -34,7 +33,6 @@ export const useWineStore = create<WineState>((set, get) => ({
                     set({ userWines: response?.data, loading: false });
                 })
                 .catch((error) => {
-                    console.log(`Ops! Algo deu errado: ${error}`);
                     set({ error: error.response?.data?.error && error, loading: false });
                 });
         } catch (err: any) {
@@ -44,7 +42,7 @@ export const useWineStore = create<WineState>((set, get) => ({
 
     addWine: (newWine: Wine) => {
         set((state) => ({
-            userWines: [...state.userWines, newWine],
+            userWines: [...state?.userWines, newWine],
         }));
     },
 }));

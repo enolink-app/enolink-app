@@ -1,4 +1,3 @@
-// hooks/useEvents.ts
 import { useEffect, useState, useCallback } from "react";
 import { useEventStore } from "@/stores/useEventStore";
 import { useRequest } from "./useRequest";
@@ -13,25 +12,19 @@ export const useEvents = () => {
     const { allEvents, setAllEvents, isLoading, setIsLoading } = useEventStore();
     const { getAllEvents } = useRequest();
 
-    const loadEvents = async () => {
-        console.log("3.0");
+    const loadEvents = useCallback(async () => {
         try {
-            console.log("3.1");
             setIsLoading(true);
             const events = await getAllEvents();
-            console.log("3.2");
             setAllEvents(events);
-            console.log("3.3");
         } catch (error) {
-            console.log("3.e");
             console.error("Failed to load events:", error);
         } finally {
-            console.log("3.4");
             setIsLoading(false);
         }
-    };
+    }, [getAllEvents, setAllEvents, setIsLoading]);
 
-    const loadLocation = async () => {
+    const loadLocation = useCallback(async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== "granted") return;
 
@@ -40,16 +33,15 @@ export const useEvents = () => {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
         });
-    };
+    }, []);
 
     const getSortedEvents = useCallback(() => {
-        if (!userLocation || !allEvents) return allEvents;
+        if (!userLocation || !allEvents || allEvents.length === 0) return allEvents;
 
         return [...allEvents].sort((a, b) => {
             if (!a.location || !b.location) return 0;
 
             const distA = calculateDistance(userLocation.latitude, userLocation.longitude, a.location.latitude, a.location.longitude);
-
             const distB = calculateDistance(userLocation.latitude, userLocation.longitude, b.location.latitude, b.location.longitude);
 
             return distA - distB;
@@ -58,13 +50,13 @@ export const useEvents = () => {
 
     useEffect(() => {
         loadLocation();
-    }, []);
+    }, [loadLocation]);
 
     useEffect(() => {
-        if (allEvents.length == 0 && !isLoading) {
+        if (allEvents.length === 0 && !isLoading) {
             loadEvents();
         }
-    }, []);
+    }, [allEvents.length, isLoading, loadEvents]);
 
     return {
         events: getSortedEvents(),

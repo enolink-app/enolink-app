@@ -7,6 +7,11 @@ import { auth } from "@/lib/firebase";
 import { Alert } from "react-native";
 import { ChevronLeft } from "lucide-react-native";
 import { config } from "@/gluestack-ui.config";
+import useLanguageStore from "@/stores/useLanguageStore";
+import { ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+
+const keyboardVerticalOffset = Platform.OS === "ios" ? 100 : 0;
+
 export default function DiaryRatingScreen() {
     const router = useRouter();
     const { wineId } = useLocalSearchParams();
@@ -17,13 +22,28 @@ export default function DiaryRatingScreen() {
     const [notes, setNotes] = useState("");
     const [loading, setLoading] = useState(false);
     const [wine, setWine] = useState(null);
-    console.log(wineId, `GET WINE ID`);
+    const primary = config.tokens.colors.primary["500"];
+    const neutralDark = config.tokens.colors.primary["600"];
+    const neutralLight = config.tokens.colors.primary["700"];
+    const accent = config.tokens.colors.primary["800"];
+    const gold = config.tokens.colors.primary["900"];
+    const textDark = config.tokens.colors.textDark;
+    const textLight = config.tokens.colors.textLight;
+    const goldTransparent = "#B89F5B30";
+    const primaryTransparent = "#6B223230";
+    const bgLight = config.tokens.colors.backgroundLight;
+
+    const { t, forceUpdate } = useLanguageStore();
+    const [updateKey, setUpdateKey] = useState(0);
+
+    useEffect(() => {
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
+
     useEffect(() => {
         const fetchWine = async () => {
             try {
-                console.log(`BUSCANDO VINHO ID ${wineId}...`);
                 const data = await getWineById(wineId);
-                console.log("VINHO ENCONTRADO: ", data);
                 setWine(data);
             } catch (error) {
                 console.error("Error fetching wine:", error);
@@ -67,58 +87,62 @@ export default function DiaryRatingScreen() {
     };
 
     return (
-        <Box flex={1} bg="$backgroundLight" p="$4">
+        <Box key={updateKey} flex={1} bg="$backgroundLight" p="$4" mt={Platform.OS == "ios" ? 50 : 0}>
             <HStack alignItems="center" mb="$4">
-                <ChevronLeft size={32} onPress={() => router.back()} />
+                <ChevronLeft key="half" size={30} style={{ marginRight: 6 }} color={config.tokens.colors.textLight} onPress={() => router.back()} />
                 <Heading size="lg" ml="$2">
-                    Nova Avaliação
+                    {t("forms.diaryRating.title")}
                 </Heading>
             </HStack>
 
             {wine && (
-                <Box bg="$primary50" p="$3" borderRadius="$md" mb="$4">
-                    <Text fontWeight="$bold">{wine.name}</Text>
-                    <Text>
-                        {wine.type} • {wine.country}
+                <Box bg={primaryTransparent} p="$3" borderRadius="$md" mb="$4">
+                    <Text color={primary} fontWeight="$bold">
+                        {wine.name}
+                    </Text>
+                    <Text color={primary}>
+                        {wine.grape} • {wine.country}
                     </Text>
                 </Box>
             )}
+            <ScrollView style={{ flex: 1 }}>
+                <VStack space="xl" mb="$8">
+                    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={keyboardVerticalOffset}>
+                        <FormControl>
+                            <FormControlLabel>
+                                <Text fontWeight="$bold">{t("forms.diaryRating.color")}</Text>
+                            </FormControlLabel>
+                            <StarRating color={gold} rating={colorRating} onChange={setColorRating} starSize={32} />
+                        </FormControl>
 
-            <VStack space="xl" mb="$8">
-                <FormControl>
-                    <FormControlLabel>
-                        <Text fontWeight="$bold">Cor</Text>
-                    </FormControlLabel>
-                    <StarRating rating={colorRating} onChange={setColorRating} starSize={32} color={config.tokens.colors.primary["500"]} />
-                </FormControl>
+                        <FormControl>
+                            <FormControlLabel>
+                                <Text fontWeight="$bold">{t("forms.diaryRating.aroma")}</Text>
+                            </FormControlLabel>
+                            <StarRating color={gold} rating={aromaRating} onChange={setAromaRating} starSize={32} />
+                        </FormControl>
 
-                <FormControl>
-                    <FormControlLabel>
-                        <Text fontWeight="$bold">Aroma</Text>
-                    </FormControlLabel>
-                    <StarRating rating={aromaRating} onChange={setAromaRating} starSize={32} color={config.tokens.colors.primary["500"]} />
-                </FormControl>
+                        <FormControl>
+                            <FormControlLabel>
+                                <Text fontWeight="$bold">{t("forms.diaryRating.flavor")}</Text>
+                            </FormControlLabel>
+                            <StarRating color={gold} rating={flavorRating} onChange={setFlavorRating} starSize={32} />
+                        </FormControl>
 
-                <FormControl>
-                    <FormControlLabel>
-                        <Text fontWeight="$bold">Sabor</Text>
-                    </FormControlLabel>
-                    <StarRating rating={flavorRating} onChange={setFlavorRating} starSize={32} color={config.tokens.colors.primary["500"]} />
-                </FormControl>
-
-                <FormControl>
-                    <FormControlLabel>
-                        <Text fontWeight="$bold">Notas (opcional)</Text>
-                    </FormControlLabel>
-                    <Textarea size="md">
-                        <TextareaInput placeholder="Ex: Aroma frutado e cítrico..." value={notes} onChangeText={setNotes} multiline />
-                    </Textarea>
-                </FormControl>
-            </VStack>
-
-            <Button size="lg" onPress={handleSubmit} isDisabled={loading || colorRating === 0 || aromaRating === 0 || flavorRating === 0}>
-                <ButtonText>{loading ? "Salvando..." : "Salvar Avaliação"}</ButtonText>
-            </Button>
+                        <FormControl>
+                            <FormControlLabel>
+                                <Text fontWeight="$bold">{t("forms.diaryRating.notes")}</Text>
+                            </FormControlLabel>
+                            <Textarea size="md">
+                                <TextareaInput borderRadius={3} bg="#FFFFFF" placeholder={t("forms.diaryRating.notes")} value={notes} onChangeText={setNotes} multiline />
+                            </Textarea>
+                        </FormControl>
+                        <Button size="lg" my="$3" onPress={handleSubmit} bgColor={primary} isDisabled={loading || colorRating === 0 || aromaRating === 0 || flavorRating === 0}>
+                            <ButtonText>{loading ? t("general.loading") : t("forms.diaryRating.submit")}</ButtonText>
+                        </Button>
+                    </KeyboardAvoidingView>
+                </VStack>
+            </ScrollView>
         </Box>
     );
 }

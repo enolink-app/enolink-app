@@ -1,58 +1,77 @@
 {
     "login": {
-        "wellcome": "¡Bienvenido!",
+        "wellcome": "¡Bienvenido/a!",
         "phrase": "Vive la experiencia.",
-        "phrase2": "¡Descubre el club del vino!",
-        "join": "Entrar",
+        "phrase2": "¡Descubre el club de vinos!",
+        "join": "Unirse",
         "forgot": "Olvidé mi contraseña",
         "or": "o",
-        "signIn": "Entrar con",
-        "new": "¿Nuevo aquí?",
+        "signIn": "Iniciar sesión con",
+        "new": "¿Eres nuevo?",
         "create": "Crear una cuenta"
     },
     "register": {
         "create": "Crear Cuenta",
-        "name": "nombre",
-        "email": "correo electrónico",
+        "name": "Nombre",
+        "email": "Correo electrónico",
         "dateBirth": "Fecha de Nacimiento",
         "lang": "Idioma",
         "password": "Contraseña",
-        "confirmPassword": "Confirmar Contraseña"
+        "haveAccount": "¿Ya tienes una cuenta? Inicia sesión",
+        "confirmPassword": "Confirmar Contraseña",
+        "quit": "Salir",
+        "mustContain0": "La contraseña debe contener:",
+        "mustContain1": "• Mínimo 8 caracteres",
+        "mustContain2": "• Al menos una letra minúscula",
+        "mustContain3": "• Al menos una letra mayúscula",
+        "mustContain4": "• Al menos un número",
+        "mustContain5": "• Al menos un símbolo (!@#$%^&*(), etc.)",
+        "notMatch": "Las contraseñas no coinciden"
     },
     "forgot": {
         "recover": "Recuperar Contraseña",
-        "text": "Ingresa tu correo registrado para recibir el enlace de restablecimiento",
-        "email": "Correo Electrónico",
+        "text": "Escribe tu correo registrado para recibir el enlace de redefinición",
+        "email": "Correo electrónico",
         "submit": "Enviar Enlace"
     },
     "home": {
         "today": "¿Qué quieres hacer hoy?",
         "diary": "Diario Personal",
         "calculator": "Calculadora de Vinos",
-        "event": "Crear Evento",
+        "event": "Crear Evento de Cata",
         "wine": "Añadir Vino",
-        "highToday": "¿Qué está de moda hoy?",
-        "checkout": "Consulta los vinos mejor valorados del momento",
+        "highToday": "¿Qué es tendencia hoy?",
+        "checkout": "Descubre los vinos mejor valorados del momento",
         "details": "Ver detalles"
     },
     "events": {
         "title": "Eventos",
         "now": "Sucediendo ahora",
         "closed": "Cerrados",
-        "emptyList": "Los eventos aparecerán aquí"
+        "emptyList": "Los eventos aparecerán aquí",
+        "allEvents": "Todos los eventos",
+        "myEvents": "Mis eventos",
+        "searchPlaceholder": "Buscar...",
+        "notFound": "No se encontraron eventos para",
+        "see": "Ver",
+        "join": "Unirse"
     },
     "wines": {
         "title": "Mis Vinos",
         "emptyList": "Tus vinos aparecerán aquí",
-        "add": "Añadir Vino"
+        "add": "Añadir Vino",
+        "searchPlaceholder": "Buscar...",
+        "notFound": "No se encontraron vinos para"
     },
     "me": {
         "title": "Mi Perfil",
         "edit": "Editar perfil",
         "invite": "Invitar Amigos",
         "created": "Creados por mí",
-        "joined": "Participando",
-        "emptyList": "Tus vinos aparecerán aquí"
+        "joined": "Unidos",
+        "emptyList": "Tus vinos aparecerán aquí",
+        "anonymous": "Tú",
+        "myEvents": "Ver Mis Eventos"
     },
     "forms": {
         "rating": {
@@ -65,22 +84,22 @@
             "loadingSbmit": "Enviando...",
             "validation": {
                 "title": "Evaluación Incompleta",
-                "message": "Por favor, evalúa todos los criterios con puntuaciones entre 1 y 5 estrellas.",
+                "message": "Por favor, califica todos los criterios con puntuaciones entre 1 y 5 estrellas.",
                 "button": "OK"
             },
             "authRequired": {
                 "title": "Autenticación Requerida",
-                "message": "Debes iniciar sesión para evaluar. Por favor, inicia sesión e inténtalo de nuevo.",
+                "message": "Necesitas iniciar sesión para evaluar. Por favor, inicia sesión e inténtalo de nuevo.",
                 "button": "OK"
             },
             "dataError": {
                 "title": "Datos Incompletos",
-                "message": "La información del evento o del vino no se cargó correctamente. Por favor, inténtalo de nuevo.",
+                "message": "La información del evento o vino no se cargó correctamente. Por favor, inténtalo de nuevo.",
                 "button": "OK"
             },
             "success": {
                 "title": "✅ ¡Evaluación Registrada!",
-                "message": "Tu evaluación se guardó con éxito.",
+                "message": "Tu evaluación se guardó exitosamente.",
                 "rateAnother": "Evaluar Otro Vino",
                 "goBack": "Volver"
             },
@@ -89,7 +108,7 @@
                 "generic": "Ocurrió un error al enviar tu evaluación.",
                 "alreadyRated": "Ya has evaluado este vino. Solo se permite una evaluación por vino.",
                 "networkTitle": "Problema de Conexión",
-                "networkMessage": "No se pudo conectar al servidor. Revisa tu conexión a internet e inténtalo de nuevo.",
+                "networkMessage": "No se pudo conectar al servidor. Revisa tu internet e inténtalo de nuevo.",
                 "unexpectedTitle": "Error Inesperado",
                 "unexpectedMessage": "Ocurrió un error inesperado al procesar tu evaluación. Por favor, inténtalo más tarde."
             },
@@ -103,6 +122,7 @@
             "grape": "Uva",
             "closure": "Cierre",
             "typwWine": "Tipo de Vino",
+            "abv": "Graduación alcohólica %",
             "image": "Imagen (opcional)",
             "camera": "Cámara",
             "gallery": "Galería",
@@ -123,31 +143,53 @@
             "alterPassword": "Cambiar contraseña",
             "currentPassword": "Contraseña actual",
             "newPassword": "Nueva contraseña",
-            "languague": "Idioma",
+            "language": "Idioma",
             "cancel": "Cancelar",
-            "submit": "Guardar cambios"
+            "submit": "Guardar cambios",
+            "remove": "Eliminar"
         },
         "newDiaryWineList": {
             "title": "Mi Diario",
-            "new": "Nueva evaluación"
+            "new": "Nuevo vino",
+            "searchPlaceholder": "Buscar...",
+            "notFound": "No se encontraron vinos para"
         },
         "newEvent": {
-            "title": "Detalles del Evento",
-            "buttonDetails": "Detalles",
+            "titleForm": "Crear Nuevo Evento",
+            "title": "Detalles",
+            "titleWine": "Vinos en el evento",
+            "buttonDetails": "Detalles del Evento",
+            "buttonDetailsDescription": "Completa la información básica para tu evento de cata.",
             "buttonWines": "Vinos",
-            "placeholderName": "Nombre del evento",
+            "creation": "Creación de Evento",
+            "placeholderName": "Nombre del Evento",
+            "dateStart": "Fecha de Inicio",
             "date": "Fecha final (opcional)",
-            "titleimage": "Imagen de fondo (opcional)",
+            "titleImage": "Imagen de fondo (opcional)",
+            "imageDescription": "Añade una imagen para identificar tu evento",
             "camera": "Tomar foto",
             "gallery": "Elegir de la galería",
+            "selectedimage": "Imagen Seleccionada",
             "buttonBack": "Anterior",
-            "buttonNext": "Siguiente",
-            "buttonSubmit": "Enviar",
-            "title2": "Vinos del Evento",
-            "emptyList1": "Ningún vino añadido",
+            "buttonNext": "Continuar a Vinos",
+            "nextStep": "Siguiente Paso",
+            "nextStepDescription": "En el siguiente paso, podrás añadir los vinos que se catarán en este evento.",
+            "buttonSubmit": "Crear evento",
+            "title2": "Vinos",
+            "eventWines": "Vinos del Evento",
+            "eventWinesDescription": "Aún no se han añadido vinos. Selecciona vinos abajo para añadirlos al evento.",
+            "addedWines": "Vinos Añadidos",
+            "emptyList1": "No hay vinos añadidos",
             "emptyList2": "tus vinos aparecerán aquí",
             "yourWines": "Tus Vinos",
-            "addWine": "Añadir Nuevo Vino"
+            "selectWines": "Selecciona vinos de tu colección para añadir al evento",
+            "addWine": "Añadir Nuevo Vino",
+            "addWineDescription": "Si no encontraste el vino que buscabas, puedes añadir uno nuevo a tu colección y al evento.",
+            "selectDate": "Seleccionar Fecha",
+            "noWines": "Tus vinos aparecerán aquí.",
+            "emptyList": "Aún no se han añadido vinos. Selecciona vinos abajo para añadirlos al evento.",
+            "searchPlaceholder": "Buscar...",
+            "notFound": "No se encontraron vinos para"
         },
         "newWineEvent": {
             "title": "Añadir Vino",
@@ -160,7 +202,10 @@
             "image": "Imagen (opcional)",
             "camera": "Cámara",
             "gallery": "Galería",
-            "submit": "Guardar Vino"
+            "submit": "Guardar Vino",
+            "abv": "Graduación alcohólica %",
+            "searchPlaceholder": "Buscar...",
+            "notFound": "No se encontraron vinos para"
         },
         "newWine": {
             "title": "Añadir Vino",
@@ -173,7 +218,11 @@
             "image": "Imagen (opcional)",
             "camera": "Cámara",
             "gallery": "Galería",
-            "submit": "Guardar Vino"
+            "submit": "Guardar Vino",
+            "abv": "Graduación alcohólica %",
+            "selectWine": "Seleccionar Vino",
+            "selectCountry": "Seleccionar País",
+            "selectGrape": "Seleccionar Uva"
         },
         "wineCalculator": {
             "title": "Calculadora de Vinos",
@@ -182,20 +231,80 @@
             "level": "¿Cuál es el nivel de consumo?",
             "morning": "Mañana",
             "afternoon": "Tarde",
-            "evening": "Noche",
-            "night": "Madrugada",
+            "evening": "Anochecer",
+            "night": "Noche",
             "high": "Alto",
             "medium": "Medio",
             "low": "Bajo",
-            "submit": "Calcular Vinos Necesarios"
+            "submit": "Calcular Vinos Necesarios",
+            "result": "Resultado",
+            "suggestions": "Sugerencias",
+            "based": "Basado en",
+            "guests": "invitados",
+            "morning2": "por la mañana",
+            "afternoon2": "por la tarde",
+            "evening2": "al anochecer",
+            "and": "y",
+            "consumption": "consumo",
+            "lowC": "consumo bajo",
+            "mediumC": "consumo medio",
+            "highC": "consumo alto",
+            "lowEx": "1-2 copas",
+            "mediumEx": "3-4 copas",
+            "highEx": "5+ copas",
+            "variety": "Consejos de Variedad:",
+            "totalBottle": "botella",
+            "recommended": "recomendado",
+            "suggestedTypes": {
+                "morning": [
+                    "Espumoso Brut (ej. Prosecco, Cava)",
+                    "Blanco Ligero (ej. Sauvignon Blanc, Pinot Grigio)",
+                    "Rosado Seco (ej. Provenza, Pinot Noir Rosé)",
+                    "Vinho Verde (ligero y ligeramente espumoso)",
+                    "Moscato d'Asti (dulce y ligero)",
+                    "Riesling (ligero y aromático)"
+                ],
+                "afternoon": [
+                    "Tinto de Cuerpo Medio (ej. Merlot, Pinot Noir)",
+                    "Blanco Estructurado (ej. Chardonnay sin barrica)",
+                    "Rosado de Cuerpo Completo (ej. Tavel)",
+                    "Vino Naranja (opción atrevida)",
+                    "Beaujolais (afrutado y fácil de beber)"
+                ],
+                "evening": [
+                    "Tinto de Cuerpo Completo (ej. Cabernet Sauvignon, Malbec)",
+                    "Espumoso Extra Brut (seco y elegante)",
+                    "Blanco de Cuerpo Completo (ej. Chardonnay con barrica)",
+                    "Vino de Oporto (para terminar la velada)",
+                    "Barolo/Barbaresco (tinto italiano noble)",
+                    "Burdeos Tinto (clásico y estructurado)"
+                ]
+            },
+            "bottleSuggestions": {
+                "large": [
+                    "Sugerimos 2-3 tipos diferentes de vino para variedad",
+                    "Incluye al menos 1 vino espumoso para celebración",
+                    "Considera 1 vino dulce para maridar con postres"
+                ],
+                "medium": ["Elige 2 tipos diferentes para ofrecer opciones", "Un blanco y un tinto cubrirán la mayoría de preferencias"]
+            }
         }
     },
     "eventRoom": {
         "title": "Evento",
         "evaluated": "Evaluado",
         "blocked": "Bloqueado",
-        "typeWine": "Haz clic en el vino liberado para evaluar. Los siguientes se habilitarán después de que todos los participantes envíen sus evaluaciones.",
-        "leave": "Salir del evento"
+        "typeWine": "Haz clic en el vino liberado para evaluar. Los siguientes se habilitarán después de que todos los participantes envíen sus reseñas.",
+        "typeWine2": "Este es un evento de cata privado. Cada vino se liberará secuencialmente después de que todos los participantes hayan evaluado el anterior.",
+        "leave": "Abandonar el evento",
+        "participants": "participantes",
+        "newParticipant": "¡nuevo participante se unió al evento!",
+        "winesForTasting": "Vinos para Cata",
+        "wines": "vinos",
+        "harvest": "Año",
+        "wait": "Espera la evaluación del vino anterior",
+        "details": "Detalles del evento",
+        "seeRanking": "Ver Clasificaciones"
     },
     "guestJoinEvent": {
         "join": "Unirse como Invitado",
@@ -210,14 +319,17 @@
     },
     "ranking": {
         "emptyList": "No hay evaluaciones registradas.",
-        "finish": "Finalizar evento"
+        "finish": "Finalizar evento",
+        "view": "Ver clasificación en navegador"
     },
     "settings": {
+        "title": "Configuración",
         "invite": "Invitar amigos",
         "share": "Compartir invitación",
         "generate": "Generar nuevo código",
         "finish": "Finalizar evento",
-        "participants": "Participantes"
+        "participants": "Participantes",
+        "sureQuit": "¿Estás seguro de que quieres cerrar sesión en tu cuenta?"
     },
     "diary": {
         "title": "Mi Diario",
@@ -227,21 +339,75 @@
         "aroma": "Aroma",
         "flavor": "Sabor",
         "close": "Cerrar",
-        "addFirst": "Añadir Primera Nota"
+        "addFirst": "Añadir Primera Nota",
+        "detailed": "Reseñas Detalladas",
+        "searchPlaceholder": "Buscar...",
+        "notFound": "No se encontraron notas para",
+        "edit": "Editar nota",
+        "creationDate": "Fecha de Creación",
+        "successUpdateNote": "¡Reseña actualizada!",
+        "newDiary": "Añadir nuevo diario"
     },
     "privacy": {
         "title": "Términos de Uso",
-        "text1": "Al usar la aplicación WineApp, aceptas nuestros términos y condiciones. Esta aplicación fue desarrollada para la cata y evaluación de vinos. No nos hacemos responsables del uso indebido de sus funciones.",
-        "text2": "Los datos proporcionados por los usuarios, como nombre, correo electrónico y evaluaciones, se almacenan de forma segura y se utilizan solo para mejorar la experiencia en la plataforma.",
-        "text3": "Política de Privacidad",
-        "text4": "Toda la información personal se trata de forma confidencial y nunca se compartirá con terceros sin consentimiento.",
-        "text5": "Al registrarte, autorizas a WineApp a usar tus datos solo dentro del ámbito de la aplicación. Puedes solicitar la eliminación de tu cuenta en cualquier momento.",
+        "text1": "Al usar la App Enolink, aceptas nuestros términos y condiciones. Esta app fue desarrollada para propósitos de cata y evaluación de vinos. No nos hacemos responsables del mal uso de sus funciones.",
+        "text2": "Los datos proporcionados por los usuarios, como nombre, correo y valoraciones, se almacenan de forma segura y se usan solo para mejorar la experiencia de la plataforma.",
+        "text3": "Política de Privacidad y ",
+        "text4": "Toda la información personal se trata confidencialmente y nunca se compartirá con terceros sin consentimiento.",
+        "text5": "Al registrarte, autorizas a Enolink App a usar tus datos solo dentro del ámbito de la aplicación. Puedes solicitar la eliminación de tu cuenta en cualquier momento.",
         "text6": "Última actualización: 2 de julio de 2025"
     },
     "general": {
-        "required": "requerido",
+        "home": "Inicio",
+        "events": "Eventos",
+        "wines": "Vinos",
+        "me": "Yo",
+        "required": "es requerido",
+        "invalid": "es inválido",
         "loading": "Cargando...",
         "noItems": "No se encontraron elementos",
-        "noWines": "Aún no hay vinos evaluados. ¡Sé el primero!"
+        "noWines": "Aún no hay vinos evaluados. ¡Sé el primero!",
+        "add": "añadir",
+        "added": "añadido",
+        "remove": "eliminar",
+        "removed": "eliminado",
+        "test": "PRUEBA",
+        "open": "Abrir",
+        "close": "Cerrar",
+        "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "errorDefault": "¡Algo salió mal!",
+        "successDefault": "¡Éxito!",
+        "search": "Buscar...",
+        "linkEventTitle": "Invitación al evento",
+        "linkEvent": "¡Hola! Has sido invitado al evento de cata",
+        "linkAppTitle": "¡Ven a EnoLink!",
+        "linkApp": "🍷 ¡Únete a mí en EnoLink! \n\nDescubre y evalúa vinos increíbles conmigo. \n\nDescarga la app:",
+        "copied": "¡Copiado al portapapeles!"
+    },
+    "onboarding": {
+        "titleApp1": "Mantente al Día con los Vinos de Moda",
+        "subtitleApp1": "Descubre lo que la gente está disfrutando con los 10 vinos mejor valorados.",
+        "titleApp2": "Evaluación de Vinos y Eventos",
+        "subtitleApp2": "Conecta a amantes del vino, disfruta y califica vinos juntos.",
+        "titleApp3": "Tus Notas Personales",
+        "subtitleApp3": "Evalúa tus vinos y registra tus ideas. Tu paladar evoluciona, y tu diario también.",
+        "titleApp4": "Todo en la Palma de tu Mano",
+        "subtitleApp4": "Transforma cada copa en un recuerdo registrado. Captura momentos únicos y construye tu historia enológica.",
+        "titleDiary1": "Tu Diario de Vinos",
+        "subtitleDiary1": "Aquí puedes guardar todas tus experiencias con vinos.",
+        "descriptionDiary1": "Toca una tarjeta para ver detalles y editar",
+        "titleDiary2": "Evalúa en Detalle",
+        "subtitleDiary2": "Califica color, aroma y sabor de 0 a 5 estrellas",
+        "descriptionDiary2": "Puedes editar tus reseñas después.",
+        "titleDiary3": "Toma Notas",
+        "subtitleDiary3": "Registra tus impresiones y recuerdos sobre cada vino",
+        "descriptionDiary3": "Usa notas para recordar detalles importantes",
+        "titleDiary4": "Añade Nuevos Vinos",
+        "subtitleDiary4": "Usa el botón + para registrar nuevas catas",
+        "descriptionDiary4": "Busca en nuestra base de datos o añade manualmente",
+        "skip": "Saltar",
+        "next": "Siguiente",
+        "gotIt": "¡Entendido, vamos!"
     }
 }

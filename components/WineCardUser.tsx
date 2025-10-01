@@ -1,6 +1,7 @@
 import { Box, Image, Button, Text, ButtonText, Card, Heading, HStack, VStack } from "@gluestack-ui/themed";
 import { Star, Wine, Grape, MapPin } from "lucide-react-native";
 import { config } from "@/ui/gluestack-ui.config";
+import { Platform } from "react-native";
 
 type Props = {
     wine: {
@@ -9,7 +10,7 @@ type Props = {
         country: string;
         average: number;
         reviewsCount: number;
-        image: any;
+        image: { uri: string } | null;
     };
 };
 
@@ -21,23 +22,15 @@ const renderStars = (rating: number) => {
     const stars = [];
 
     for (let i = 0; i < fullStars; i++) {
-        stars.push(<Star key={`full-${i}`} size={16} color="#E71F65" fill="#E71F65" />);
+        stars.push(<Star key={`full-${i}`} size={16} color="#101010" fill="#101010" />);
     }
 
     if (hasHalfStar) {
-        // Você pode usar outro ícone se quiser algo mais gráfico
-        stars.push(
-            <Star
-                key="half"
-                size={16}
-                color="#E71F65"
-                fill="rgba(231, 31, 101, 0.5)" // truque visual para meia estrela
-            />
-        );
+        stars.push(<Star key="half" size={16} color="#101010" fill="rgba(231, 181, 31, 0.5)" />);
     }
 
     for (let i = 0; i < emptyStars; i++) {
-        stars.push(<Star key={`empty-${i}`} size={16} color="#E71F65" fill="none" />);
+        stars.push(<Star key={`empty-${i}`} size={16} color="#101010" fill="none" />);
     }
 
     return stars;
@@ -47,10 +40,11 @@ export default function WineCardUser({ wine }: Props) {
     return (
         <Card
             variant="elevated"
-            mr="$4"
             my="$1"
             flex={1}
-            h={150}
+            h={100}
+            minWidth={"$full"}
+            maxWidth={"$full"}
             flexDirection="row"
             aspectRatio={2.5}
             justifyContent="flex-start"
@@ -58,7 +52,13 @@ export default function WineCardUser({ wine }: Props) {
             className="bg-slate-100 w-48 h-20"
             borderRadius="$lg"
         >
-            <Image source={wine.image} alt={wine.name} borderRadius={6} height={120} resizeMode="cover" />
+            <Image
+                source={wine?.image && wine.image.includes("https") ? wine?.image : require("../assets/images/placeholder.png")}
+                alt={wine?.name}
+                borderRadius={6}
+                height={80}
+                resizeMode="cover"
+            />
             <VStack p="$3" space="md">
                 <Box width={180}>
                     <Text fontWeight="$bold" numberOfLines={1} ellipsizeMode="tail">
@@ -66,21 +66,9 @@ export default function WineCardUser({ wine }: Props) {
                     </Text>
                 </Box>
                 <Box width={180} flexDirection="row" alignItems="center" gap={6}>
-                    <Wine key="half" size={14} color={config.tokens.colors.textLight} />
-                    <Text fontSize="$sm" color="$textDark500">
-                        {wine.type}
-                    </Text>
-                </Box>
-                <Box width={180} flexDirection="row" alignItems="center" gap={6}>
-                    <Grape key="half" size={14} color={config.tokens.colors.textLight} />
-                    <Text fontSize="$sm" color="$textDark500">
-                        {wine.grape}
-                    </Text>
-                </Box>
-                <Box width={180} flexDirection="row" alignItems="center" gap={6}>
                     <MapPin key="half" size={14} color={config.tokens.colors.textLight} />
                     <Text fontSize="$sm" color="$textDark500">
-                        {wine.country}
+                        {wine.country} • {wine.harvest}
                     </Text>
                 </Box>
             </VStack>

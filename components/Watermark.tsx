@@ -1,31 +1,38 @@
-// components/Watermark.tsx
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import Constants from "expo-constants";
 import { HStack, VStack } from "@gluestack-ui/themed";
-const isTestBuild = process.env.APP_ENV === "test";
+import { useState, useEffect } from "react";
+import useLanguageStore from "@/stores/useLanguageStore";
+
+const isTestBuild = false;
 
 export default function Watermark() {
-    console.log(`IS TEST BUILD? ${isTestBuild}`);
+    const { t, forceUpdate } = useLanguageStore();
+    const [updateKey, setUpdateKey] = useState(0);
+
+    useEffect(() => {
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
+
     if (!isTestBuild) return null;
     const { width, height } = Dimensions.get("window");
 
-    // Quantidade de linhas e colunas de marcas d'água
     const cols = 3;
     const rows = 6;
 
     const watermarks = Array.from({ length: cols * rows });
     const HomComponent = () => {
         return (
-            <HStack space="2xl">
-                <Text style={styles.text}>TEST</Text>
-                <Text style={styles.text}>TEST</Text>
-                <Text style={styles.text}>TEST</Text>
-                <Text style={styles.text}>TEST</Text>
+            <HStack key={updateKey} space="2xl">
+                <Text style={styles.text}>{t("general.test")}</Text>
+                <Text style={styles.text}>{t("general.test")}</Text>
+                <Text style={styles.text}>{t("general.test")}</Text>
+                <Text style={styles.text}>{t("general.test")}</Text>
             </HStack>
         );
     };
     return (
-        <View pointerEvents="none" style={styles.container}>
+        <View key={updateKey} pointerEvents="none" style={styles.container}>
             <VStack>
                 {watermarks.map((_, index) => (
                     <HomComponent key={index} />

@@ -1,4 +1,3 @@
-// hooks/useInitialURL.ts
 import { useEffect, useState } from "react";
 import { Linking } from "react-native";
 

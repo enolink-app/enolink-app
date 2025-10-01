@@ -5,7 +5,6 @@ import esES from "../i18n/es-ES.json";
 import frFR from "../i18n/fr-FR.json";
 import itIT from "../i18n/it-IT.json";
 
-// Exporte como um objeto com tipos explícitos
 const translations = {
     en,
     "pt-BR": ptBR,

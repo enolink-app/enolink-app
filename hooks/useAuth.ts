@@ -1,4 +1,3 @@
-// hooks/useAuth.ts
 import { useEffect, useState } from "react";
 import { auth, setupAuthListener } from "../lib/firebase";
 import { User } from "firebase/auth";

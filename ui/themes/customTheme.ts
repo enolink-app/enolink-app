@@ -1,17 +1,13 @@
 export const customTheme = {
     colors: {
-        // Tema claro
-        backgroundLight: "#FFF8EC",
+        backgroundLight: "#ECE7E1",
         textLight: "#0A0A13",
 
-        // Tema escuro
         backgroundDark: "#0A0A13",
-        textDark: "#FFF8EC",
+        textDark: "#F7F7F7",
 
-        // Primário (botões, destaque)
-        primary: "#E71F65",
+        primary: "#101010",
 
-        // Outros que podem ser úteis
         muted: "#CCCCCC",
         error: "#FF4D4D",
         success: "#12B76A",

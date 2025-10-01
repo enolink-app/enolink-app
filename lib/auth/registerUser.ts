@@ -1,4 +1,3 @@
-// lib/auth/registerUser.ts
 import { auth, db } from "@/lib/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";

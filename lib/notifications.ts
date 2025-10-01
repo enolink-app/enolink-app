@@ -4,7 +4,6 @@ import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { auth } from "./firebase";
 
-// Configurar handlers de notificação
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
         shouldShowAlert: true,
@@ -39,23 +38,17 @@ export const registerForPushNotifications = async () => {
 };
 
 export const setupNotifications = (onNotificationReceived: (notification: any) => void) => {
-    // Listener para notificações recebidas em foreground
     const subscription = Notifications.addNotificationReceivedListener(onNotificationReceived);
 
-    // Configurar Firebase Messaging
     const messaging = getMessaging();
 
-    // Pegar token FCM
-    getToken(messaging, { vapidKey: "SEU_VAPID_KEY" })
+    getToken(messaging, { vapidKey: "KEY" })
         .then((fcmToken) => {
             console.log("FCM Token:", fcmToken);
-            // Envie este token para seu backend associado ao usuário
         })
         .catch((err) => console.log("Erro ao obter FCM token", err));
 
-    // Listener para mensagens em foreground
     onMessage(messaging, (payload) => {
-        console.log("Mensagem recebida em foreground", payload);
         onNotificationReceived({
             title: payload.notification?.title,
             body: payload.notification?.body,

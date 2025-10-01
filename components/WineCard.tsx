@@ -7,7 +7,7 @@ type Props = {
         country: string;
         average: number;
         reviewsCount: number;
-        image: any; // por conta do require()
+        image: any;
         onPress: Function;
     };
 };
@@ -20,23 +20,15 @@ const renderStars = (rating: number) => {
     const stars = [];
 
     for (let i = 0; i < fullStars; i++) {
-        stars.push(<Star key={`full-${i}`} size={16} color="#5D1728" fill="#5D1728" />);
+        stars.push(<Star key={`full-${i}`} size={16} color="#101010" fill="#101010" />);
     }
 
     if (hasHalfStar) {
-        // Você pode usar outro ícone se quiser algo mais gráfico
-        stars.push(
-            <Star
-                key="half"
-                size={16}
-                color="#E71F65"
-                fill="rgba(231, 31, 101, 0.5)" // truque visual para meia estrela
-            />
-        );
+        stars.push(<Star key="half" size={16} color="#101010" fill="rgba(231, 181, 31, 0.5)" />);
     }
 
     for (let i = 0; i < emptyStars; i++) {
-        stars.push(<Star key={`empty-${i}`} size={16} color="#E71F65" fill="none" />);
+        stars.push(<Star key={`empty-${i}`} size={16} color="#101010" fill="none" />);
     }
 
     return stars;

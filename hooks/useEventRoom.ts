@@ -13,7 +13,6 @@ export const useEventRoom = (eventId: string) => {
                 setIsLoading(true);
                 const event = await getEventById(eventId);
 
-                // Garante que cada vinho tenha um ID
                 const eventWithWineIds = {
                     ...event,
                     wines: event.wines.map((wine: any, index: number) => ({

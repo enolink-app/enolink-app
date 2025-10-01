@@ -1,3 +1,3 @@
 export function generateInviteLink(inviteCode: string) {
-    return `https://enolinkapp.com/join/${inviteCode}`;
+    return `https://invite-enolink.online/e/join/${inviteCode}`;
 }

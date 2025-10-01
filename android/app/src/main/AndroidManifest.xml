@@ -28,15 +28,18 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="enolink"/>
         <data android:scheme="com.vivavinho.enolink"/>
         <data android:scheme="com.vivavinho.enolink"/>
       </intent-filter>
       <intent-filter data-generated="true">
         <action android:name="android.intent.action.VIEW"/>
-        <data android:scheme="wineapp"/>
-        <data android:scheme="https" android:host="enolinkapp.com" android:pathPrefix="/join/"/>
+        <data android:scheme="https" android:host="invite-enolink.online" android:pathPrefix="/e/"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+      <intent-filter data-generated="true">
+        <action android:name="android.intent.action.undefined"/>
       </intent-filter>
     </activity>
   </application>

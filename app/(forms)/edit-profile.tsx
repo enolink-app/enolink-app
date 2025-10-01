@@ -40,11 +40,14 @@ import { useRouter } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
 import { auth, db } from "@/lib/firebase";
 import { updateProfile, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
-import { doc, updateDoc, setDoc } from "firebase/firestore";
+import { doc, updateDoc, setDoc, getDoc } from "firebase/firestore";
 import { uploadBytes, ref, getDownloadURL, getStorage, uploadBytesResumable } from "firebase/storage";
 import { Progress, ProgressFilledTrack } from "@gluestack-ui/themed";
+import { Platform } from "react-native";
+import { uploadEventImage } from "@/services/storage";
+import { uploadImage } from "@/services/storage";
+import useLanguageStore from "@/stores/useLanguageStore";
 
-// Schema de validação
 const schema = yup.object({
     name: yup.string().required("Nome é obrigatório"),
     currentPassword: yup.string().when("password", {
@@ -66,27 +69,39 @@ const schema = yup.object({
 
 type FormData = yup.InferType<typeof schema>;
 
-// Lista de idiomas com bandeiras
 const LANGUAGES = [
-    { code: "pt", name: "Português", flag: require("../../assets/images/br.png") },
-    { code: "en", name: "English", flag: require("../../assets/images/us.png") },
-    { code: "es", name: "Español", flag: require("../../assets/images/es.png") },
+    { name: "Português (Brasil)", code: "pt-BR", flag: "🇧🇷" },
+    { name: "Português (Portugal)", code: "pt-PT", flag: "🇵🇹" },
+    { name: "English", code: "en", flag: "🇺🇸" },
+    { name: "Español", code: "es-ES", flag: "🇪🇸" },
+    { name: "Italiano", code: "it-IT", flag: "🇮🇹" },
+    { name: "Français", code: "fr-FR", flag: "🇫🇷" },
 ];
+
+const getLanguageByCode = (code: string) => {
+    return LANGUAGES.find((lang) => lang.code === code) || LANGUAGES[0];
+};
 
 export default function EditProfileScreen() {
     const [avatar, setAvatar] = useState<string | null>(null);
     const [showDialog, setShowDialog] = useState(false);
     const [loading, setLoading] = useState(false);
     const [currentUser, setCurrentUser] = useState<any>(null);
+    const [userData, setUserData] = useState<any>(null);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [showPasswordFields, setShowPasswordFields] = useState(false);
+    const [selectedLanguage, setSelectedLanguage] = useState(userData?.language ? getLanguageByCode(userData.language) : LANGUAGES[0]);
     const router = useRouter();
     const storage = getStorage();
     const primary = config.tokens.colors.primary["500"];
+    const neutralDark = config.tokens.colors.primary["600"];
+    const neutralLight = config.tokens.colors.primary["700"];
+    const accent = config.tokens.colors.primary["800"];
+    const gold = config.tokens.colors.primary["900"];
     const textLight = config.tokens.colors.textLight;
-
+    const user = auth.currentUser;
     const toast = useToast();
-
+    const { t, language, setLanguage } = useLanguageStore();
     const {
         control,
         handleSubmit,
@@ -97,45 +112,74 @@ export default function EditProfileScreen() {
         resolver: yupResolver(schema),
     });
 
-    // Carrega os dados do usuário ao montar o componente
     useEffect(() => {
-        const user = auth.currentUser;
-        if (user) {
-            setCurrentUser(user);
-            if (user.photoURL) {
-                setAvatar(user.photoURL);
+        const loadUserData = async () => {
+            try {
+                const user = auth.currentUser;
+                if (user) {
+                    setCurrentUser(user);
+
+                    const userDocRef = doc(db, "users", user.uid);
+                    const userDoc = await getDoc(userDocRef);
+
+                    if (userDoc.exists()) {
+                        const userDataFromFirestore = userDoc.data();
+                        setUserData(userDataFromFirestore);
+
+                        const userLanguage = userDataFromFirestore.language || "pt-BR";
+                        const languageItem = getLanguageByCode(userLanguage);
+                        setSelectedLanguage(languageItem);
+
+                        reset({
+                            name: userDataFromFirestore.displayName || user.displayName || "",
+                            language: userLanguage,
+                        });
+
+                        if (userDataFromFirestore.photoURL) {
+                            setAvatar(userDataFromFirestore.photoURL);
+                        } else if (user.photoURL) {
+                            setAvatar(user.photoURL);
+                        }
+                    } else {
+                        reset({
+                            name: user.displayName || "",
+                            language: "pt-BR",
+                        });
+
+                        if (user.photoURL) {
+                            setAvatar(user.photoURL);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Erro ao carregar dados do usuário:", error);
             }
-            reset({
-                name: user.displayName || "",
-                language: "pt", // Valor padrão
-            });
-        }
+        };
+
+        loadUserData();
     }, []);
 
     const handleChangeAvatar = async () => {
         try {
-            // Verifica permissões
             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
             if (status !== "granted") {
                 Alert.alert("Permissão necessária", "Precisamos acessar sua galeria para alterar a foto");
                 return;
             }
-
             const result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
-                aspect: [1, 1],
-                quality: 0.7,
-                allowsMultipleSelection: false,
+                aspect: [4, 3],
+                quality: 0.8,
             });
 
-            if (!result.canceled && result.assets[0]) {
+            if (!result.canceled && result.assets.length > 0) {
                 setAvatar(result.assets[0].uri);
-                setShowDialog(false); // Fecha o diálogo após seleção
+                setShowDialog(false);
             }
         } catch (error) {
             console.error("Erro ao selecionar imagem:", error);
-            Alert.alert("Erro", "Não foi possível selecionar a imagem");
+            Alert.alert("Erro", error);
         }
     };
 
@@ -144,42 +188,16 @@ export default function EditProfileScreen() {
         if (!user) throw new Error("Usuário não autenticado");
 
         try {
+            if (!uri) throw new Error("URI da imagem não fornecida");
+
             const timestamp = Date.now();
-            const storageRef = ref(storage, `avatars/${user.uid}_${timestamp}.jpg`);
+            const path = `avatars/${user.uid}_${timestamp}.jpg`;
 
-            const response = await fetch(uri);
-            if (!response.ok) throw new Error("Falha ao carregar imagem");
+            const downloadURL = await uploadImage(uri, path);
 
-            const blob = await response.blob();
-
-            // Usando uploadBytesResumable corretamente
-            const uploadTask = uploadBytesResumable(storageRef, blob);
-
-            return new Promise((resolve, reject) => {
-                uploadTask.on(
-                    "state_changed",
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        setUploadProgress(progress);
-                    },
-                    (error) => {
-                        setUploadProgress(0);
-                        reject(error);
-                    },
-                    async () => {
-                        try {
-                            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                            setUploadProgress(0);
-                            resolve(downloadURL);
-                        } catch (error) {
-                            setUploadProgress(0);
-                            reject(error);
-                        }
-                    }
-                );
-            });
+            return downloadURL;
         } catch (error) {
-            setUploadProgress(0);
+            console.error("Erro no processo de upload:", error);
             throw error;
         }
     };
@@ -189,7 +207,7 @@ export default function EditProfileScreen() {
             const user = auth.currentUser;
             if (user) {
                 await user.reload();
-                setCurrentUser({ ...user }); // Força a atualização do estado
+                setCurrentUser({ ...user });
             }
         } catch (error) {
             console.error("Erro ao recarregar perfil:", error);
@@ -205,13 +223,11 @@ export default function EditProfileScreen() {
                 throw new Error("Usuário não autenticado");
             }
 
-            // Objeto para armazenar todas as atualizações
             const updates: {
                 displayName?: string;
                 photoURL?: string;
             } = {};
 
-            // 1. Upload da foto se necessário
             let newPhotoURL = null;
             if (avatar && avatar !== user.photoURL) {
                 try {
@@ -219,21 +235,18 @@ export default function EditProfileScreen() {
                     updates.photoURL = newPhotoURL;
                 } catch (error) {
                     console.error("Erro ao fazer upload do avatar:", error);
-                    throw new Error("Falha ao atualizar a foto de perfil");
+                    throw new Error(t("general.errorDefault"));
                 }
             }
 
-            // 2. Atualizar nome se modificado
-            if (data.name !== user.displayName) {
+            if (data.name !== user?.displayName) {
                 updates.displayName = data.name;
             }
 
-            // 3. Aplicar atualizações no perfil do Firebase Auth
             if (Object.keys(updates).length > 0) {
                 await updateProfile(user, updates);
             }
 
-            // 4. Atualizar senha se fornecida
             if (data.password && data.currentPassword && user.email) {
                 try {
                     const credential = EmailAuthProvider.credential(user.email, data.currentPassword);
@@ -258,48 +271,43 @@ export default function EditProfileScreen() {
 
             await setDoc(doc(db, "users", user.uid), userData, { merge: true });
 
-            // Força a atualização do perfil
             await reloadUserProfile();
 
-            // Feedback visual
+            if (data.language !== useLanguageStore.getState().language) {
+                await useLanguageStore.getState().setLanguage(data.language);
+            }
+
             toast.show({
                 placement: "top",
                 render: () => (
                     <Box bg="$success500" p="$3" rounded="$md">
-                        <Text color="$textDark">Perfil atualizado com sucesso!</Text>
+                        <Text color="$textDark">{t("general.successDefault")}</Text>
                     </Box>
                 ),
             });
 
-            // Atualiza o estado local com os novos dados
             setCurrentUser({
                 ...user,
                 displayName: data.name,
                 photoURL: newPhotoURL || user.photoURL,
             });
 
-            // Volta para tela anterior após 1 segundo
+            setUserData(userData);
+
             setTimeout(() => router.back(), 1000);
         } catch (error: any) {
-            console.error("Erro detalhado:", error);
+            console.error("Erro detalhado:", {
+                code: error.code,
+                message: error.message,
+                serverResponse: error.customData?.serverResponse,
+                fullError: error,
+            });
 
-            let errorMessage = "Erro ao atualizar perfil";
-            if (error.message) {
+            let errorMessage = t("general.errorDefault");
+            if (error.code === "storage/unknown") {
+                errorMessage = t("general.errorDefault");
+            } else if (error.message) {
                 errorMessage = error.message;
-            } else if (error.code) {
-                switch (error.code) {
-                    case "auth/wrong-password":
-                        errorMessage = "Senha atual incorreta";
-                        break;
-                    case "auth/requires-recent-login":
-                        errorMessage = "Faça login novamente para alterar a senha";
-                        break;
-                    case "permission-denied":
-                        errorMessage = "Sem permissão para atualizar";
-                        break;
-                    default:
-                        errorMessage = `Erro: ${error.code}`;
-                }
             }
 
             toast.show({
@@ -321,10 +329,8 @@ export default function EditProfileScreen() {
             const user = auth.currentUser;
             if (!user) return;
 
-            // Remove a foto do perfil
             await updateProfile(user, { photoURL: null });
 
-            // Atualiza no Firestore
             await setDoc(
                 doc(db, "users", user.uid),
                 {
@@ -334,7 +340,6 @@ export default function EditProfileScreen() {
                 { merge: true }
             );
 
-            // Atualiza estado local
             setAvatar(null);
             setCurrentUser({ ...user, photoURL: null });
 
@@ -342,7 +347,7 @@ export default function EditProfileScreen() {
                 placement: "top",
                 render: () => (
                     <Box bg="$success500" p="$3" rounded="$md">
-                        <Text color="$textDark">Foto removida com sucesso!</Text>
+                        <Text color="$textDark">{t("general.successDefault")}</Text>
                     </Box>
                 ),
             });
@@ -352,7 +357,7 @@ export default function EditProfileScreen() {
                 placement: "top",
                 render: () => (
                     <Box bg="$error500" p="$3" rounded="$md">
-                        <Text color="$textDark">Erro ao remover foto</Text>
+                        <Text color="$textDark">{t("general.errorDefault")}</Text>
                     </Box>
                 ),
             });
@@ -361,20 +366,21 @@ export default function EditProfileScreen() {
             setShowDialog(false);
         }
     };
+
     const password = watch("password");
-    const isEmailUser = currentUser?.providerData.some((provider) => provider.providerId === "password");
+    const isEmailUser = currentUser?.providerData?.some((provider) => provider.providerId === "password");
 
     return (
         <Box flex={1} bg="$backgroundLight" p="$4" pt={50}>
             <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb="$4">
                 <HStack justifyContent="space-between" alignItems="center">
-                    <ChevronLeft color={textLight} size={40} onPress={() => router.back()} />
-                    <Heading size="lg">Editar Perfil</Heading>
+                    <ChevronLeft onPress={() => router.push("/tabs/(tabs)/profile")} key="half" size={30} style={{ marginRight: 6 }} color={config.tokens.colors.textLight} />
+
+                    <Heading size="lg">{t("forms.editProfile.title")}</Heading>
                 </HStack>
             </Box>
 
             <VStack space="lg">
-                {/* Seção do Avatar */}
                 <TouchableOpacity onPress={() => setShowDialog(true)}>
                     <Avatar size="xl" borderRadius="$full" alignSelf="center">
                         {uploadProgress > 0 && uploadProgress < 100 && (
@@ -387,7 +393,7 @@ export default function EditProfileScreen() {
                                 </Text>
                             </Box>
                         )}
-                        <AvatarImage source={{ uri: avatar || DEFAULT_AVATAR }} alt="User avatar" />
+                        <AvatarImage borderColor={primary} borderWidth={0.5} source={avatar ? { uri: avatar } : require("../../assets/images/placeholder.png")} alt="User avatar" />
                     </Avatar>
                 </TouchableOpacity>
 
@@ -395,62 +401,66 @@ export default function EditProfileScreen() {
                     <AlertDialogBackdrop />
                     <AlertDialogContent>
                         <AlertDialogHeader>
-                            <Text>Foto de Perfil</Text>
+                            <Text>{t("forms.addWineDiary.image")}</Text>
                         </AlertDialogHeader>
                         <AlertDialogBody>
                             <Button variant="outline" onPress={handleChangeAvatar} mb="$2">
-                                <ButtonText>Escolher da Galeria</ButtonText>
+                                <ButtonText>{t("forms.addWineDiary.gallery")}</ButtonText>
                             </Button>
                             {currentUser?.photoURL && (
                                 <Button variant="outline" bg="$red100" borderColor="$red500" onPress={handleRemoveAvatar}>
-                                    <ButtonText color="$red500">Remover Foto</ButtonText>
+                                    <ButtonText color="$red500">{t("forms.editProfile.remove")}</ButtonText>
                                 </Button>
                             )}
                         </AlertDialogBody>
                         <AlertDialogFooter>
                             <Button action="secondary" onPress={() => setShowDialog(false)}>
-                                <ButtonText>Fechar</ButtonText>
+                                <ButtonText>{t("forms.editProfile.cancel")}</ButtonText>
                             </Button>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
 
-                {/* Campo Nome */}
                 <FormControl isInvalid={!!errors.name}>
                     <FormControlLabel>
-                        <FormControlLabelText>Nome</FormControlLabelText>
+                        <FormControlLabelText>{t("forms.editProfile.name")}</FormControlLabelText>
                     </FormControlLabel>
                     <Controller
                         control={control}
                         name="name"
                         render={({ field: { onChange, value } }) => (
                             <Input>
-                                <InputField placeholder="Seu nome" value={value} onChangeText={onChange} />
+                                <InputField bg="#FFFFFF" placeholder={t("forms.editProfile.name")} value={value} onChangeText={onChange} />
                             </Input>
                         )}
                     />
-                    {errors.name && <Text color="$error500">{errors.name.message}</Text>}
+                    {errors.name && <Text color="$error500">{errors?.name?.message}</Text>}
                 </FormControl>
 
-                {/* Seção de Senha (apenas para usuários de email/senha) */}
                 {isEmailUser && (
                     <>
                         {!showPasswordFields ? (
                             <Button variant="outline" onPress={() => setShowPasswordFields(true)}>
-                                <ButtonText>Alterar Senha</ButtonText>
+                                <ButtonText>{t("forms.editProfile.alterPassword")}</ButtonText>
                             </Button>
                         ) : (
                             <>
                                 <FormControl isInvalid={!!errors.currentPassword}>
                                     <FormControlLabel>
-                                        <FormControlLabelText>Senha Atual</FormControlLabelText>
+                                        <FormControlLabelText>{t("forms.editProfile.currentPassword")}</FormControlLabelText>
                                     </FormControlLabel>
                                     <Controller
                                         control={control}
                                         name="currentPassword"
                                         render={({ field: { onChange, value } }) => (
                                             <Input>
-                                                <InputField placeholder="Digite sua senha atual" secureTextEntry value={value} onChangeText={onChange} />
+                                                <InputField
+                                                    bg="#FFFFFF"
+                                                    placeholder={t("forms.editProfile.currentPassword")}
+                                                    secureTextEntry
+                                                    value={value}
+                                                    onChangeText={onChange}
+                                                />
                                             </Input>
                                         )}
                                     />
@@ -459,14 +469,14 @@ export default function EditProfileScreen() {
 
                                 <FormControl isInvalid={!!errors.password}>
                                     <FormControlLabel>
-                                        <FormControlLabelText>Nova Senha</FormControlLabelText>
+                                        <FormControlLabelText>{t("forms.editProfile.newPassword")}</FormControlLabelText>
                                     </FormControlLabel>
                                     <Controller
                                         control={control}
                                         name="password"
                                         render={({ field: { onChange, value } }) => (
                                             <Input>
-                                                <InputField placeholder="Digite sua nova senha" secureTextEntry value={value} onChangeText={onChange} />
+                                                <InputField bg="#FFFFFF" placeholder={t("forms.editProfile.newPassword")} secureTextEntry value={value} onChangeText={onChange} />
                                             </Input>
                                         )}
                                     />
@@ -475,7 +485,7 @@ export default function EditProfileScreen() {
 
                                 {password && (
                                     <Button variant="link" onPress={() => setShowPasswordFields(false)}>
-                                        <ButtonText>Cancelar alteração de senha</ButtonText>
+                                        <ButtonText>{t("forms.editProfile.cancel")}</ButtonText>
                                     </Button>
                                 )}
                             </>
@@ -483,31 +493,32 @@ export default function EditProfileScreen() {
                     </>
                 )}
 
-                {/* Campo Idioma com Bandeiras */}
                 <FormControl isInvalid={!!errors.language}>
                     <FormControlLabel>
-                        <FormControlLabelText>Idioma</FormControlLabelText>
+                        <FormControlLabelText>{t("forms.editProfile.language")}</FormControlLabelText>
                     </FormControlLabel>
                     <Controller
                         control={control}
                         name="language"
                         render={({ field: { onChange, value } }) => (
-                            <Select selectedValue={value} onValueChange={onChange}>
+                            <Select
+                                selectedValue={selectedLanguage.code}
+                                onValueChange={(selectedCode) => {
+                                    const selected = LANGUAGES.find((lang) => lang.code === selectedCode) || LANGUAGES[0];
+                                    setSelectedLanguage(selected);
+                                    onChange(selectedCode); // Armazena apenas o código no formulário
+                                }}
+                            >
                                 <SelectTrigger>
-                                    <SelectInput placeholder="Selecione um idioma" />
+                                    <SelectInput bg="#FFFFFF" placeholder="Selecione um idioma" value={`${selectedLanguage.flag} ${selectedLanguage.name}`} />
                                 </SelectTrigger>
                                 <SelectPortal>
                                     <SelectBackdrop />
                                     <SelectContent>
                                         {LANGUAGES.map((lang) => (
-                                            <SelectItem
-                                                key={lang.code}
-                                                label={lang.name}
-                                                value={lang.code}
-                                                startIcon={<Image source={lang.flag} alt={lang.name} width={24} height={16} mr="$2" />}
-                                            >
-                                                <HStack alignItems="center" justifyContent="space-between" space="sm">
-                                                    <Image source={lang.flag} alt={lang.name} width={24} height={16} mr="$2" />
+                                            <SelectItem key={lang.code} label={`${lang.flag} ${lang.name}`} value={lang.code}>
+                                                <HStack alignItems="center" space="sm">
+                                                    <Text fontSize="$lg">{lang.flag}</Text>
                                                     <Text>{lang.name}</Text>
                                                 </HStack>
                                             </SelectItem>
@@ -520,13 +531,12 @@ export default function EditProfileScreen() {
                     {errors.language && <Text color="$error500">{errors.language.message}</Text>}
                 </FormControl>
 
-                {/* Botões de ação */}
                 <HStack space="md" mt="$4" justifyContent="center">
-                    <Button variant="outline" action="secondary" onPress={() => router.back()} isDisabled={loading}>
-                        <ButtonText>Cancelar</ButtonText>
+                    <Button variant="outline" borderColor={neutralDark} action="secondary" onPress={() => router.back()} isDisabled={loading}>
+                        <ButtonText color={neutralDark}>{t("forms.editProfile.cancel")}</ButtonText>
                     </Button>
-                    <Button bg="$primary500" onPress={handleSubmit(onSubmit)} isDisabled={loading}>
-                        <ButtonText>{loading ? "Salvando..." : "Salvar Alterações"}</ButtonText>
+                    <Button bg={neutralDark} onPress={handleSubmit(onSubmit)} isDisabled={loading}>
+                        <ButtonText>{loading ? t("general.loading") : t("forms.editProfile.submit")}</ButtonText>
                     </Button>
                 </HStack>
             </VStack>

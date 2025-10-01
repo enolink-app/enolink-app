@@ -1,4 +1,3 @@
-// stores/useLanguageStore.ts
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import translations from "../translations";
@@ -12,24 +11,31 @@ type LanguageCode = keyof Translations;
 
 interface LanguageState {
     language: LanguageCode;
-    setLanguage: (lang: LanguageCode) => void;
+    setLanguage: (lang: LanguageCode) => Promise<void>;
     t: (key: string) => string;
     initialize: () => Promise<void>;
     syncLanguageWithFirebase: (userId: string) => Promise<void>;
+    forceUpdate: number;
+    triggerUpdate: () => void;
 }
 
 const useLanguageStore = create<LanguageState>()(
     persist(
         (set, get) => ({
-            language: "en",
-            setLanguage: (lang) => {
+            language: "pt-BR",
+            forceUpdate: 0,
+
+            setLanguage: async (lang) => {
                 set({ language: lang });
-                // Sincroniza com Firebase se usuário logado
+
+                get().triggerUpdate();
+
                 const user = auth.currentUser;
                 if (user) {
-                    get().syncLanguageWithFirebase(user.uid);
+                    await get().syncLanguageWithFirebase(user.uid);
                 }
             },
+
             t: (key) => {
                 const { language } = get();
                 const keys = key.split(".");
@@ -42,9 +48,27 @@ const useLanguageStore = create<LanguageState>()(
 
                 return value ?? `[${key}]`;
             },
+
             initialize: async () => {
-                // Pode adicionar lógica para detectar idioma do dispositivo aqui
+                const user = auth.currentUser;
+                if (user) {
+                    try {
+                        const userRef = doc(db, "users", user.uid);
+                        const userDoc = await getDoc(userRef);
+
+                        if (userDoc.exists()) {
+                            const userData = userDoc.data();
+                            if (userData.language && userData.language !== get().language) {
+                                set({ language: userData.language });
+                                get().triggerUpdate();
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Failed to load language from Firebase:", error);
+                    }
+                }
             },
+
             syncLanguageWithFirebase: async (userId) => {
                 try {
                     const userRef = doc(db, "users", userId);
@@ -52,6 +76,10 @@ const useLanguageStore = create<LanguageState>()(
                 } catch (error) {
                     console.error("Failed to sync language with Firebase:", error);
                 }
+            },
+
+            triggerUpdate: () => {
+                set((state) => ({ forceUpdate: state.forceUpdate + 1 }));
             },
         }),
         {

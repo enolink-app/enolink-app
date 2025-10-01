@@ -1,39 +1,55 @@
-import { Box, ScrollView, Text, Heading, VStack } from "@gluestack-ui/themed";
-
+import { Box, ScrollView, Text, Heading, VStack, HStack } from "@gluestack-ui/themed";
+import useLanguageStore from "@/stores/useLanguageStore";
+import { ChevronLeft } from "lucide-react-native";
+import { useRouter } from "expo-router";
+import { Platform } from "react-native";
+import { config } from "@/gluestack-ui.config";
+import { useState, useEffect } from "react";
 export default function PrivacyPolicyScreen() {
+    const router = useRouter();
+    const { t, forceUpdate } = useLanguageStore();
+    const [updateKey, setUpdateKey] = useState(0);
+
+    useEffect(() => {
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
+
     return (
-        <Box flex={1} bg="$backgroundLight" p="$4">
+        <Box key={updateKey} flex={1} bg="$backgroundLight" p="$4">
+            <HStack justifyContent="flex-start" mt={Platform.OS == "ios" ? 50 : 0}>
+                <ChevronLeft onPress={() => router.push("/(settings)/settings")} key="half" size={30} style={{ marginRight: 6 }} color={config.tokens.colors.textLight} />
+                <Text fontSize="$2xl" fontWeight="$bold" color="$textLight">
+                    {t("settings.title")}
+                </Text>
+            </HStack>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <VStack space="lg">
                     <Heading size="xl" color="$textLight">
-                        Termos de Uso
+                        {t("privacy.title")}
                     </Heading>
 
                     <Text color="$textLight" fontSize="$md" lineHeight="$md">
-                        Ao utilizar o aplicativo WineApp, você concorda com os nossos termos e condições. Este aplicativo foi desenvolvido para fins de degustação e avaliação de
-                        vinhos. Não nos responsabilizamos por uso indevido das funcionalidades.
+                        {t("privacy.text1")}
                     </Text>
 
                     <Text color="$textLight" fontSize="$md" lineHeight="$md">
-                        Os dados fornecidos pelos usuários, como nome, e-mail e avaliações, são armazenados com segurança e utilizados apenas para melhorar a experiência da
-                        plataforma.
+                        {t("privacy.text2")}
                     </Text>
 
                     <Heading size="xl" color="$textLight" mt="$6">
-                        Política de Privacidade
+                        {t("privacy.text3")}
                     </Heading>
 
                     <Text color="$textLight" fontSize="$md" lineHeight="$md">
-                        Todas as informações pessoais são tratadas com confidencialidade e nunca serão compartilhadas com terceiros sem consentimento.
+                        {t("privacy.text4")}
                     </Text>
 
                     <Text color="$textLight" fontSize="$md" lineHeight="$md">
-                        Ao cadastrar-se, você autoriza o WineApp a utilizar seus dados apenas dentro do escopo da aplicação. Você pode solicitar a exclusão da sua conta a qualquer
-                        momento.
+                        {t("privacy.text5")}
                     </Text>
 
                     <Text color="$muted" fontSize="$sm" mt="$6" textAlign="center">
-                        Última atualização: 02 de julho de 2025
+                        {t("privacy.text6")}
                     </Text>
                 </VStack>
             </ScrollView>
