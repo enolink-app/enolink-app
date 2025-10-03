@@ -73,7 +73,7 @@ export default function LoginScreen() {
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         webClientId: "27430021409-n25b5e2urcnv1m0sot5stg8m81muo386.apps.googleusercontent.com",
-        iosClientId: "27430021409-s0s3ttbgkjefeai5e3elhe5h9go2a5gj.apps.googleusercontent.com",
+        iosClientId: "27430021409-uqcg92jgpji2nj2ik5vo3ogmu3qvlp6j.apps.googleusercontent.com",
         androidClientId: "27430021409-nmhb7q72shobhp7h3vi3okvoaetf2rv8.apps.googleusercontent.com",
         scopes: ["openid", "profile", "email"],
         selectAccount: true,
@@ -123,7 +123,7 @@ export default function LoginScreen() {
     }, [user]);
 
     useEffect(() => {
-        console.log("RESPONSE", request?.codeVerifier);
+        console.log("RESPONSE", request);
         if (response?.type === "success" && response.params?.code) {
             (async () => {
                 try {
@@ -168,61 +168,6 @@ export default function LoginScreen() {
         resolver: yupResolver(loginSchema),
     });
 
-    const handleGoogleSignIn = async (response: any) => {
-        setIsLoading(true);
-        try {
-            const { id_token } = response.params;
-
-            if (!id_token) {
-                throw new Error("ID token não encontrado");
-            }
-
-            const credential = GoogleAuthProvider.credential(id_token);
-            const userCredential = await signInWithCredential(auth, credential);
-            const user = userCredential.user;
-
-            console.log("✅ Usuário autenticado:", user.uid);
-
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-
-            if (!auth.currentUser) {
-                throw new Error("Usuário não está autenticado após login");
-            }
-
-            try {
-                await createUserInFirestore({
-                    uid: user.uid,
-                    name: user.displayName || "",
-                    email: user.email || "",
-                    provider: "google",
-                    language: "pt-BR",
-                });
-
-                console.log("✅ Usuário salvo no Firestore");
-            } catch (firestoreError) {
-                console.error("⚠️ Erro ao salvar no Firestore, mas login realizado:", firestoreError);
-            }
-
-            router.replace("/tabs/(tabs)/home");
-        } catch (error) {
-            console.error("❌ Erro no login com Google:", error);
-
-            let errorMessage = "Erro ao fazer login com Google";
-
-            if (error.code == "auth/network-request-failed") {
-                errorMessage = "Erro de conexão. Verifique sua internet.";
-            } else if (error.code == "auth/popup-blocked") {
-                errorMessage = "Popup bloqueado. Tente novamente.";
-            } else if (error.code == "auth/cancelled-popup-request") {
-                errorMessage = "Login cancelado.";
-            }
-
-            console.log("error", errorMessage);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     const handleGoogleLogin = async () => {
         setIsLoading(true);
         try {
@@ -232,7 +177,7 @@ export default function LoginScreen() {
                 return;
             }
 
-            const result = await promptAsync({ useProxy: true }); // ajuste useProxy conforme ambiente
+            const result = await promptAsync({ useProxy: true });
             console.log("Resultado do promptAsync:", result);
 
             if (result.type !== "success") {

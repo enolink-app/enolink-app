@@ -38,6 +38,7 @@ export default function WineCardForm({ wine, onPress, isAdded = false }: Props) 
         }
         return text;
     };
+
     return (
         <Card
             key={updateKey}
@@ -56,7 +57,7 @@ export default function WineCardForm({ wine, onPress, isAdded = false }: Props) 
             opacity={isAdded ? 0.7 : 1}
         >
             <Image
-                source={wine.image && wine.image.include("https") ? wine.image : require("../assets/images/placeholder.png")}
+                source={wine.image || (wine.image && wine?.image?.uri?.includes("https")) ? wine.image : require("../assets/images/placeholder.png")}
                 alt={wine.name}
                 borderRadius={6}
                 m={8}

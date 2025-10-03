@@ -2,11 +2,12 @@
     "login": {
         "wellcome": "Bienvenue !",
         "phrase": "Vivez l'expérience.",
-        "phrase2": "Découvrez le club de vin !",
+        "phrase2": "Découvrez Enolink !",
         "join": "Rejoindre",
         "forgot": "J'ai oublié mon mot de passe",
         "or": "ou",
         "signIn": "Se connecter avec",
+        "signUp": "S'inscrire avec",
         "new": "Nouveau ici ?",
         "create": "Créer un compte"
     },
@@ -17,7 +18,7 @@
         "dateBirth": "Date de naissance",
         "lang": "Langue",
         "password": "Mot de passe",
-        "haveAccount": "Vous avez déjà un compte ? Se connecter",
+        "haveAccount": "Vous avez déjà un compte ? Connectez-vous",
         "confirmPassword": "Confirmer le mot de passe",
         "quit": "Quitter",
         "mustContain0": "Le mot de passe doit contenir :",
@@ -39,7 +40,7 @@
         "diary": "Journal personnel",
         "calculator": "Calculateur de vin",
         "event": "Créer un événement de dégustation",
-        "wine": "Ajouter du vin",
+        "wine": "Ajouter un vin",
         "highToday": "Qu'est-ce qui est tendance aujourd'hui ?",
         "checkout": "Découvrez les vins les mieux notés du moment",
         "details": "Voir les détails"
@@ -47,7 +48,7 @@
     "events": {
         "title": "Événements",
         "now": "En ce moment",
-        "closed": "Fermé",
+        "closed": "Terminé",
         "emptyList": "Les événements apparaîtront ici",
         "allEvents": "Tous les événements",
         "myEvents": "Mes événements",
@@ -59,7 +60,7 @@
     "wines": {
         "title": "Mes Vins",
         "emptyList": "Vos vins apparaîtront ici",
-        "add": "Ajouter du vin",
+        "add": "Ajouter un vin",
         "searchPlaceholder": "Rechercher...",
         "notFound": "Aucun vin trouvé pour"
     },
@@ -79,7 +80,7 @@
             "color": "Couleur",
             "aroma": "Arôme",
             "flavor": "Saveur",
-            "notes": "Notes rapides",
+            "notes": "Notes rapides (optionnel)",
             "submit": "Envoyer l'évaluation",
             "loadingSbmit": "Envoi en cours...",
             "validation": {
@@ -112,10 +113,11 @@
                 "unexpectedTitle": "Erreur inattendue",
                 "unexpectedMessage": "Une erreur inattendue s'est produite lors du traitement de votre évaluation. Veuillez réessayer plus tard."
             },
-            "notesPlaceholder": "Qu'avez-vous pensé du vin ?"
+            "ratingTips": "Appuyez sur les étoiles pour donner des notes de 0,5 en 0,5",
+            "notesPlaceholder": "Qu'avez-vous pensé de ce vin ?"
         },
         "addWineDiary": {
-            "title": "Ajouter du vin",
+            "title": "Ajouter un vin",
             "name": "Nom",
             "harvest": "Millésime",
             "country": "Pays",
@@ -123,7 +125,7 @@
             "closure": "Bouchon",
             "typwWine": "Type de vin",
             "abv": "Degré alcoolique %",
-            "image": "Image (facultatif)",
+            "image": "Image (optionnel)",
             "camera": "Appareil photo",
             "gallery": "Galerie",
             "submit": "Sauvegarder le vin"
@@ -164,16 +166,16 @@
             "creation": "Création d'événement",
             "placeholderName": "Nom de l'événement",
             "dateStart": "Date de début",
-            "date": "Date de fin (facultatif)",
-            "titleImage": "Image de fond (facultatif)",
+            "date": "Date de fin (optionnel)",
+            "titleImage": "Image de fond (optionnel)",
             "imageDescription": "Ajoutez une image pour identifier votre événement",
             "camera": "Prendre une photo",
-            "gallery": "Choisir dans la galerie",
+            "gallery": "Choisir depuis la galerie",
             "selectedimage": "Image sélectionnée",
             "buttonBack": "Précédent",
-            "buttonNext": "Continuer vers les Vins",
+            "buttonNext": "Continuer vers les vins",
             "nextStep": "Étape suivante",
-            "nextStepDescription": "Dans l'étape suivante, vous pourrez ajouter les vins qui seront dégustés lors de cet événement.",
+            "nextStepDescription": "À l'étape suivante, vous pourrez ajouter les vins qui seront dégustés lors de cet événement.",
             "buttonSubmit": "Créer l'événement",
             "title2": "Vins",
             "eventWines": "Vins de l'événement",
@@ -182,7 +184,7 @@
             "emptyList1": "Aucun vin ajouté",
             "emptyList2": "vos vins apparaîtront ici",
             "yourWines": "Vos Vins",
-            "selectWines": "Sélectionnez des vins de votre collection à ajouter à l'événement",
+            "selectWines": "Sélectionnez des vins dans votre collection pour les ajouter à l'événement",
             "addWine": "Ajouter un nouveau vin",
             "addWineDescription": "Si vous n'avez pas trouvé le vin que vous cherchiez, vous pouvez en ajouter un nouveau à votre collection et à l'événement.",
             "selectDate": "Sélectionner une date",
@@ -192,14 +194,14 @@
             "notFound": "Aucun vin trouvé pour"
         },
         "newWineEvent": {
-            "title": "Ajouter du vin",
+            "title": "Ajouter un vin",
             "name": "Nom",
             "harvest": "Millésime",
             "country": "Pays",
             "grape": "Cépage",
             "closure": "Bouchon",
             "typwWine": "Type de vin",
-            "image": "Image (facultatif)",
+            "image": "Image (optionnel)",
             "camera": "Appareil photo",
             "gallery": "Galerie",
             "submit": "Sauvegarder le vin",
@@ -208,14 +210,14 @@
             "notFound": "Aucun vin trouvé pour"
         },
         "newWine": {
-            "title": "Ajouter du vin",
+            "title": "Ajouter un vin",
             "name": "Nom",
             "harvest": "Millésime",
             "country": "Pays",
             "grape": "Cépage",
             "closure": "Bouchon",
             "typwWine": "Type de vin",
-            "image": "Image (facultatif)",
+            "image": "Image (optionnel)",
             "camera": "Appareil photo",
             "gallery": "Galerie",
             "submit": "Sauvegarder le vin",
@@ -275,7 +277,7 @@
                     "Rouge corsé (ex: Cabernet Sauvignon, Malbec)",
                     "Brut (sec et élégant)",
                     "Blanc corsé (ex: Chardonnay boisé)",
-                    "Porto (pour finir la soirée)",
+                    "Porto (pour terminer la soirée)",
                     "Barolo/Barbaresco (noble rouge italien)",
                     "Bordeaux rouge (classique et structuré)"
                 ]
@@ -294,8 +296,8 @@
         "title": "Événement",
         "evaluated": "Évalué",
         "blocked": "Bloqué",
-        "typeWine": "Cliquez sur le vin libéré pour l'évaluer. Les suivants seront activés après que tous les participants aient soumis leurs évaluations.",
-        "typeWine2": "Ceci est un événement de dégustation privé. Chaque vin sera libéré séquentiellement après que tous les participants aient évalué le précédent.",
+        "typeWine": "Cliquez sur le vin débloqué pour l'évaluer. Les suivants seront activés après que tous les participants aient soumis leurs évaluations.",
+        "typeWine2": "Ceci est un événement de dégustation privé. Chaque vin sera débloqué séquentiellement après que tous les participants aient évalué le précédent.",
         "leave": "Quitter l'événement",
         "participants": "participants",
         "newParticipant": "nouveau participant a rejoint l'événement !",
@@ -304,7 +306,7 @@
         "harvest": "Millésime",
         "wait": "Attendez l'évaluation du vin précédent",
         "details": "Détails de l'événement",
-        "seeRanking": "Voir les classements"
+        "seeRanking": "Voir le classement"
     },
     "guestJoinEvent": {
         "join": "Rejoindre en tant qu'invité",
@@ -339,7 +341,7 @@
         "aroma": "Arôme",
         "flavor": "Saveur",
         "close": "Fermer",
-        "addFirst": "Ajouter la première note",
+        "addFirst": "Ajouter une première note",
         "detailed": "Avis détaillés",
         "searchPlaceholder": "Rechercher...",
         "notFound": "Aucune note trouvée pour",
@@ -351,8 +353,8 @@
     "privacy": {
         "title": "Conditions d'utilisation",
         "text1": "En utilisant l'application Enolink, vous acceptez nos conditions générales. Cette application a été développée pour la dégustation et l'évaluation de vins. Nous ne sommes pas responsables de toute utilisation abusive de ses fonctionnalités.",
-        "text2": "Les données fournies par les utilisateurs, telles que le nom, l'e-mail et les évaluations, sont stockées en toute sécurité et utilisées uniquement pour améliorer l'expérience de la plateforme.",
-        "text3": "Politique de confidentialité et ",
+        "text2": "Les données fournies par les utilisateurs, telles que le nom, l'e-mail et les évaluations, sont stockées de manière sécurisée et utilisées uniquement pour améliorer l'expérience de la plateforme.",
+        "text3": "Politique de confidentialité et",
         "text4": "Toutes les informations personnelles sont traitées confidentiellement et ne seront jamais partagées avec des tiers sans consentement.",
         "text5": "En vous inscrivant, vous autorisez l'application Enolink à utiliser vos données uniquement dans le cadre de l'application. Vous pouvez demander la suppression de votre compte à tout moment.",
         "text6": "Dernière mise à jour : 2 juillet 2025"
@@ -382,11 +384,12 @@
         "linkEventTitle": "Invitation à l'événement",
         "linkEvent": "Bonjour ! Vous avez été invité à l'événement de dégustation",
         "linkAppTitle": "Venez sur EnoLink !",
-        "linkApp": "🍷 Rejoignez-moi sur EnoLink ! \n\nDécouvrez et évaluez des vins extraordinaires avec moi. \n\nTéléchargez l'application :",
-        "copied": "Copié dans le presse-papiers !"
+        "linkApp": "🍷 Rejoignez-moi sur EnoLink ! \n\nDécouvrez et évaluez des vins exceptionnels avec moi. \n\nTéléchargez l'application :",
+        "copied": "Copié dans le presse-papiers !",
+        "save": "Sauvegarder"
     },
     "onboarding": {
-        "titleApp1": "Restez à jour avec les vins tendance",
+        "titleApp1": "Restez informé des vins tendance",
         "subtitleApp1": "Découvrez ce que les gens apprécient avec les 10 vins les mieux notés.",
         "titleApp2": "Évaluation des vins et événements",
         "subtitleApp2": "Connectez les amateurs de vin, appréciez et évaluez les vins ensemble.",
@@ -399,7 +402,7 @@
         "descriptionDiary1": "Appuyez sur une carte pour voir les détails et modifier",
         "titleDiary2": "Évaluez en détail",
         "subtitleDiary2": "Notez la couleur, l'arôme et la saveur de 0 à 5 étoiles",
-        "descriptionDiary2": "Vous pouvez modifier vos évaluations plus tard.",
+        "descriptionDiary2": "Vous pourrez modifier vos évaluations plus tard.",
         "titleDiary3": "Prenez des notes",
         "subtitleDiary3": "Enregistrez vos impressions et souvenirs sur chaque vin",
         "descriptionDiary3": "Utilisez les notes pour vous souvenir des détails importants",

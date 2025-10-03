@@ -146,14 +146,18 @@ export default function EventsScreen() {
                     <EventCard
                         onPress={handlePress}
                         key={item?.id || index}
-                        image={getEventImage(item)}
+                        image={
+                            item?.coverImage || (item?.coverImage && item?.coverImage?.uri?.includes("https"))
+                                ? item?.coverImage
+                                : require("../../../assets/images/placeholder.png")
+                        }
                         title={item?.name}
                         date={formatDate(item?.dateStart)}
                         distance={distanceText}
                         isNearby={distanceText && parseFloat(distanceText) < 5}
                         badge={""}
                         status={item?.status}
-                        text={isOrganizer || isParticipant ? t("events.join") : t("events.see")}
+                        text={(isOrganizer || isParticipant) && !isClosed ? t("events.join") : t("events.see")}
                     />
                 </Box>
             );

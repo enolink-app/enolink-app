@@ -2,11 +2,12 @@
     "login": {
         "wellcome": "Benvenuto!",
         "phrase": "Vivi l'esperienza.",
-        "phrase2": "Scopri il wine club!",
+        "phrase2": "Scopri Enolink!",
         "join": "Unisciti",
         "forgot": "Ho dimenticato la password",
         "or": "o",
         "signIn": "Accedi con",
+        "signUp": "Registrati con",
         "new": "Nuovo qui?",
         "create": "Crea un account"
     },
@@ -40,7 +41,7 @@
         "calculator": "Calcolatore Vini",
         "event": "Crea Evento di Degustazione",
         "wine": "Aggiungi Vino",
-        "highToday": "Cosa c'è di caldo oggi?",
+        "highToday": "Cosa va di moda oggi?",
         "checkout": "Scopri i vini meglio valutati del momento",
         "details": "Vedi dettagli"
     },
@@ -79,12 +80,12 @@
             "color": "Colore",
             "aroma": "Aroma",
             "flavor": "Sapore",
-            "notes": "Appunti rapidi",
+            "notes": "Note rapide (opzionale)",
             "submit": "Invia Valutazione",
             "loadingSbmit": "Invio in corso...",
             "validation": {
                 "title": "Valutazione Incompleta",
-                "message": "Per favore, valuta tutti i criteri con punteggi tra 1 e 5 stelle.",
+                "message": "Per favore valuta tutti i criteri con punteggi tra 1 e 5 stelle.",
                 "button": "OK"
             },
             "authRequired": {
@@ -94,13 +95,13 @@
             },
             "dataError": {
                 "title": "Dati Incompleti",
-                "message": "Le informazioni sull'evento o sul vino non sono state caricate correttamente. Riprova.",
+                "message": "Le informazioni sull'evento o sul vino non sono state caricate correttamente. Per favore riprova.",
                 "button": "OK"
             },
             "success": {
                 "title": "✅ Valutazione Registrata!",
                 "message": "La tua valutazione è stata salvata con successo.",
-                "rateAnother": "Valuta un Altro Vino",
+                "rateAnother": "Valuta Un Altro Vino",
                 "goBack": "Torna Indietro"
             },
             "errors": {
@@ -110,8 +111,9 @@
                 "networkTitle": "Problema di Connessione",
                 "networkMessage": "Impossibile connettersi al server. Controlla la tua connessione internet e riprova.",
                 "unexpectedTitle": "Errore Inaspettato",
-                "unexpectedMessage": "Si è verificato un errore imprevisto durante l'elaborazione della tua valutazione. Riprova più tardi."
+                "unexpectedMessage": "Si è verificato un errore inaspettato durante l'elaborazione della tua valutazione. Riprova più tardi."
             },
+            "ratingTips": "Clicca sulle stelle per dare valutazioni da 0.5 a 0.5",
             "notesPlaceholder": "Cosa hai pensato del vino?"
         },
         "addWineDiary": {
@@ -133,7 +135,7 @@
             "color": "Colore",
             "aroma": "Aroma",
             "flavor": "Sapore",
-            "notes": "Appunti rapidi",
+            "notes": "Note rapide",
             "submit": "Invia Valutazione",
             "loadingSbmit": "Invio in corso..."
         },
@@ -170,14 +172,14 @@
             "camera": "Scatta foto",
             "gallery": "Prendi dalla galleria",
             "selectedimage": "Immagine Selezionata",
-            "buttonBack": "Indietro",
+            "buttonBack": "Precedente",
             "buttonNext": "Continua ai Vini",
-            "nextStep": "Prossimo Passo",
-            "nextStepDescription": "Nel prossimo passo, potrai aggiungere i vini che verranno degustati in questo evento.",
+            "nextStep": "Prossimo Step",
+            "nextStepDescription": "Nel prossimo step, potrai aggiungere i vini che verranno degustati in questo evento.",
             "buttonSubmit": "Crea evento",
             "title2": "Vini",
             "eventWines": "Vini dell'Evento",
-            "eventWinesDescription": "Nessun vino aggiunto ancora. Seleziona i vini qui sotto per aggiungerli all'evento.",
+            "eventWinesDescription": "Nessun vino aggiunto ancora. Seleziona i vini qui sotto da aggiungere all'evento.",
             "addedWines": "Vini Aggiunti",
             "emptyList1": "Nessun vino aggiunto",
             "emptyList2": "i tuoi vini appariranno qui",
@@ -187,7 +189,7 @@
             "addWineDescription": "Se non hai trovato il vino che cercavi, puoi aggiungerne uno nuovo alla tua collezione e all'evento.",
             "selectDate": "Seleziona Data",
             "noWines": "I tuoi vini appariranno qui.",
-            "emptyList": "Nessun vino aggiunto ancora. Seleziona i vini qui sotto per aggiungerli all'evento.",
+            "emptyList": "Nessun vino aggiunto ancora. Seleziona i vini qui sotto da aggiungere all'evento.",
             "searchPlaceholder": "Cerca...",
             "notFound": "Nessun vino trovato per"
         },
@@ -252,30 +254,30 @@
             "lowEx": "1-2 bicchieri",
             "mediumEx": "3-4 bicchieri",
             "highEx": "5+ bicchieri",
-            "variety": "Consigli Varietà:",
+            "variety": "Consigli Varietali:",
             "totalBottle": "bottiglia",
             "recommended": "raccomandato",
             "suggestedTypes": {
                 "morning": [
                     "Spumante Brut (es. Prosecco, Cava)",
                     "Bianco Leggero (es. Sauvignon Blanc, Pinot Grigio)",
-                    "Rosé Secco (es. Provenza, Pinot Noir Rosé)",
+                    "Rosé Secco (es. Provence, Pinot Noir Rosé)",
                     "Vinho Verde (leggero e leggermente frizzante)",
                     "Moscato d'Asti (dolce e leggero)",
                     "Riesling (leggero e aromatico)"
                 ],
                 "afternoon": [
-                    "Rosso di medio corpo (es. Merlot, Pinot Noir)",
-                    "Bianco strutturato (es. Chardonnay non barricato)",
-                    "Rosé corposo (es. Tavel)",
+                    "Rosso di Corpo Medio (es. Merlot, Pinot Noir)",
+                    "Bianco Strutturato (es. Chardonnay non barricato)",
+                    "Rosé Corposo (es. Tavel)",
                     "Vino Orange (scelta audace)",
                     "Beaujolais (fruttato e facile da bere)"
                 ],
                 "evening": [
-                    "Rosso corposo (es. Cabernet Sauvignon, Malbec)",
+                    "Rosso Corposo (es. Cabernet Sauvignon, Malbec)",
                     "Spumante Extra Brut (secco ed elegante)",
-                    "Bianco corposo (es. Chardonnay barricato)",
-                    "Vino Porto (per concludere la serata)",
+                    "Bianco Corposo (es. Chardonnay barricato)",
+                    "Vino Port (per concludere la serata)",
                     "Barolo/Barbaresco (nobile rosso italiano)",
                     "Bordeaux Rosso (classico e strutturato)"
                 ]
@@ -290,8 +292,8 @@
         "title": "Evento",
         "evaluated": "Valutato",
         "blocked": "Bloccato",
-        "typeWine": "Clicca sul vino rilasciato per recensire. I successivi verranno abilitati dopo che tutti i partecipanti avranno inviato le loro recensioni.",
-        "typeWine2": "Questo è un evento di degustazione privato. Ogni vino verrà rilasciato in sequenza dopo che tutti i partecipanti avranno valutato il precedente.",
+        "typeWine": "Clicca sul vino rilasciato per recensire. I successivi saranno abilitati dopo che tutti i partecipanti avranno inviato le loro recensioni.",
+        "typeWine2": "Questo è un evento di degustazione privato. Ogni vino sarà rilasciato in sequenza dopo che tutti i partecipanti avranno valutato il precedente.",
         "leave": "Lascia l'evento",
         "participants": "partecipanti",
         "newParticipant": "nuovo partecipante si è unito all'evento!",
@@ -346,11 +348,11 @@
     },
     "privacy": {
         "title": "Termini di Utilizzo",
-        "text1": "Utilizzando l'App Enolink, accetti i nostri termini e condizioni. Questa app è stata sviluppata per scopi di degustazione e valutazione del vino. Non siamo responsabili per eventuali usi impropri delle sue funzionalità.",
+        "text1": "Utilizzando l'App Enolink, accetti i nostri termini e condizioni. Questa app è stata sviluppata per scopi di degustazione e valutazione di vini. Non siamo responsabili per eventuali usi impropri delle sue funzionalità.",
         "text2": "I dati forniti dagli utenti, come nome, email e valutazioni, sono archiviati in modo sicuro e utilizzati solo per migliorare l'esperienza della piattaforma.",
-        "text3": "Politica sulla Privacy e ",
-        "text4": "Tutte le informazioni personali sono trattate in modo confidenziale e non verranno mai condivise con terze parti senza consenso.",
-        "text5": "Registrandoti, autorizzi l'App Enolink a utilizzare i tuoi dati solo nell'ambito dell'applicazione. Puoi richiedere la cancellazione del tuo account in qualsiasi momento.",
+        "text3": "Politica sulla Privacy e",
+        "text4": "Tutte le informazioni personali sono trattate in modo confidenziale e non saranno mai condivise con terze parti senza consenso.",
+        "text5": "Registrandoti, autorizzi l'App Enolink ad utilizzare i tuoi dati solo nell'ambito dell'applicazione. Puoi richiedere la cancellazione del tuo account in qualsiasi momento.",
         "text6": "Ultimo aggiornamento: 2 Luglio 2025"
     },
     "general": {
@@ -379,26 +381,27 @@
         "linkEvent": "Ciao! Sei stato invitato all'evento di degustazione",
         "linkAppTitle": "Vieni su EnoLink!",
         "linkApp": "🍷 Unisciti a me su EnoLink! \n\nScopri e recensisci vini fantastici con me. \n\nScarica l'app:",
-        "copied": "Copiato negli appunti!"
+        "copied": "Copiato negli appunti!",
+        "save": "Salva"
     },
     "onboarding": {
         "titleApp1": "Rimani Aggiornato sui Vini di Tendenza",
-        "subtitleApp1": "Scopri cosa stanno apprezzando le persone con i top 10 vini meglio valutati.",
+        "subtitleApp1": "Scopri cosa stanno apprezzando le persone con i 10 vini meglio valutati.",
         "titleApp2": "Valutazione Vini ed Eventi",
-        "subtitleApp2": "Collega gli amanti del vino, goditi e valuta i vini insieme.",
-        "titleApp3": "I Tuoi Appunti Personali",
-        "subtitleApp3": "Valuta i tuoi vini e registra le tue idee. Il tuo palato evolve e il tuo diario lo segue.",
+        "subtitleApp2": "Connetti gli amanti del vino, goditi e valuta i vini insieme.",
+        "titleApp3": "Le Tue Note Personali",
+        "subtitleApp3": "Valuta i tuoi vini e registra le tue idee. Il tuo palato evolve, e il tuo diario lo segue.",
         "titleApp4": "Tutto nel Palmo della Tua Mano",
         "subtitleApp4": "Trasforma ogni calice in un ricordo registrato. Cattura momenti unici e costruisci la tua storia enologica.",
         "titleDiary1": "Il Tuo Diario dei Vini",
-        "subtitleDiary1": "Qui puoi salvare tutte le tue esperienze vinicole.",
+        "subtitleDiary1": "Qui puoi salvare tutte le tue esperienze con il vino.",
         "descriptionDiary1": "Tocca una carta per vedere i dettagli e modificare",
         "titleDiary2": "Valuta in Dettaglio",
         "subtitleDiary2": "Valuta colore, aroma e sapore da 0 a 5 stelle",
         "descriptionDiary2": "Puoi modificare le tue recensioni in seguito.",
         "titleDiary3": "Prendi Appunti",
         "subtitleDiary3": "Registra le tue impressioni e ricordi su ogni vino",
-        "descriptionDiary3": "Usa le note per ricordare i dettagli importanti",
+        "descriptionDiary3": "Usa le note per ricordare dettagli importanti",
         "titleDiary4": "Aggiungi Nuovi Vini",
         "subtitleDiary4": "Usa il pulsante + per registrare nuove degustazioni",
         "descriptionDiary4": "Cerca nel nostro database o aggiungi manualmente",

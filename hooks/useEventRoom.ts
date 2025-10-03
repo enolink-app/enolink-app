@@ -15,10 +15,12 @@ export const useEventRoom = (eventId: string) => {
 
                 const eventWithWineIds = {
                     ...event,
-                    wines: event.wines.map((wine: any, index: number) => ({
-                        ...wine,
-                        id: wine.id || `wine-${index}-${Date.now()}`,
-                    })),
+                    wines: event?.wines
+                        ? event.wines.map((wine: any, index: number) => ({
+                              ...wine,
+                              id: wine.id || `wine-${index}-${Date.now()}`,
+                          }))
+                        : [],
                 };
 
                 const rankings = await getRanking(eventId);
@@ -28,6 +30,7 @@ export const useEventRoom = (eventId: string) => {
                 setRankings(rankings);
                 setMyEvaluations(myEvaluations);
             } catch (error) {
+                console.log(eventId, "event id no fetchEventData");
                 console.error("Error fetching event data:", error);
             } finally {
                 setIsLoading(false);

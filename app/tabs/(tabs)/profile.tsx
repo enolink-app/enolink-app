@@ -97,7 +97,7 @@ export default function ProfileScreen() {
             Alert.alert("Erro", "Não foi possível compartilhar o convite.");
         }
     };
-    console.log(token);
+
     return (
         <Box key={updateKey} flex={1} bg="$backgroundLight" p="$4" mt={Platform.OS == "ios" ? 50 : 0}>
             <Box mt={20} mb={50} flexDirection="row" justifyContent="space-between">

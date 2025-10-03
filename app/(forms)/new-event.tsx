@@ -65,6 +65,7 @@ import { uploadEventImage, validateImageForUpload } from "@/services/storage";
 import * as Network from "expo-network";
 import useLanguageStore from "@/stores/useLanguageStore";
 import EventSearchBar from "@/components/EventSearchBar";
+import { uploadImage } from "@/services/storage";
 
 type Wine = {
     id?: string;
@@ -492,13 +493,11 @@ export default function EventForm() {
             let coverImageUrl = null;
 
             if (selectedImage) {
-                try {
-                    const correctedUri = getCorrectUri(selectedImage);
-                    coverImageUrl = await uploadEventImage(correctedUri, user.uid);
-                } catch (uploadError) {
-                    console.error("Erro no upload da imagem:", uploadError);
-                    Alert.alert("Aviso", "Não foi possível enviar a imagem. O evento será criado sem ela.", [{ text: "OK" }]);
-                }
+                const userId = auth.currentUser?.uid || "unknown";
+                const timestamp = Date.now();
+                const path = `wines/${userId}_${timestamp}.jpg`;
+
+                coverImageUrl = await uploadImage(selectedImage, path);
             }
 
             const eventData = {
@@ -792,9 +791,6 @@ export default function EventForm() {
                                                 resizeMode="cover"
                                                 alt="Imagem selecionada"
                                             />
-                                            <Text fontSize="$sm" color="$text600" mt="$2">
-                                                {t("forms.newEvent.selectedImage")}
-                                            </Text>
                                         </Box>
                                     )}
                                 </FormControl>

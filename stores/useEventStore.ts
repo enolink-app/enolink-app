@@ -194,7 +194,7 @@ export const useEventStore = create<EventState>((set, get) => ({
                 myEvaluations: eventData.participants?.find((p) => p.id === auth.currentUser?.uid)?.evaluations || [],
             });
         } catch (error) {
-            console.error("Erro ao atualizar dados do evento:", error);
+            console.error("Erro ao atualizar dados do evento:", JSON.stringify(error));
         } finally {
             set({ isLoading: false });
         }

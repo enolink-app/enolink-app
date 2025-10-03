@@ -1,6 +1,6 @@
 import { Box, FlatList, Heading, ButtonIcon, Button, HStack, VStack, Text, ButtonText, Image, StarIcon, Input, InputField, Textarea, TextareaInput } from "@gluestack-ui/themed";
 import { Plus, ChevronLeft } from "lucide-react-native";
-import { Platform, Modal, Alert } from "react-native";
+import { Platform, Modal, Alert, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { DiaryCard } from "@/components/DiaryCard";
 import { config } from "@/gluestack-ui.config";
@@ -12,6 +12,7 @@ import useLanguageStore from "@/stores/useLanguageStore";
 import EventSearchBar from "@/components/EventSearchBar";
 import { checkDiaryFirstLaunch } from "@/utils/firstLaunch";
 import DiaryOnboarding from "@/components/DiaryOnboarding";
+import StarRating from "react-native-star-rating-widget";
 
 export default function DiaryScreen() {
     const router = useRouter();
@@ -103,9 +104,9 @@ export default function DiaryScreen() {
 
     const [editMode, setEditMode] = useState(false);
     const [editNotes, setEditNotes] = useState("");
-    const [editColor, setEditColor] = useState<number | string>(0);
-    const [editAroma, setEditAroma] = useState<number | string>(0);
-    const [editFlavor, setEditFlavor] = useState<number | string>(0);
+    const [editColor, setEditColor] = useState<number>(0);
+    const [editAroma, setEditAroma] = useState<number>(0);
+    const [editFlavor, setEditFlavor] = useState<number>(0);
     const [savingEdit, setSavingEdit] = useState(false);
 
     const handleStartEdit = () => {
@@ -120,17 +121,23 @@ export default function DiaryScreen() {
     const handleSaveEdit = async () => {
         if (!selectedEntry) return;
 
+        // Validação atualizada
         if (!validateRating(editColor) || !validateRating(editAroma) || !validateRating(editFlavor)) {
-            Alert.alert(`${t("general.error")}`, "As notas devem ser números entre 0 e 5.");
+            Alert.alert(`${t("general.error")}`, "As notas devem ser entre 0 e 5 estrelas.");
             return;
         }
 
         setSavingEdit(true);
         try {
+            // Formata as avaliações igual ao formulário
+            const formatRating = (rating: number) => {
+                return Math.round(rating * 2) / 2; // Permite meias estrelas
+            };
+
             const payload = {
-                color: Number(editColor),
-                aroma: Number(editAroma),
-                flavor: Number(editFlavor),
+                color: formatRating(Number(editColor)),
+                aroma: formatRating(Number(editAroma)),
+                flavor: formatRating(Number(editFlavor)),
                 notes: editNotes,
             };
 
@@ -142,7 +149,7 @@ export default function DiaryScreen() {
             Alert.alert(`${t("general.success")}`, `${t("diary.successUpdateNote")}`);
         } catch (error: any) {
             console.error(`${t("general.error")}`, error);
-            Alert.alert(`${t("general.error")}`, error?.response?.data?.error);
+            Alert.alert(`${t("general.error")}`, error?.response?.data?.error || "Erro ao atualizar avaliação");
         } finally {
             setSavingEdit(false);
             setEditMode(false);
@@ -202,9 +209,16 @@ export default function DiaryScreen() {
                 <Box flex={1} justifyContent="center" alignItems="center" bg="rgba(0,0,0,0.5)">
                     <Box bg="$white" p="$6" borderRadius="$lg" w="90%" maxHeight="90%">
                         {selectedEntry && (
-                            <>
+                            <ScrollView>
                                 <HStack space="md" alignItems="center" mb="$4">
-                                    <Image source={{ uri: selectedEntry.wineData.image }} alt={selectedEntry.wineData.name} w={80} h={100} borderRadius="$md" resizeMode="cover" />
+                                    <Image
+                                        source={selectedEntry.wineData.image != "null" ? selectedEntry.wineData.image : require("../../assets/images/placeholder.png")}
+                                        alt={selectedEntry.wineData.name}
+                                        w={80}
+                                        h={100}
+                                        rounded="$md"
+                                        resizeMode="cover"
+                                    />
                                     <VStack flex={1}>
                                         <Heading color={neutralDark} size="md">
                                             {selectedEntry.wineData.name}
@@ -223,12 +237,12 @@ export default function DiaryScreen() {
                                         </HStack>
                                     </VStack>
                                 </HStack>
-
                                 <VStack space="md" mb="$4">
                                     <Text color={neutralDark} fontWeight="$bold" fontSize="$lg">
                                         {t("diary.detailed")}
                                     </Text>
 
+                                    {/* Cor */}
                                     <VStack space="xs">
                                         <HStack justifyContent="space-between" alignItems="center">
                                             <Text color={neutralDark} fontWeight="$bold">
@@ -237,20 +251,20 @@ export default function DiaryScreen() {
                                             <Text color={neutralDark}>{editMode ? `${editColor}/5` : `${selectedEntry.color}/5`}</Text>
                                         </HStack>
                                         {editMode ? (
-                                            <Input>
-                                                <InputField
-                                                    bg="#FFFFFF"
-                                                    keyboardType="numeric"
-                                                    value={String(editColor)}
-                                                    onChangeText={(v) => setEditColor(v)}
-                                                    placeholder="0 - 5"
-                                                />
-                                            </Input>
+                                            <StarRating
+                                                rating={Number(editColor)}
+                                                onChange={(rating) => setEditColor(rating)}
+                                                starSize={32}
+                                                color={gold}
+                                                animationConfig={{ scale: 1.05 }}
+                                                enableHalfStar={true}
+                                            />
                                         ) : (
                                             renderStars(selectedEntry.color, "sm")
                                         )}
                                     </VStack>
 
+                                    {/* Aroma */}
                                     <VStack space="xs">
                                         <HStack justifyContent="space-between" alignItems="center">
                                             <Text color={neutralDark} fontWeight="$bold">
@@ -259,20 +273,20 @@ export default function DiaryScreen() {
                                             <Text color={neutralDark}>{editMode ? `${editAroma}/5` : `${selectedEntry.aroma}/5`}</Text>
                                         </HStack>
                                         {editMode ? (
-                                            <Input>
-                                                <InputField
-                                                    bg="#FFFFFF"
-                                                    keyboardType="numeric"
-                                                    value={String(editAroma)}
-                                                    onChangeText={(v) => setEditAroma(v)}
-                                                    placeholder="0 - 5"
-                                                />
-                                            </Input>
+                                            <StarRating
+                                                rating={Number(editAroma)}
+                                                onChange={(rating) => setEditAroma(rating)}
+                                                starSize={32}
+                                                color={gold}
+                                                animationConfig={{ scale: 1.05 }}
+                                                enableHalfStar={true}
+                                            />
                                         ) : (
                                             renderStars(selectedEntry.aroma, "sm")
                                         )}
                                     </VStack>
 
+                                    {/* Sabor */}
                                     <VStack space="xs">
                                         <HStack justifyContent="space-between" alignItems="center">
                                             <Text color={neutralDark} fontWeight="$bold">
@@ -281,15 +295,14 @@ export default function DiaryScreen() {
                                             <Text color={neutralDark}>{editMode ? `${editFlavor}/5` : `${selectedEntry.flavor}/5`}</Text>
                                         </HStack>
                                         {editMode ? (
-                                            <Input>
-                                                <InputField
-                                                    bg="#FFFFFF"
-                                                    keyboardType="numeric"
-                                                    value={String(editFlavor)}
-                                                    onChangeText={(v) => setEditFlavor(v)}
-                                                    placeholder="0 - 5"
-                                                />
-                                            </Input>
+                                            <StarRating
+                                                rating={Number(editFlavor)}
+                                                onChange={(rating) => setEditFlavor(rating)}
+                                                starSize={32}
+                                                color={gold}
+                                                animationConfig={{ scale: 1.05 }}
+                                                enableHalfStar={true}
+                                            />
                                         ) : (
                                             renderStars(selectedEntry.flavor, "sm")
                                         )}
@@ -352,12 +365,12 @@ export default function DiaryScreen() {
                                                 <ButtonText>{t("general.cancel")}</ButtonText>
                                             </Button>
                                             <Button backgroundColor={primary} onPress={handleSaveEdit} isDisabled={savingEdit}>
-                                                <ButtonText>{savingEdit ? t("general.saving") : t("general.save")}</ButtonText>
+                                                <ButtonText>{savingEdit ? t("general.loading") : t("general.save")}</ButtonText>
                                             </Button>
                                         </>
                                     )}
                                 </HStack>
-                            </>
+                            </ScrollView>
                         )}
                     </Box>
                 </Box>

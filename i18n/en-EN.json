@@ -2,7 +2,7 @@
     "login": {
         "wellcome": "Wellcome!",
         "phrase": "Live the experience.",
-        "phrase2": "Discover de wine club!",
+        "phrase2": "Discover de Enolink!",
         "join": "Join",
         "forgot": "Forgot my password",
         "or": "or",
@@ -80,7 +80,7 @@
             "color": "Color",
             "aroma": "Aroma",
             "flavor": "Flavor",
-            "notes": "Quick notes",
+            "notes": "Quick notes (optional)",
             "submit": "Send Evaluation",
             "loadingSbmit": "Sending...",
             "validation": {
@@ -113,6 +113,7 @@
                 "unexpectedTitle": "Unexpected Error",
                 "unexpectedMessage": "An unexpected error occurred while processing your evaluation. Please try again later."
             },
+            "ratingTips": "Tap on the stars to give ratings from 0.5 out of 0.5",
             "notesPlaceholder": "What did you think of the wine?"
         },
         "addWineDiary": {
@@ -349,7 +350,7 @@
         "title": "Terms of Use",
         "text1": "By using the Enolink App, you agree to our terms and conditions. This app was developed for wine tasting and evaluation purposes. We are not responsible for any misuse of its features.",
         "text2": "Data provided by users, such as name, email, and ratings, is securely stored and used only to improve the platform experience.",
-        "text3": "Privacy Policy and ",
+        "text3": "Privacy Policy and",
         "text4": "All personal information is treated confidentially and will never be shared with third parties without consent.",
         "text5": "By registering, you authorize Enolink App to use your data only within the scope of the application. You can request the deletion of your account at any time.",
         "text6": "Last updated: July 2, 2025"
@@ -380,7 +381,8 @@
         "linkEvent": "Hello! You have been invited to the tasting event",
         "linkAppTitle": "Come to EnoLink!",
         "linkApp": "🍷 Join me on EnoLink! \n\nDiscover and review amazing wines with me. \n\nDownload the app:",
-        "copied": "Copied to clipboard!"
+        "copied": "Copied to clipboard!",
+        "save": "Save"
     },
     "onboarding": {
         "titleApp1": "Stay Up to Date with Trending Wines",

@@ -1,5 +1,19 @@
-import { useState } from "react";
-import { Box, Heading, VStack, FormControl, FormControlLabel, FormControlLabelText, Textarea, TextareaInput, Button, ButtonText, HStack, Text } from "@gluestack-ui/themed";
+import { useState, useEffect } from "react";
+import {
+    Box,
+    Heading,
+    VStack,
+    FormControl,
+    FormControlLabel,
+    FormControlLabelText,
+    Textarea,
+    TextareaInput,
+    Button,
+    ButtonText,
+    HStack,
+    Text,
+    useToast,
+} from "@gluestack-ui/themed";
 import StarRating from "react-native-star-rating-widget";
 import { ScrollView, KeyboardAvoidingView, Platform, Alert } from "react-native";
 import { ChevronLeft } from "lucide-react-native";
@@ -8,6 +22,7 @@ import { config } from "@/gluestack-ui.config";
 import { auth } from "@/lib/firebase";
 import { useRequest } from "@/hooks/useRequest";
 import { useEventStore } from "@/stores/useEventStore";
+import useLanguageStore from "@/stores/useLanguageStore";
 
 const keyboardVerticalOffset = Platform.OS === "ios" ? 100 : 0;
 const primary = config.tokens.colors.primary["500"];
@@ -26,14 +41,22 @@ export default function RateWineScreen() {
     const [flavorRating, setFlavorRating] = useState(0);
     const [notes, setNotes] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [updateKey, setUpdateKey] = useState(0);
+    const toast = useToast();
     const [validationErrors, setValidationErrors] = useState({
         color: "",
         aroma: "",
         flavor: "",
     });
     const params = useLocalSearchParams();
+    const { t, forceUpdate } = useLanguageStore();
+
     const { eventId, index: wineIndex, wineId, wineName } = params;
     const router = useRouter();
+
+    useEffect(() => {
+        setUpdateKey((prev) => prev + 1);
+    }, [forceUpdate]);
 
     const validateRatings = () => {
         const errors = {
@@ -115,43 +138,41 @@ export default function RateWineScreen() {
             const result = await evaluateWineEvent(evaluationData);
 
             if (result === "success") {
-                await refreshEventData(String(eventId));
-
-                Alert.alert("✅ Avaliação Registrada!", "Sua avaliação foi salva com sucesso.", [
-                    {
-                        text: "Ok",
-                        onPress: () => router.back(),
-                        style: "cancel",
-                    },
-                ]);
+                console.log(eventId, "eventId");
+                await refreshEventData(eventId);
+                showToast("success", t("forms.rating.success.title"));
+                router.push(`/tabs/${eventId}/event-room`);
             } else {
-                const errorMessage = result.includes("já avaliou")
-                    ? "Você já avaliou este vinho. Só é permitido uma avaliação por vinho."
-                    : result || "Ocorreu um erro ao enviar sua avaliação.";
-
-                Alert.alert("Ops!", errorMessage);
+                const errorMessage = result.includes("já avaliou") ? t("forms.rating.error.alreadyRated") : result || t("forms.rating.error.generic");
+                showToast("error", errorMessage);
             }
         } catch (error) {
             console.error("Erro na avaliação:", error);
             const isNetworkError = error?.message?.includes("Network");
-
-            Alert.alert(
-                isNetworkError ? "Problema de Conexão" : "Erro Inesperado",
-                isNetworkError
-                    ? "Não foi possível conectar ao servidor. Verifique sua internet e tente novamente."
-                    : "Ocorreu um erro inesperado ao processar sua avaliação. Tente novamente mais tarde."
-            );
+            const errorResponse = isNetworkError ? t("forms.rating.error.networkMessage") : t("forms.rating.error.unexpectedMessage");
+            showToast("error", errorResponse);
         } finally {
             setIsSubmitting(false);
         }
     };
 
+    const showToast = (type: "success" | "error", message: string) => {
+        toast.show({
+            placement: "top",
+            render: () => (
+                <Box bg={type === "success" ? "$primary600" : "$error500"} px="$4" py="$2" rounded="$sm">
+                    <Text color="$textLight50">{message}</Text>
+                </Box>
+            ),
+        });
+    };
+
     return (
-        <Box flex={1} bg="$backgroundLight" p="$4" mt={Platform.OS == "ios" ? 50 : 0}>
+        <Box key={updateKey} flex={1} bg="$backgroundLight" p="$4" mt={Platform.OS == "ios" ? 50 : 0}>
             <HStack alignItems="center" mb="$4">
-                <ChevronLeft key="half" size={30} style={{ marginRight: 6 }} color={config.tokens.colors.textLight} onPress={() => router.back()} />
+                <ChevronLeft key="half" size={30} style={{ marginRight: 6 }} color={config.tokens.colors.textLight} onPress={() => router.push(`/tabs/${eventId}/event-room`)} />
                 <Heading size="lg" mb="$4">
-                    Avaliar Vinho
+                    {t("forms.rating.title")}
                 </Heading>
             </HStack>
 
@@ -168,7 +189,7 @@ export default function RateWineScreen() {
                     <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={keyboardVerticalOffset}>
                         <FormControl isInvalid={!!validationErrors.color}>
                             <FormControlLabel>
-                                <FormControlLabelText>Cor</FormControlLabelText>
+                                <FormControlLabelText>{t("forms.rating.color")}</FormControlLabelText>
                             </FormControlLabel>
                             <StarRating
                                 rating={colorRating}
@@ -179,6 +200,7 @@ export default function RateWineScreen() {
                                     }
                                 }}
                                 starSize={32}
+                                color={gold}
                                 animationConfig={{ scale: 1.05 }}
                                 enableHalfStar={true}
                             />
@@ -191,7 +213,7 @@ export default function RateWineScreen() {
 
                         <FormControl isInvalid={!!validationErrors.aroma}>
                             <FormControlLabel>
-                                <FormControlLabelText>Aroma</FormControlLabelText>
+                                <FormControlLabelText>{t("forms.rating.aroma")}</FormControlLabelText>
                             </FormControlLabel>
                             <StarRating
                                 rating={aromaRating}
@@ -202,6 +224,7 @@ export default function RateWineScreen() {
                                     }
                                 }}
                                 starSize={32}
+                                color={gold}
                                 animationConfig={{ scale: 1.05 }}
                                 enableHalfStar={true}
                             />
@@ -214,7 +237,7 @@ export default function RateWineScreen() {
 
                         <FormControl isInvalid={!!validationErrors.flavor}>
                             <FormControlLabel>
-                                <FormControlLabelText>Sabor</FormControlLabelText>
+                                <FormControlLabelText>{t("forms.rating.flavor")}</FormControlLabelText>
                             </FormControlLabel>
                             <StarRating
                                 rating={flavorRating}
@@ -225,6 +248,7 @@ export default function RateWineScreen() {
                                     }
                                 }}
                                 starSize={32}
+                                color={gold}
                                 animationConfig={{ scale: 1.05 }}
                                 enableHalfStar={true}
                             />
@@ -237,12 +261,14 @@ export default function RateWineScreen() {
 
                         <FormControl>
                             <FormControlLabel>
-                                <FormControlLabelText>Notas rápidas (opcional)</FormControlLabelText>
+                                <FormControlLabelText>{t("forms.rating.notes")}</FormControlLabelText>
                             </FormControlLabel>
                             <Textarea size="md">
                                 <TextareaInput
-                                    placeholder="O que achou do vinho? Suas impressões, características, etc."
+                                    placeholder={t("forms.rating.notesPlaceholder")}
                                     multiline
+                                    rounded={3}
+                                    bg="#FFFFFF"
                                     numberOfLines={3}
                                     value={notes}
                                     onChangeText={setNotes}
@@ -257,7 +283,7 @@ export default function RateWineScreen() {
 
                     <Box bg="$backgroundLight100" p="$3" borderRadius="$md" mt="$2">
                         <Text fontSize="$sm" color="$textDark500" textAlign="center">
-                            💡 Toque nas estrelas para dar avaliações de 0.5 em 0.5
+                            💡 {t("forms.rating.ratingTips")}
                         </Text>
                     </Box>
                 </VStack>

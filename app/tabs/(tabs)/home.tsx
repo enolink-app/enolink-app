@@ -157,7 +157,15 @@ export default function HomeScreen() {
                     >
                         <Box flex={1} justifyContent="center" px="$4" alignItems="center" bg="rgba(0,0,0,0.5)">
                             <Box w="$full" p="$6" bg="white" borderRadius="$lg">
-                                <Image source={{ uri: wineDetails?.image }} alt={wineDetails.name} w="$full" h={120} resizeMode="contain" rounded="$md" mb="$2" />
+                                <Image
+                                    source={wineDetails?.image && wineDetails?.image?.includes("https") ? wineDetails?.image : require("../../../assets/images/placeholder.png")}
+                                    alt={wineDetails.name}
+                                    w="$full"
+                                    h={120}
+                                    //resizeMode="contain"
+                                    rounded="$md"
+                                    mb="$2"
+                                />
                                 <VStack space="xs" m="$4">
                                     <Text fontWeight="$bold" fontSize="$md">
                                         {wineDetails?.name}

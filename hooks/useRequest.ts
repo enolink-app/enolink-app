@@ -34,30 +34,30 @@ export const useRequest = () => {
         return await api
             .get("/events")
             .then((response) => {
-                setAllEvents(response.data);
-                return response.data;
+                setAllEvents(response?.data);
+                return response?.data;
             })
             .catch((error) => {
-                console.log(`deu ruim, ${JSON.stringify(error.response.data)}`);
+                console.log(`deu ruim, ${error?.response?.data}`);
                 throw Error(`Algo deu errado: ${error}`);
             });
     }
 
     async function getEventById(id: string) {
-        const allEvents = useEventStore.getState().allEvents;
+        /*         const allEvents = useEventStore.getState().allEvents;
         const cachedEvent = allEvents.find((event) => event.id === id);
-        if (cachedEvent) return cachedEvent;
+        if (cachedEvent) return cachedEvent; */
 
         const response = await api
             .get(`/events/${id}`)
             .then((response) => {
-                return JSON.stringify(response.data);
+                return response.data;
             })
             .catch((error) => {
                 console.log(`Não foi poss;ivel buscar os eventos por ID: ${JSON.stringify(error.response.data)}`);
-                throw Error(`Não foi poss;ivel buscar os eventos por ID: ${JSON.stringify(error.response.data)}`);
+                throw Error(`Não foi poss;ivel buscar os eventos por ID: ${error.response.data}`);
             });
-        return response.data;
+        return response;
     }
 
     async function getEventByUser() {
@@ -104,7 +104,7 @@ export const useRequest = () => {
             })
             .catch((error) => {
                 console.log(`Erro ao buscar ranking: ${error}`);
-                throw Error(`Erro ao bbuscar ranking: ${JSON.stringify(error.response.data)}`);
+                throw Error(`Erro ao bbuscar ranking: ${error.response.data}`);
             });
     }
 
@@ -115,7 +115,7 @@ export const useRequest = () => {
                 return response?.data;
             })
             .catch((error) => {
-                console.log(`Algo deu errado: ${JSON.stringify(error.response.data)}`);
+                console.log(`Algo deu errado: ${error?.response?.data}`);
                 throw Error("Algo deu errado", error);
             });
     }

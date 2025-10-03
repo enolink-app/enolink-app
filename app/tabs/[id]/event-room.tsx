@@ -21,7 +21,7 @@ import {
 } from "@gluestack-ui/themed";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { ChevronLeft, ShareIcon, Copy, SettingsIcon, Star, Users, Wine, Lock, CheckCircle, Crown, Calendar } from "lucide-react-native";
-import { Share } from "react-native";
+import { Share, Platform } from "react-native";
 import { config } from "@/gluestack-ui.config";
 import { useEventStore } from "@/stores/useEventStore";
 import { useEventRoom } from "@/hooks/useEventRoom";
@@ -143,7 +143,7 @@ export default function EventRoomScreen() {
     };
 
     return (
-        <Box key={updateKey} flex={1} bg="$backgroundLight" w="$full" pt={50}>
+        <Box key={updateKey} flex={1} bg="$backgroundLight" w="$full" pt={Platform.OS == "ios" ? 50 : 0}>
             <Box
                 bg={{
                     linearGradient: {
@@ -161,18 +161,18 @@ export default function EventRoomScreen() {
             >
                 <HStack alignItems="center" justifyContent="space-between" mb="$4">
                     <HStack alignItems="center" flex={1}>
-                        <Pressable onPress={() => router.push("/tabs/(tabs)/home")} p="$2" rounded="$full" bg="rgba(255,255,255,0.2)" mr="$3">
-                            <ChevronLeft size={32} color={textLight} />
+                        <Pressable onPress={() => router.push("/tabs/(tabs)/home")} p="$2" rounded="$full" mr="$3">
+                            <ChevronLeft size={32} color={neutralDark} />
                         </Pressable>
 
                         <VStack flex={1}>
-                            <Heading size="lg" color={textLight} numberOfLines={1}>
+                            <Heading size="lg" color={neutralDark} numberOfLines={1}>
                                 {currentEvent?.name || t("eventRoom.title")}
                             </Heading>
                             {currentEvent?.dateStart && (
                                 <HStack alignItems="center" mt="$1">
-                                    <Calendar size={14} color={textLight} />
-                                    <Text color={textLight} fontSize="$sm" ml="$1">
+                                    <Calendar size={14} color={neutralDark} />
+                                    <Text color={neutralDark} fontSize="$sm" ml="$1">
                                         {formatEventDate(currentEvent.dateStart)}
                                     </Text>
                                 </HStack>
@@ -181,25 +181,25 @@ export default function EventRoomScreen() {
                     </HStack>
 
                     {isOrganizer && (
-                        <Pressable onPress={() => router.push(`/tabs/${eventId}/settings`)} p="$2" rounded="$full" bg="rgba(255,255,255,0.2)">
-                            <SettingsIcon size={32} color={textLight} />
+                        <Pressable onPress={() => router.push(`/tabs/${eventId}/settings`)} p="$2" rounded="$full">
+                            <SettingsIcon size={32} color={neutralDark} />
                         </Pressable>
                     )}
                 </HStack>
 
                 <HStack justifyContent="space-between" alignItems="center">
                     <HStack alignItems="center">
-                        <Users size={16} color={textLight} />
-                        <Text color={textLight} fontSize="$sm" ml="$2">
+                        <Users size={16} color={neutralDark} />
+                        <Text color={neutralDark} fontSize="$sm" ml="$2">
                             {currentEvent?.participants?.length || 0} {t("eventRoom.participants")}
                         </Text>
                     </HStack>
 
                     <HStack space="sm">
-                        <Pressable onPress={handleCopyInviteLink} p="$2" rounded="$full" bg="rgba(255,255,255,0.2)">
+                        <Pressable onPress={handleCopyInviteLink} p="$2" rounded="$full">
                             <Copy size={16} color={textLight} />
                         </Pressable>
-                        <Pressable onPress={handleShareInvite} p="$2" rounded="$full" bg="rgba(255,255,255,0.2)">
+                        <Pressable onPress={handleShareInvite} p="$2" rounded="$full">
                             <ShareIcon size={16} color={textLight} />
                         </Pressable>
                     </HStack>

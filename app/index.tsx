@@ -32,7 +32,7 @@ export default function Index() {
             </View>
         );
     }
-    console.log(`LOGANDO`);
+
     return (
         <GluestackUIProvider config={config}>
             <LanguageProvider>{firstLaunch ? <Redirect href="/onboarding" /> : <Redirect href={user ? "/tabs/(tabs)/home" : "/splash"} />}</LanguageProvider>

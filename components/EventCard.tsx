@@ -40,7 +40,7 @@ export function EventCard({ image, title, date, distance, isNearby, onPress, tex
                     <BadgeText>Próximo de você</BadgeText>
                 </Badge>
             )}
-            <HStack p="$2" borderRadius="$lg" space="md">
+            <HStack borderRadius="$lg" space="md">
                 <Image source={image} alt="Foto do evento" width={80} height={80} borderRadius={6} resizeMode="cover" defaultSource={require("../assets/images/placeholder.png")} />
                 <VStack justifyContent="flex-start" alignItems="flex-start" flex={1}>
                     <Box width={160} my={3}>

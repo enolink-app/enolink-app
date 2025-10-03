@@ -2,11 +2,12 @@
     "login": {
         "wellcome": "Bem-vindo!",
         "phrase": "Viva a experiência.",
-        "phrase2": "Descubra o wine club!",
+        "phrase2": "Descubra o Enolink!",
         "join": "Entrar",
         "forgot": "Esqueci minha senha",
         "or": "ou",
         "signIn": "Entrar com",
+        "signUp": "Cadastrar com",
         "new": "Novo por aqui?",
         "create": "Criar uma conta"
     },
@@ -79,7 +80,7 @@
             "color": "Cor",
             "aroma": "Aroma",
             "flavor": "Sabor",
-            "notes": "Notas rápidas",
+            "notes": "Notas rápidas (opcional)",
             "submit": "Enviar Avaliação",
             "loadingSbmit": "Enviando...",
             "validation": {
@@ -112,6 +113,7 @@
                 "unexpectedTitle": "Erro Inesperado",
                 "unexpectedMessage": "Ocorreu um erro inesperado ao processar sua avaliação. Por favor, tente novamente mais tarde."
             },
+            "ratingTips": "Toque nas estrelas para dar notas de 0.5 em 0.5",
             "notesPlaceholder": "O que você achou do vinho?"
         },
         "addWineDiary": {
@@ -120,7 +122,7 @@
             "harvest": "Safra",
             "country": "País",
             "grape": "Uva",
-            "closure": "Tipo de Fechamento",
+            "closure": "Tampa",
             "typwWine": "Tipo de Vinho",
             "abv": "Graduação alcoólica %",
             "image": "Imagem (opcional)",
@@ -159,21 +161,21 @@
             "title": "Detalhes",
             "titleWine": "Vinhos no evento",
             "buttonDetails": "Detalhes do Evento",
-            "buttonDetailsDescription": "Preencha as informações básicas para seu evento de degustação.",
+            "buttonDetailsDescription": "Preencha as informações básicas do seu evento de degustação.",
             "buttonWines": "Vinhos",
-            "creation": "Criação de Evento",
+            "creation": "Criação do Evento",
             "placeholderName": "Nome do Evento",
             "dateStart": "Data de Início",
             "date": "Data final (opcional)",
             "titleImage": "Imagem de fundo (opcional)",
             "imageDescription": "Adicione uma imagem para identificar seu evento",
             "camera": "Tirar foto",
-            "gallery": "Tirar da galeria",
+            "gallery": "Pegar da galeria",
             "selectedimage": "Imagem Selecionada",
             "buttonBack": "Anterior",
             "buttonNext": "Continuar para Vinhos",
-            "nextStep": "Próxima Etapa",
-            "nextStepDescription": "Na próxima etapa, você poderá adicionar os vinhos que serão degustados neste evento.",
+            "nextStep": "Próximo Passo",
+            "nextStepDescription": "No próximo passo, você poderá adicionar os vinhos que serão degustados neste evento.",
             "buttonSubmit": "Criar evento",
             "title2": "Vinhos",
             "eventWines": "Vinhos do Evento",
@@ -197,7 +199,7 @@
             "harvest": "Safra",
             "country": "País",
             "grape": "Uva",
-            "closure": "Tipo de Fechamento",
+            "closure": "Tampa",
             "typwWine": "Tipo de Vinho",
             "image": "Imagem (opcional)",
             "camera": "Câmera",
@@ -213,7 +215,7 @@
             "harvest": "Safra",
             "country": "País",
             "grape": "Uva",
-            "closure": "Tipo de Fechamento",
+            "closure": "Tampa",
             "typwWine": "Tipo de Vinho",
             "image": "Imagem (opcional)",
             "camera": "Câmera",
@@ -260,7 +262,7 @@
                     "Espumante Brut (ex: Prosecco, Cava)",
                     "Branco Leve (ex: Sauvignon Blanc, Pinot Grigio)",
                     "Rosé Seco (ex: Provence, Pinot Noir Rosé)",
-                    "Vinho Verde (leve e levemente frisante)",
+                    "Vinho Verde (leve e ligeiramente frisante)",
                     "Moscato d'Asti (doce e leve)",
                     "Riesling (leve e aromático)"
                 ],
@@ -307,14 +309,14 @@
         "seeRanking": "Ver Classificação"
     },
     "guestJoinEvent": {
-        "join": "Entrar como Convidado",
+        "join": "Participar como Convidado",
         "name": "Nome",
         "submit": "Entrar no Evento",
         "loadingSubmit": "Carregando"
     },
     "joinEvent": {
         "title": "Você foi convidado para um evento!",
-        "submit": "Entrar no Evento",
+        "submit": "Participar do Evento",
         "loadingSubmit": "Carregando..."
     },
     "ranking": {
@@ -350,11 +352,11 @@
     },
     "privacy": {
         "title": "Termos de Uso",
-        "text1": "Ao usar o Aplicativo Enolink, você concorda com nossos termos e condições. Este aplicativo foi desenvolvido para fins de degustação e avaliação de vinhos. Não nos responsabilizamos por qualquer uso indevido de suas funcionalidades.",
+        "text1": "Ao usar o App Enolink, você concorda com nossos termos e condições. Este aplicativo foi desenvolvido para fins de degustação e avaliação de vinhos. Não nos responsabilizamos por qualquer uso indevido de suas funcionalidades.",
         "text2": "Os dados fornecidos pelos usuários, como nome, e-mail e avaliações, são armazenados com segurança e usados apenas para melhorar a experiência da plataforma.",
-        "text3": "Política de Privacidade e ",
-        "text4": "Todas as informações pessoais são tratadas de forma confidencial e nunca serão compartilhadas com terceiros sem consentimento.",
-        "text5": "Ao se registrar, você autoriza o Aplicativo Enolink a usar seus dados apenas no âmbito do aplicativo. Você pode solicitar a exclusão de sua conta a qualquer momento.",
+        "text3": "Política de Privacidade e",
+        "text4": "Todas as informações pessoais são tratadas com confidencialidade e nunca serão compartilhadas com terceiros sem consentimento.",
+        "text5": "Ao se registrar, você autoriza o App Enolink a usar seus dados apenas no âmbito da aplicação. Você pode solicitar a exclusão de sua conta a qualquer momento.",
         "text6": "Última atualização: 2 de julho de 2025"
     },
     "general": {
@@ -383,20 +385,21 @@
         "linkEvent": "Olá! Você foi convidado para o evento de degustação",
         "linkAppTitle": "Venha para o EnoLink!",
         "linkApp": "🍷 Junte-se a mim no EnoLink! \n\nDescubra e avalie vinhos incríveis comigo. \n\nBaixe o aplicativo:",
-        "copied": "Copiado para a área de transferência!"
+        "copied": "Copiado para a área de transferência!",
+        "save": "Salvar"
     },
     "onboarding": {
         "titleApp1": "Fique por Dentro dos Vinhos em Alta",
         "subtitleApp1": "Descubra o que as pessoas estão curtindo com os 10 vinhos mais bem avaliados.",
         "titleApp2": "Avaliação de Vinhos e Eventos",
-        "subtitleApp2": "Conecte amantes do vinho, aproveite e avalie vinhos juntos.",
+        "subtitleApp2": "Conecte amantes do vinho, curta e avalie vinhos juntos.",
         "titleApp3": "Suas Notas Pessoais",
         "subtitleApp3": "Avalie seus vinhos e registre suas ideias. Seu paladar evolui, e seu diário acompanha.",
         "titleApp4": "Tudo na Palma da Sua Mão",
         "subtitleApp4": "Transforme cada taça em uma memória registrada. Capture momentos únicos e construa sua história enológica.",
         "titleDiary1": "Seu Diário de Vinhos",
         "subtitleDiary1": "Aqui você pode salvar todas as suas experiências com vinhos.",
-        "descriptionDiary1": "Toque em um card para ver detalhes e editar",
+        "descriptionDiary1": "Toque em um cartão para ver detalhes e editar",
         "titleDiary2": "Avalie em Detalhes",
         "subtitleDiary2": "Avalie cor, aroma e sabor de 0 a 5 estrelas",
         "descriptionDiary2": "Você pode editar suas avaliações depois.",
@@ -405,7 +408,7 @@
         "descriptionDiary3": "Use as notas para lembrar de detalhes importantes",
         "titleDiary4": "Adicione Novos Vinhos",
         "subtitleDiary4": "Use o botão + para registrar novas degustações",
-        "descriptionDiary4": "Pesquise em nossa base ou adicione manualmente",
+        "descriptionDiary4": "Pesquise em nosso banco de dados ou adicione manualmente",
         "skip": "Pular",
         "next": "Próximo",
         "gotIt": "Entendi, vamos lá!"

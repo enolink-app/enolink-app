@@ -34,6 +34,8 @@ import { useRequest } from "@/hooks/useRequest";
 import { useWineStore } from "@/stores/useWineStores";
 import useLanguageStore from "@/stores/useLanguageStore";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { auth } from "@/lib/firebase";
+import { uploadImage } from "@/services/storage";
 
 const wineSchema = yup.object({
     name: yup.string().required("Nome é obrigatório"),
@@ -184,10 +186,19 @@ export default function AddWineFullScreen() {
     const onSubmit = async (data: WineFormData) => {
         setLoading(true);
         try {
+            let imageUrl = null;
+
+            if (selectedImage) {
+                const userId = auth.currentUser?.uid || "unknown";
+                const timestamp = Date.now();
+                const path = `wines/${userId}_${timestamp}.jpg`;
+
+                imageUrl = await uploadImage(selectedImage, path);
+            }
             const fullData = {
                 ...data,
                 type: "default",
-                image: selectedImage,
+                image: imageUrl || "null",
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
             };
@@ -361,7 +372,6 @@ export default function AddWineFullScreen() {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-
             <Modal isOpen={showGrapeModal} onClose={() => setShowGrapeModal(false)}>
                 <ModalBackdrop />
                 <ModalContent>

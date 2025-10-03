@@ -50,7 +50,7 @@ export default function WineCard({ wine, onPress }: Props) {
             borderRadius="$lg"
         >
             <Image
-                source={wine.image && wine.image.includes("https") ? wine.image : require("../assets/images/placeholder.png")}
+                source={wine.image && wine?.image?.uri?.includes("https") ? wine.image : require("../assets/images/placeholder.png")}
                 alt={wine.name}
                 borderRadius={6}
                 height={120}

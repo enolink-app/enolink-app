@@ -176,7 +176,7 @@ export default function LoginScreen() {
         } catch (error: any) {
             console.error("❌ Firebase login error:", error);
 
-            let errorMessage = "Erro de autenticação";
+            let errorMessage = "Credenciais incorretas";
 
             if (error.code === "auth/network-request-failed") {
                 errorMessage = "Erro de conexão. Verifique sua internet e tente novamente.";
@@ -188,7 +188,7 @@ export default function LoginScreen() {
                 errorMessage = "E-mail inválido.";
             }
 
-            Alert.alert("Erro de Login", errorMessage);
+            showToast("error", errorMessage);
         } finally {
             setIsLoading(false);
         }
